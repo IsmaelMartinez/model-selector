@@ -4,7 +4,7 @@
 
 ### /create-prd
 **Description**: Create a Product Requirements Document for a new feature
-**File**: `create-prd.md`
+**File**: `.claude/commands/create-prd.md`
 **Usage**: `/create-prd [brief feature description]`
 
 **Process**:
@@ -19,7 +19,7 @@
 
 ### /generate-tasks
 **Description**: Generate detailed task list from an existing PRD
-**File**: `generate-tasks.md`
+**File**: `.claude/commands/generate-tasks.md`
 **Usage**: `/generate-tasks [prd-file-path]`
 
 **Process**:
@@ -34,7 +34,7 @@
 
 ### /process-task-list
 **Description**: Execute tasks from a generated task list step-by-step
-**File**: `process-task-list.md`
+**File**: `.claude/commands/process-task-list.md`
 **Usage**: `/process-task-list [task-file-path]`
 
 **Process**:
@@ -57,9 +57,10 @@ The typical development workflow using these commands:
 ## File Structure
 
 - `/tasks/` - Contains all PRDs and task lists
-- `create-prd.md` - Template and instructions for PRD creation
-- `generate-tasks.md` - Template and instructions for task generation
-- `process-task-list.md` - Instructions for task execution
+- `.claude/commands/` - Contains Claude command definitions
+  - `create-prd.md` - Template and instructions for PRD creation
+  - `generate-tasks.md` - Template and instructions for task generation
+  - `process-task-list.md` - Instructions for task execution
 
 ## Project Information
 
