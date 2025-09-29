@@ -53,7 +53,7 @@
       {#each recommendations as model, index}
         {@const tierBadge = getTierBadge(model.tier)}
         {@const envBadge = getEnvironmentalBadge(model.environmentalScore)}
-        <article class="model-card" role="listitem" tabindex="0">
+        <article class="model-card" role="listitem">
           <div class="model-header">
             <div class="model-title">
               <h3>{model.name}</h3>
@@ -118,16 +118,23 @@
           </div>
           
           <div class="model-actions">
-            <a 
-              href="https://huggingface.co/{model.huggingFaceId}" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="action-link"
-              aria-describedby="external-link-desc"
-            >
-              View on Hugging Face
-              <span aria-hidden="true">↗</span>
-            </a>
+            {#if model.huggingFaceId && !model.huggingFaceId.startsWith('placeholder/')}
+              <a 
+                href="https://huggingface.co/{model.huggingFaceId}" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="action-link"
+                aria-describedby="external-link-desc"
+              >
+                View on Hugging Face
+                <span aria-hidden="true">↗</span>
+              </a>
+            {:else}
+              <span class="placeholder-link">
+                <span aria-hidden="true">📖</span>
+                Reference Implementation
+              </span>
+            {/if}
           </div>
         </article>
       {/each}
@@ -353,6 +360,16 @@
   .action-link:hover {
     color: #2b6cb0;
     text-decoration: underline;
+  }
+  
+  .placeholder-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #718096;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: default;
   }
   
   .no-results {

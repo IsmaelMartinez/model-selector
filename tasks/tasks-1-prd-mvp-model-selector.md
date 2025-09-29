@@ -21,36 +21,36 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 - [x] 2.6 Implement "smaller is better" model selection logic
 
 ## Parent Task 3: Frontend Implementation
-- [ ] 3.1 Enhance task input interface with accessibility features
-- [ ] 3.2 Implement tiered recommendation display system
-- [ ] 3.3 Create model comparison cards with environmental impact
-- [ ] 3.4 Add basic responsive design (mobile-friendly but not optimized)
-- [ ] 3.5 Implement basic keyboard navigation
-- [ ] 3.6 Add semantic HTML structure and proper headings
+- [x] 3.1 Enhance task input interface with accessibility features
+- [x] 3.2 Implement tiered recommendation display system
+- [x] 3.3 Create model comparison cards with environmental impact
+- [x] 3.4 Add basic responsive design (mobile-friendly but not optimized)
+- [x] 3.5 Implement basic keyboard navigation
+- [x] 3.6 Add semantic HTML structure and proper headings
 
 ## Parent Task 4: Core Application Logic
-- [ ] 4.1 Implement task classification engine
-- [ ] 4.2 Build recommendation engine with tier prioritization
-- [ ] 4.3 Create model filtering and ranking system
-- [ ] 4.4 Implement client-side data processing
-- [ ] 4.5 Add error handling and fallback mechanisms
-- [ ] 4.6 Ensure reasonable recommendation response time (<3 seconds acceptable for MVP)
+- [x] 4.1 Implement task classification engine
+- [x] 4.2 Build recommendation engine with tier prioritization
+- [x] 4.3 Create model filtering and ranking system
+- [x] 4.4 Implement client-side data processing
+- [x] 4.5 Add error handling and fallback mechanisms
+- [x] 4.6 Ensure reasonable recommendation response time (<3 seconds acceptable for MVP)
 
 ## Parent Task 5: Testing & Quality Assurance
-- [ ] 5.1 Create test suite for task classification accuracy
-- [ ] 5.2 Test tiered recommendation logic with sample inputs
-- [ ] 5.3 Create reasonable environmental impact estimates (defer scientific validation)
-- [ ] 5.4 Test basic accessibility (keyboard navigation, semantic HTML)
-- [ ] 5.5 Test Chrome compatibility (defer other browsers for later iterations)
-- [ ] 5.6 Check basic performance metrics (reasonable bundle size and load time)
+- [x] 5.1 Create test suite for task classification accuracy
+- [x] 5.2 Test tiered recommendation logic with sample inputs
+- [x] 5.3 Create reasonable environmental impact estimates (defer scientific validation)
+- [x] 5.4 Test basic accessibility (keyboard navigation, semantic HTML)
+- [x] 5.5 Test Chrome compatibility (defer other browsers for later iterations)
+- [x] 5.6 Check basic performance metrics (reasonable bundle size and load time)
 
 ## Parent Task 6: Deployment & Documentation
-- [ ] 6.1 Set up GitHub Actions for automated deployment
-- [ ] 6.2 Configure SvelteKit for static site generation
-- [ ] 6.3 Create lean deployment documentation
-- [ ] 6.4 Set up GitHub Pages deployment
-- [ ] 6.5 Test deployment pipeline and verify HTTPS
-- [ ] 6.6 Create basic user documentation and examples
+- [x] 6.1 Set up GitHub Actions for automated deployment
+- [x] 6.2 Configure SvelteKit for static site generation
+- [x] 6.3 Create lean deployment documentation
+- [x] 6.4 Set up GitHub Pages deployment
+- [x] 6.5 Test deployment pipeline and verify HTTPS
+- [x] 6.6 Create basic user documentation and examples
 
 ## Relevant Files
 
