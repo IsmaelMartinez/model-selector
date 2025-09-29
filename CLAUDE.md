@@ -69,6 +69,7 @@ The typical development workflow using these commands:
 - **Deployment**: Static site generation for PWA
 - **Architecture**: Rules-first approach with future SLM integration
 - **Testing**: Vitest for unit testing
+- **Data**: Static JSON files for model metadata and task taxonomy
 
 ### Common Commands
 ```bash
@@ -92,6 +93,12 @@ git push           # Push to remote
 - Maintain component-based architecture
 - Keep environmental consciousness in recommendations
 - Prioritize offline functionality and PWA capabilities
+
+### Data Management
+- **Model Data**: Curated from Hugging Face Hub and Papers with Code
+- **Update Process**: Quarterly updates via API queries and manual validation
+- **Structure**: 3-tier system (Lightweight/Standard/Advanced) based on model size
+- **Documentation**: See `/docs/MODEL_CURATION_PROCESS.md` for detailed process
 
 ### Testing Guidelines
 - Write tests for logic components
