@@ -7,7 +7,9 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "update-models": "node src/lib/aggregation/cli.js",
+    "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",
