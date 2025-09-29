@@ -5,7 +5,7 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 **MVP Approach**: Keep it simple and focused. Chrome-first, reasonable estimates for environmental impact, basic accessibility. Prove the concept works before adding complexity.
 
 ## Parent Task 1: Research & Discovery Phase
-- [ ] 1.1 Survey Hugging Face task classification models
+- [x] 1.1 Survey Hugging Face task classification models
 - [ ] 1.2 Test Hugging Face API access and data formats
 - [ ] 1.3 Research Papers with Code API capabilities (optional - use if easily accessible)
 - [ ] 1.4 Prototype simple classification pipeline
