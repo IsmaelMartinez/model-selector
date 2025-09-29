@@ -242,8 +242,13 @@ export class ModelAggregator {
     // Extract accuracy if available (simplified)
     const accuracy = this.extractAccuracy(rawModel, detailedInfo);
     
-    // Calculate environmental score based on size
-    const environmentalScore = this.calculateEnvironmentalScore(sizeMB);
+    // Calculate environmental score using comprehensive system
+    const environmentalScore = await this.calculateEnvironmentalScore(sizeMB, {
+      sizeMB,
+      name: this.extractModelName(rawModel),
+      description: this.extractDescription(rawModel, detailedInfo),
+      deploymentOptions: this.determineDeploymentOptions(sizeMB, rawModel)
+    });
     
     // Determine deployment options based on size and model type
     const deploymentOptions = this.determineDeploymentOptions(sizeMB, rawModel);
@@ -403,12 +408,27 @@ export class ModelAggregator {
   }
 
   /**
-   * Calculate environmental impact score
+   * Calculate environmental impact score using comprehensive calculator
    */
-  calculateEnvironmentalScore(sizeMB) {
-    if (sizeMB < 100) return 1; // Low impact
-    if (sizeMB < 500) return 2; // Medium impact
-    return 3; // High impact
+  calculateEnvironmentalScore(sizeMB, model = null) {
+    // Use the comprehensive environmental calculator if available
+    try {
+      // Import dynamically to avoid circular dependencies
+      const { environmentalCalculator } = await import('../environmental/EnvironmentalImpactCalculator.js');
+      
+      const testModel = model || {
+        sizeMB,
+        deploymentOptions: sizeMB < 100 ? ['browser', 'edge'] : sizeMB < 500 ? ['cloud'] : ['server']
+      };
+      
+      const impact = environmentalCalculator.calculateImpact(testModel);
+      return impact.environmentalScore;
+    } catch (error) {
+      // Fallback to simple size-based calculation
+      if (sizeMB < 100) return 1; // Low impact
+      if (sizeMB < 500) return 2; // Medium impact
+      return 3; // High impact
+    }
   }
 
   /**
