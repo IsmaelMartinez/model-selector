@@ -137,6 +137,50 @@
             "lastUpdated": "2023-11-15"
           }
         ]
+      },
+      "semantic_segmentation": {
+        "lightweight": [
+          {
+            "id": "mobilevit_s",
+            "name": "MobileViT Small",
+            "huggingFaceId": "apple/mobilevit-small",
+            "description": "Lightweight vision transformer for semantic segmentation",
+            "sizeMB": 22.4,
+            "accuracy": 0.781,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "mobile"],
+            "frameworks": ["PyTorch", "ONNX"],
+            "lastUpdated": "2023-10-15"
+          }
+        ],
+        "standard": [
+          {
+            "id": "deeplabv3_resnet50",
+            "name": "DeepLabV3 ResNet-50",
+            "huggingFaceId": "placeholder/deeplabv3-resnet50",
+            "description": "Semantic segmentation with atrous convolution",
+            "sizeMB": 158.0,
+            "accuracy": 0.867,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-09-22"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "deeplabv3_resnet101",
+            "name": "DeepLabV3 ResNet-101",
+            "huggingFaceId": "placeholder/deeplabv3-resnet101",
+            "description": "High-accuracy semantic segmentation",
+            "sizeMB": 233.0,
+            "accuracy": 0.892,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2023-09-22"
+          }
+        ]
       }
     },
     "natural_language_processing": {
@@ -281,6 +325,36 @@
             "lastUpdated": "2023-02-10"
           }
         ]
+      },
+      "named_entity_recognition": {
+        "lightweight": [
+          {
+            "id": "spacy_en_core_web_sm",
+            "name": "SpaCy English Small",
+            "huggingFaceId": "spacy/en_core_web_sm",
+            "description": "Efficient NER with SpaCy pipeline",
+            "sizeMB": 15.0,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server", "edge"],
+            "frameworks": ["SpaCy"],
+            "lastUpdated": "2023-11-01"
+          }
+        ],
+        "standard": [
+          {
+            "id": "dbmdz_bert_large_cased_finetuned_conll03_english",
+            "name": "BERT NER English",
+            "huggingFaceId": "dbmdz/bert-large-cased-finetuned-conll03-english",
+            "description": "BERT fine-tuned for named entity recognition",
+            "sizeMB": 1340.0,
+            "accuracy": 0.91,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-06-14"
+          }
+        ]
       }
     },
     "speech_processing": {
@@ -373,6 +447,166 @@
             "deploymentOptions": ["cloud", "server"],
             "frameworks": ["PyTorch"],
             "lastUpdated": "2024-01-20"
+          }
+        ]
+      },
+      "anomaly_detection": {
+        "lightweight": [
+          {
+            "id": "isolation_forest",
+            "name": "Isolation Forest",
+            "huggingFaceId": "placeholder/isolation-forest",
+            "description": "Unsupervised anomaly detection for time series",
+            "sizeMB": 2.1,
+            "accuracy": 0.78,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "cloud"],
+            "frameworks": ["scikit-learn", "ONNX"],
+            "lastUpdated": "2023-12-05"
+          }
+        ],
+        "standard": [
+          {
+            "id": "autoencoder_anomaly",
+            "name": "Autoencoder Anomaly Detection",
+            "huggingFaceId": "placeholder/autoencoder-anomaly",
+            "description": "Deep learning approach for anomaly detection",
+            "sizeMB": 45.2,
+            "accuracy": 0.84,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-11-18"
+          }
+        ]
+      }
+    },
+    "recommendation_systems": {
+      "collaborative_filtering": {
+        "lightweight": [
+          {
+            "id": "matrix_factorization",
+            "name": "Matrix Factorization",
+            "huggingFaceId": "placeholder/matrix-factorization",
+            "description": "Lightweight collaborative filtering using matrix factorization",
+            "sizeMB": 8.5,
+            "accuracy": 0.76,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "cloud"],
+            "frameworks": ["PyTorch", "scikit-learn"],
+            "lastUpdated": "2023-10-28"
+          }
+        ],
+        "standard": [
+          {
+            "id": "neural_collaborative_filtering",
+            "name": "Neural Collaborative Filtering",
+            "huggingFaceId": "placeholder/neural-cf",
+            "description": "Deep learning approach to collaborative filtering",
+            "sizeMB": 152.0,
+            "accuracy": 0.82,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-09-15"
+          }
+        ]
+      },
+      "content_based": {
+        "lightweight": [
+          {
+            "id": "content_similarity",
+            "name": "Content Similarity Recommender",
+            "huggingFaceId": "placeholder/content-similarity",
+            "description": "Lightweight content-based filtering using embeddings",
+            "sizeMB": 12.3,
+            "accuracy": 0.71,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "cloud"],
+            "frameworks": ["sentence-transformers", "ONNX"],
+            "lastUpdated": "2023-11-10"
+          }
+        ]
+      }
+    },
+    "reinforcement_learning": {
+      "game_playing": {
+        "standard": [
+          {
+            "id": "dqn_atari",
+            "name": "Deep Q-Network for Atari",
+            "huggingFaceId": "placeholder/dqn-atari",
+            "description": "Deep reinforcement learning for Atari games",
+            "sizeMB": 89.4,
+            "accuracy": 0.85,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "stable-baselines3"],
+            "lastUpdated": "2023-08-20"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "alphazero",
+            "name": "AlphaZero",
+            "huggingFaceId": "placeholder/alphazero",
+            "description": "Advanced game playing with Monte Carlo Tree Search",
+            "sizeMB": 445.0,
+            "accuracy": 0.95,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2023-07-25"
+          }
+        ]
+      },
+      "robotics": {
+        "standard": [
+          {
+            "id": "td3_robotics",
+            "name": "Twin Delayed DDPG for Robotics",
+            "huggingFaceId": "placeholder/td3-robotics",
+            "description": "Continuous control for robotic applications",
+            "sizeMB": 67.8,
+            "accuracy": 0.79,
+            "environmentalScore": 2,
+            "deploymentOptions": ["edge", "server"],
+            "frameworks": ["PyTorch", "stable-baselines3"],
+            "lastUpdated": "2023-09-30"
+          }
+        ]
+      }
+    },
+    "data_preprocessing": {
+      "data_cleaning": {
+        "lightweight": [
+          {
+            "id": "pandas_profiling",
+            "name": "Pandas Profiling",
+            "huggingFaceId": "placeholder/pandas-profiling",
+            "description": "Automated data quality assessment and cleaning",
+            "sizeMB": 5.2,
+            "accuracy": 0.88,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "cloud"],
+            "frameworks": ["pandas", "Python"],
+            "lastUpdated": "2023-12-01"
+          }
+        ]
+      },
+      "feature_engineering": {
+        "lightweight": [
+          {
+            "id": "feature_tools",
+            "name": "Featuretools",
+            "huggingFaceId": "placeholder/featuretools",
+            "description": "Automated feature engineering framework",
+            "sizeMB": 18.9,
+            "accuracy": 0.82,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["Python", "pandas"],
+            "lastUpdated": "2023-11-25"
           }
         ]
       }

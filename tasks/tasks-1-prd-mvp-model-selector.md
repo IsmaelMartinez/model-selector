@@ -17,8 +17,8 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 - [x] 2.2 Create model metadata aggregation system
 - [x] 2.3 Create simple environmental impact scoring system (reasonable estimates)
 - [x] 2.4 Build task classification logic (OSS model or keyword fallback)
-- [ ] 2.5 Create initial curated dataset with 10+ task categories
-- [ ] 2.6 Implement "smaller is better" model selection logic
+- [x] 2.5 Create initial curated dataset with 10+ task categories
+- [x] 2.6 Implement "smaller is better" model selection logic
 
 ## Parent Task 3: Frontend Implementation
 - [ ] 3.1 Enhance task input interface with accessibility features
