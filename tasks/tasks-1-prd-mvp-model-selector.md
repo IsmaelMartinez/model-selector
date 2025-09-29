@@ -10,7 +10,7 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 - [x] 1.3 Research Papers with Code API capabilities (optional - use if easily accessible)
 - [x] 1.4 Prototype simple classification pipeline
 - [x] 1.5 Create sample task taxonomy and model mappings
-- [ ] 1.6 Validate technical feasibility of aggregation approach
+- [x] 1.6 Validate technical feasibility of aggregation approach
 
 ## Parent Task 2: Data Structure & Pipeline Implementation
 - [ ] 2.1 Design and implement tiered data structure (browser/local)
