@@ -15,7 +15,7 @@ An open source assistant that helps you discover AI models prioritizing environm
 
 ## 🚀 Live Demo
 
-Visit the live application: [AI Model Selector](https://your-username.github.io/model-selector)
+Visit the live application: [AI Model Selector](https://ismaelmartinez.github.io/model-selector)
 
 ## 📋 Supported Tasks
 
@@ -111,7 +111,7 @@ npx vitest run tests/acceptance.test.js
 
 1. Enable Pages in repository Settings → Pages → Source: GitHub Actions
 2. Push to `main` branch triggers automatic deployment
-3. Visit your deployed site at `https://username.github.io/model-selector`
+3. Visit your deployed site at `https://ismaelmartinez.github.io/model-selector`
 
 ### Manual Deployment
 
