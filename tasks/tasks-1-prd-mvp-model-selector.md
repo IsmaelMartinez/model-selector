@@ -6,7 +6,7 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 
 ## Parent Task 1: Research & Discovery Phase
 - [x] 1.1 Survey Hugging Face task classification models
-- [ ] 1.2 Test Hugging Face API access and data formats
+- [x] 1.2 Test Hugging Face API access and data formats
 - [ ] 1.3 Research Papers with Code API capabilities (optional - use if easily accessible)
 - [ ] 1.4 Prototype simple classification pipeline
 - [ ] 1.5 Create sample task taxonomy and model mappings
