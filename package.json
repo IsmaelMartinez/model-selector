@@ -1,0 +1,34 @@
+{
+  "name": "model-selector",
+  "version": "0.1.0",
+  "description": "An open source assistant to help you choose, adapt, and deploy the best AI model for your task",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "svelte": "^4.2.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "ai",
+    "ml",
+    "model-selection",
+    "pwa",
+    "offline",
+    "svelte"
+  ],
+  "author": "Model Selector Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/model-selector.git"
+  }
+}
