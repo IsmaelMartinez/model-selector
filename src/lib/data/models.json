@@ -1,0 +1,411 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-01-29",
+  "tiers": {
+    "lightweight": {
+      "label": "Lightweight Models",
+      "description": "Small, efficient models optimized for minimal resource usage",
+      "priority": 1,
+      "maxSizeMB": 100,
+      "environmentalScore": 1
+    },
+    "standard": {
+      "label": "Standard Models", 
+      "description": "Balanced models offering good performance with reasonable resource usage",
+      "priority": 2,
+      "maxSizeMB": 500,
+      "environmentalScore": 2
+    },
+    "advanced": {
+      "label": "Advanced Models",
+      "description": "Large, high-performance models for complex tasks",
+      "priority": 3,
+      "maxSizeMB": 2000,
+      "environmentalScore": 3
+    }
+  },
+  "models": {
+    "computer_vision": {
+      "image_classification": {
+        "lightweight": [
+          {
+            "id": "mobilenet_v3_small",
+            "name": "MobileNetV3 Small",
+            "huggingFaceId": "google/mobilenet_v3_small_1.0_224",
+            "description": "Lightweight image classification optimized for mobile devices",
+            "sizeMB": 9.2,
+            "accuracy": 0.672,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "mobile", "edge"],
+            "frameworks": ["TensorFlow.js", "ONNX"],
+            "lastUpdated": "2023-08-15"
+          },
+          {
+            "id": "efficientnet_b0",
+            "name": "EfficientNet B0",
+            "huggingFaceId": "google/efficientnet-b0",
+            "description": "Efficient CNN with excellent accuracy-to-size ratio",
+            "sizeMB": 20.3,
+            "accuracy": 0.772,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "mobile", "cloud"],
+            "frameworks": ["TensorFlow.js", "PyTorch", "ONNX"],
+            "lastUpdated": "2023-09-20"
+          }
+        ],
+        "standard": [
+          {
+            "id": "resnet50",
+            "name": "ResNet-50",
+            "huggingFaceId": "microsoft/resnet-50",
+            "description": "Popular deep residual network for image classification",
+            "sizeMB": 98.0,
+            "accuracy": 0.761,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "lastUpdated": "2023-07-10"
+          },
+          {
+            "id": "vit_base_patch16_224",
+            "name": "Vision Transformer Base",
+            "huggingFaceId": "google/vit-base-patch16-224",
+            "description": "Transformer architecture applied to image classification",
+            "sizeMB": 330.0,
+            "accuracy": 0.841,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-06-05"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "efficientnet_b7",
+            "name": "EfficientNet B7",
+            "huggingFaceId": "google/efficientnet-b7",
+            "description": "Large, high-accuracy CNN for demanding applications",
+            "sizeMB": 256.0,
+            "accuracy": 0.843,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-08-30"
+          }
+        ]
+      },
+      "object_detection": {
+        "lightweight": [
+          {
+            "id": "yolo_v8n",
+            "name": "YOLOv8 Nano",
+            "huggingFaceId": "ultralytics/yolov8n",
+            "description": "Ultra-lightweight object detection for real-time applications",
+            "sizeMB": 6.2,
+            "accuracy": 0.372,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "mobile", "edge"],
+            "frameworks": ["ONNX", "TensorFlow.js"],
+            "lastUpdated": "2023-11-15"
+          }
+        ],
+        "standard": [
+          {
+            "id": "yolo_v8s",
+            "name": "YOLOv8 Small",
+            "huggingFaceId": "ultralytics/yolov8s",
+            "description": "Balanced object detection with good speed-accuracy tradeoff",
+            "sizeMB": 22.5,
+            "accuracy": 0.448,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "edge", "server"],
+            "frameworks": ["PyTorch", "ONNX"],
+            "lastUpdated": "2023-11-15"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "yolo_v8x",
+            "name": "YOLOv8 Extra Large",
+            "huggingFaceId": "ultralytics/yolov8x",
+            "description": "High-accuracy object detection for production use",
+            "sizeMB": 136.7,
+            "accuracy": 0.537,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2023-11-15"
+          }
+        ]
+      }
+    },
+    "natural_language_processing": {
+      "text_classification": {
+        "lightweight": [
+          {
+            "id": "distilbert_base",
+            "name": "DistilBERT Base",
+            "huggingFaceId": "distilbert-base-uncased",
+            "description": "Lightweight BERT variant with 97% performance, 60% size",
+            "sizeMB": 255.0,
+            "accuracy": 0.97,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "lastUpdated": "2023-05-20"
+          },
+          {
+            "id": "albert_base_v2",
+            "name": "ALBERT Base v2",
+            "huggingFaceId": "albert-base-v2",
+            "description": "Parameter-efficient transformer with factorized embeddings",
+            "sizeMB": 44.7,
+            "accuracy": 0.89,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-04-12"
+          }
+        ],
+        "standard": [
+          {
+            "id": "bert_base_uncased",
+            "name": "BERT Base Uncased",
+            "huggingFaceId": "bert-base-uncased",
+            "description": "Original BERT model for general text understanding",
+            "sizeMB": 420.0,
+            "accuracy": 0.84,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-03-15"
+          },
+          {
+            "id": "roberta_base",
+            "name": "RoBERTa Base",
+            "huggingFaceId": "roberta-base",
+            "description": "Robustly optimized BERT with improved training",
+            "sizeMB": 478.0,
+            "accuracy": 0.876,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-06-08"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "bert_large_uncased",
+            "name": "BERT Large Uncased",
+            "huggingFaceId": "bert-large-uncased",
+            "description": "Large BERT model for highest accuracy requirements",
+            "sizeMB": 1340.0,
+            "accuracy": 0.864,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-03-15"
+          }
+        ]
+      },
+      "sentiment_analysis": {
+        "lightweight": [
+          {
+            "id": "cardiffnlp_twitter_roberta_base_sentiment",
+            "name": "Twitter RoBERTa Sentiment",
+            "huggingFaceId": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+            "description": "Specialized sentiment analysis for social media text",
+            "sizeMB": 478.0,
+            "accuracy": 0.82,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2023-08-25"
+          }
+        ],
+        "standard": [
+          {
+            "id": "nlptown_bert_base_multilingual_sentiment",
+            "name": "Multilingual BERT Sentiment",
+            "huggingFaceId": "nlptown/bert-base-multilingual-uncased-sentiment",
+            "description": "Multilingual sentiment analysis with BERT",
+            "sizeMB": 681.0,
+            "accuracy": 0.79,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-07-18"
+          }
+        ]
+      },
+      "text_generation": {
+        "lightweight": [
+          {
+            "id": "gpt2",
+            "name": "GPT-2",
+            "huggingFaceId": "gpt2",
+            "description": "Small transformer for basic text generation",
+            "sizeMB": 548.0,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "lastUpdated": "2023-02-10"
+          }
+        ],
+        "standard": [
+          {
+            "id": "gpt2_medium",
+            "name": "GPT-2 Medium",
+            "huggingFaceId": "gpt2-medium",
+            "description": "Medium-sized GPT-2 for better text generation quality",
+            "sizeMB": 1580.0,
+            "accuracy": 0.82,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-02-10"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "gpt2_large",
+            "name": "GPT-2 Large",
+            "huggingFaceId": "gpt2-large",
+            "description": "Large GPT-2 for high-quality text generation",
+            "sizeMB": 3160.0,
+            "accuracy": 0.87,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-02-10"
+          }
+        ]
+      }
+    },
+    "speech_processing": {
+      "speech_recognition": {
+        "lightweight": [
+          {
+            "id": "wav2vec2_base_960h",
+            "name": "Wav2Vec2 Base",
+            "huggingFaceId": "facebook/wav2vec2-base-960h",
+            "description": "Efficient speech recognition for English",
+            "sizeMB": 360.0,
+            "accuracy": 0.93,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-09-12"
+          }
+        ],
+        "standard": [
+          {
+            "id": "wav2vec2_large_960h",
+            "name": "Wav2Vec2 Large",
+            "huggingFaceId": "facebook/wav2vec2-large-960h",
+            "description": "High-accuracy speech recognition for English",
+            "sizeMB": 1260.0,
+            "accuracy": 0.95,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "TensorFlow"],
+            "lastUpdated": "2023-09-12"
+          }
+        ]
+      },
+      "text_to_speech": {
+        "lightweight": [
+          {
+            "id": "speecht5_tts",
+            "name": "SpeechT5 TTS",
+            "huggingFaceId": "microsoft/speecht5_tts",
+            "description": "Unified speech and text pre-training for TTS",
+            "sizeMB": 920.0,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2023-10-05"
+          }
+        ]
+      }
+    },
+    "time_series": {
+      "forecasting": {
+        "lightweight": [
+          {
+            "id": "chronos_t5_tiny",
+            "name": "Chronos T5 Tiny",
+            "huggingFaceId": "amazon/chronos-t5-tiny",
+            "description": "Lightweight time series forecasting model",
+            "sizeMB": 8.4,
+            "accuracy": 0.72,
+            "environmentalScore": 1,
+            "deploymentOptions": ["browser", "edge", "cloud"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2024-01-20"
+          }
+        ],
+        "standard": [
+          {
+            "id": "chronos_t5_small",
+            "name": "Chronos T5 Small",
+            "huggingFaceId": "amazon/chronos-t5-small",
+            "description": "Balanced time series forecasting with good accuracy",
+            "sizeMB": 42.0,
+            "accuracy": 0.78,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2024-01-20"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "chronos_t5_base",
+            "name": "Chronos T5 Base",
+            "huggingFaceId": "amazon/chronos-t5-base",
+            "description": "High-accuracy time series forecasting",
+            "sizeMB": 200.0,
+            "accuracy": 0.83,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch"],
+            "lastUpdated": "2024-01-20"
+          }
+        ]
+      }
+    }
+  },
+  "environmentalImpact": {
+    "scoringCriteria": {
+      "1": {
+        "label": "Low Impact",
+        "description": "Minimal energy consumption, suitable for edge devices",
+        "estimatedCO2gPerInference": "< 0.1",
+        "powerConsumptionW": "< 5"
+      },
+      "2": {
+        "label": "Medium Impact", 
+        "description": "Moderate energy consumption, cloud deployment recommended",
+        "estimatedCO2gPerInference": "0.1 - 1.0",
+        "powerConsumptionW": "5 - 50"
+      },
+      "3": {
+        "label": "High Impact",
+        "description": "Significant energy consumption, specialized hardware recommended",
+        "estimatedCO2gPerInference": "> 1.0",
+        "powerConsumptionW": "> 50"
+      }
+    },
+    "methodology": "Estimates based on model size, complexity, and typical deployment scenarios. Values are approximations for comparative purposes."
+  },
+  "selectionRules": {
+    "defaultTierPriority": ["lightweight", "standard", "advanced"],
+    "environmentalWeighting": 0.4,
+    "accuracyWeighting": 0.4,
+    "deploymentWeighting": 0.2,
+    "maxRecommendations": 3
+  }
+}
