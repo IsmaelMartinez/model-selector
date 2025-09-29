@@ -1,7 +1,7 @@
 # ADR 002: Three-Tier Model Organization System
 
 ## Status
-**Accepted** - January 29, 2025
+**Accepted** - September 29, 2025
 
 ## Context
 The Model Selector needs to organize diverse AI models (ranging from 6MB to 3GB) in a way that helps users make informed decisions based on their constraints and requirements.
@@ -105,4 +105,4 @@ This decision will be reviewed when:
 
 ---
 **Decision Made By:** MVP Development Team  
-**Review Date:** July 2025
+**Review Date:** March 2026

@@ -1,7 +1,7 @@
 # ADR 001: Static Data Architecture for Model Recommendations
 
 ## Status
-**Accepted** - January 29, 2025
+**Accepted** - September 29, 2025
 
 ## Context
 The MVP Model Selector needs to provide AI model recommendations without real-time API dependencies. We evaluated several approaches for data architecture and model recommendation delivery.
@@ -88,4 +88,4 @@ This decision will be reviewed when:
 
 ---
 **Decision Made By:** MVP Development Team  
-**Review Date:** July 2025
+**Review Date:** March 2026

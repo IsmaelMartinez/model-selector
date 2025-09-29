@@ -63,4 +63,4 @@ curl "https://huggingface.co/api/models?filter=task:CATEGORY&sort=downloads"
 - Coverage focused on popular English-language models
 
 ---
-*Last Updated: January 29, 2025*
+*Last Updated: September 29, 2025*
