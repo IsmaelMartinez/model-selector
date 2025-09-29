@@ -16,7 +16,7 @@ Based on PRD: `1-prd-mvp-model-selector.md`
 - [x] 2.1 Design and implement tiered data structure (browser/local)
 - [x] 2.2 Create model metadata aggregation system
 - [x] 2.3 Create simple environmental impact scoring system (reasonable estimates)
-- [ ] 2.4 Build task classification logic (OSS model or keyword fallback)
+- [x] 2.4 Build task classification logic (OSS model or keyword fallback)
 - [ ] 2.5 Create initial curated dataset with 10+ task categories
 - [ ] 2.6 Implement "smaller is better" model selection logic
 
