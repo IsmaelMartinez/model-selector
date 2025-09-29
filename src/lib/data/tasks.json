@@ -9,14 +9,14 @@
         "image_classification": {
           "label": "Image Classification",
           "description": "Categorizing images into predefined classes",
-          "keywords": ["classify images", "image recognition", "visual classification", "photo categorization"],
-          "examples": ["Classify dog breeds", "Medical image diagnosis", "Quality control inspection"]
+          "keywords": ["classify images", "image recognition", "visual classification", "photo categorization", "categorize images", "identify image type", "image analysis", "visual recognition", "photo classification", "NASA image", "satellite image", "medical image"],
+          "examples": ["Classify dog breeds", "Medical image diagnosis", "Quality control inspection", "Categorize NASA telescope images"]
         },
         "object_detection": {
           "label": "Object Detection",
           "description": "Identifying and locating objects within images",
-          "keywords": ["detect objects", "bounding box", "yolo", "object recognition", "locate objects"],
-          "examples": ["Traffic sign detection", "Face detection", "Security monitoring"]
+          "keywords": ["detect objects", "bounding box", "yolo", "object recognition", "locate objects", "count objects", "count stars", "find objects", "identify objects", "spot objects", "objects in image", "things in photo"],
+          "examples": ["Traffic sign detection", "Face detection", "Security monitoring", "Count stars in NASA images"]
         },
         "semantic_segmentation": {
           "label": "Semantic Segmentation", 
