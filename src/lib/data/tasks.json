@@ -1,0 +1,167 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-09-29",
+  "taskTaxonomy": {
+    "computer_vision": {
+      "label": "Computer Vision",
+      "description": "Tasks involving image and video analysis",
+      "subcategories": {
+        "image_classification": {
+          "label": "Image Classification",
+          "description": "Categorizing images into predefined classes",
+          "keywords": ["classify images", "image recognition", "visual classification", "photo categorization"],
+          "examples": ["Classify dog breeds", "Medical image diagnosis", "Quality control inspection"]
+        },
+        "object_detection": {
+          "label": "Object Detection",
+          "description": "Identifying and locating objects within images",
+          "keywords": ["detect objects", "bounding box", "yolo", "object recognition", "locate objects"],
+          "examples": ["Traffic sign detection", "Face detection", "Security monitoring"]
+        },
+        "semantic_segmentation": {
+          "label": "Semantic Segmentation", 
+          "description": "Pixel-level classification of image regions",
+          "keywords": ["segment image", "pixel classification", "region detection", "image segmentation"],
+          "examples": ["Medical image segmentation", "Autonomous driving", "Satellite imagery analysis"]
+        }
+      }
+    },
+    "natural_language_processing": {
+      "label": "Natural Language Processing",
+      "description": "Tasks involving text understanding and generation",
+      "subcategories": {
+        "text_classification": {
+          "label": "Text Classification",
+          "description": "Categorizing text into predefined classes",
+          "keywords": ["classify text", "text categorization", "document classification", "text analysis"],
+          "examples": ["Email spam detection", "News article categorization", "Customer inquiry routing"]
+        },
+        "sentiment_analysis": {
+          "label": "Sentiment Analysis",
+          "description": "Determining emotional tone in text",
+          "keywords": ["sentiment", "emotion", "positive negative", "opinion mining", "mood analysis"],
+          "examples": ["Product review analysis", "Social media monitoring", "Customer feedback analysis"]
+        },
+        "text_generation": {
+          "label": "Text Generation",
+          "description": "Generating human-like text",
+          "keywords": ["generate text", "language model", "gpt", "text creation", "writing assistant"],
+          "examples": ["Content creation", "Chatbot responses", "Code generation"]
+        },
+        "named_entity_recognition": {
+          "label": "Named Entity Recognition",
+          "description": "Identifying and extracting entities from text",
+          "keywords": ["entity extraction", "ner", "named entities", "information extraction"],
+          "examples": ["Extract person names", "Location identification", "Company name extraction"]
+        }
+      }
+    },
+    "speech_processing": {
+      "label": "Speech Processing",
+      "description": "Tasks involving audio and speech analysis",
+      "subcategories": {
+        "speech_recognition": {
+          "label": "Speech Recognition",
+          "description": "Converting speech to text",
+          "keywords": ["speech to text", "asr", "voice recognition", "transcription", "dictation"],
+          "examples": ["Voice assistants", "Meeting transcription", "Podcast subtitles"]
+        },
+        "text_to_speech": {
+          "label": "Text to Speech",
+          "description": "Converting text to spoken words", 
+          "keywords": ["text to speech", "tts", "voice synthesis", "speech generation"],
+          "examples": ["Audiobook generation", "Voice assistants", "Accessibility tools"]
+        }
+      }
+    },
+    "time_series": {
+      "label": "Time Series Analysis",
+      "description": "Tasks involving temporal data analysis and forecasting",
+      "subcategories": {
+        "forecasting": {
+          "label": "Time Series Forecasting",
+          "description": "Predicting future values based on historical data",
+          "keywords": ["forecast", "predict", "time series", "temporal prediction", "trend analysis"],
+          "examples": ["Stock price prediction", "Weather forecasting", "Demand planning"]
+        },
+        "anomaly_detection": {
+          "label": "Anomaly Detection",
+          "description": "Identifying unusual patterns in temporal data",
+          "keywords": ["anomaly", "outlier", "unusual pattern", "fraud detection", "abnormal behavior"],
+          "examples": ["Fraud detection", "System monitoring", "Quality control"]
+        }
+      }
+    },
+    "recommendation_systems": {
+      "label": "Recommendation Systems",
+      "description": "Tasks involving personalized content suggestions",
+      "subcategories": {
+        "collaborative_filtering": {
+          "label": "Collaborative Filtering",
+          "description": "Recommendations based on user similarity",
+          "keywords": ["collaborative filtering", "user-based", "similar users", "recommendation"],
+          "examples": ["Movie recommendations", "Product suggestions", "Music discovery"]
+        },
+        "content_based": {
+          "label": "Content-Based Filtering",
+          "description": "Recommendations based on item features",
+          "keywords": ["content based", "item features", "similarity", "feature matching"],
+          "examples": ["News article recommendations", "Job matching", "Similar product suggestions"]
+        }
+      }
+    },
+    "reinforcement_learning": {
+      "label": "Reinforcement Learning",
+      "description": "Tasks involving learning through interaction and rewards",
+      "subcategories": {
+        "game_playing": {
+          "label": "Game Playing",
+          "description": "Learning to play games through trial and error",
+          "keywords": ["game", "agent", "policy", "q-learning", "strategy"],
+          "examples": ["Chess playing", "Video game AI", "Board game strategies"]
+        },
+        "robotics": {
+          "label": "Robotics Control",
+          "description": "Learning robot control policies",
+          "keywords": ["robot", "control", "manipulation", "navigation", "motor skills"],
+          "examples": ["Robot arm control", "Autonomous navigation", "Grasping objects"]
+        }
+      }
+    },
+    "data_preprocessing": {
+      "label": "Data Preprocessing", 
+      "description": "Tasks involving data cleaning and preparation",
+      "subcategories": {
+        "data_cleaning": {
+          "label": "Data Cleaning",
+          "description": "Removing errors and inconsistencies from data",
+          "keywords": ["clean data", "remove noise", "handle missing", "data quality"],
+          "examples": ["Remove duplicates", "Handle missing values", "Correct data errors"]
+        },
+        "feature_engineering": {
+          "label": "Feature Engineering",
+          "description": "Creating meaningful features from raw data",
+          "keywords": ["feature", "transform", "encode", "scale", "normalize"],
+          "examples": ["Feature scaling", "Categorical encoding", "Feature selection"]
+        }
+      }
+    }
+  },
+  "taskMappingRules": {
+    "priorityOrder": [
+      "computer_vision",
+      "natural_language_processing", 
+      "speech_processing",
+      "time_series",
+      "recommendation_systems",
+      "reinforcement_learning",
+      "data_preprocessing"
+    ],
+    "confidenceThresholds": {
+      "high": 0.8,
+      "medium": 0.6,
+      "low": 0.4
+    },
+    "fallbackCategory": "data_preprocessing"
+  }
+}
