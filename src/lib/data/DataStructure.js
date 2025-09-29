@@ -3,8 +3,16 @@
  * Provides efficient client-side access to model and task data
  */
 
-import modelsData from './models.json';
-import tasksData from './tasks.json';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load JSON data files
+const modelsData = JSON.parse(readFileSync(join(__dirname, 'models.json'), 'utf8'));
+const tasksData = JSON.parse(readFileSync(join(__dirname, 'tasks.json'), 'utf8'));
 
 export class TieredDataStructure {
   constructor() {
