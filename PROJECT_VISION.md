@@ -108,7 +108,7 @@ An open source assistant to help you choose the most environmentally efficient A
 - Confidence scores for all recommendations
 
 ### Phase 4: v3.0 - Distributed & Extensible
-**Timeline**: 2025
+**Timeline**: 2026
 **Status**: Vision
 
 **Goals:**
@@ -174,7 +174,7 @@ User Input → Local SLM → Distributed Graph → Plugin Ecosystem → Enhanced
 - **Accessibility**: Basic keyboard navigation and semantic HTML (MVP)
 
 ### Community
-- **Adoption**: 1000+ monthly active users by end of 2024
+- **Adoption**: 1000+ monthly active users by end of 2025
 - **Contributions**: 50+ community contributors
 - **Extensions**: 10+ community plugins by v3.0
 - **Trust**: Cited by 100+ research papers/blog posts
