@@ -10,7 +10,7 @@
       "environmentalScore": 1
     },
     "standard": {
-      "label": "Standard Models", 
+      "label": "Standard Models",
       "description": "Balanced models offering good performance with reasonable resource usage",
       "priority": 2,
       "maxSizeMB": 500,
@@ -36,8 +36,14 @@
             "sizeMB": 9.2,
             "accuracy": 0.672,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "mobile", "edge"],
-            "frameworks": ["TensorFlow.js", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "mobile"
+            ],
+            "frameworks": [
+              "TensorFlow.js",
+              "ONNX"
+            ],
             "lastUpdated": "2023-08-15"
           },
           {
@@ -48,8 +54,16 @@
             "sizeMB": 20.3,
             "accuracy": 0.772,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "mobile", "cloud"],
-            "frameworks": ["TensorFlow.js", "PyTorch", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "cloud"
+            ],
+            "frameworks": [
+              "TensorFlow.js",
+              "PyTorch",
+              "ONNX"
+            ],
             "lastUpdated": "2023-09-20"
           }
         ],
@@ -62,8 +76,14 @@
             "sizeMB": 98.0,
             "accuracy": 0.761,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow",
+              "ONNX"
+            ],
             "lastUpdated": "2023-07-10"
           },
           {
@@ -74,8 +94,13 @@
             "sizeMB": 330.0,
             "accuracy": 0.841,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-06-05"
           }
         ],
@@ -88,8 +113,13 @@
             "sizeMB": 256.0,
             "accuracy": 0.843,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-08-30"
           }
         ]
@@ -104,8 +134,14 @@
             "sizeMB": 6.2,
             "accuracy": 0.372,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "mobile", "edge"],
-            "frameworks": ["ONNX", "TensorFlow.js"],
+            "deploymentOptions": [
+              "browser",
+              "mobile"
+            ],
+            "frameworks": [
+              "ONNX",
+              "TensorFlow.js"
+            ],
             "lastUpdated": "2023-11-15"
           }
         ],
@@ -118,8 +154,14 @@
             "sizeMB": 22.5,
             "accuracy": 0.448,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "edge", "server"],
-            "frameworks": ["PyTorch", "ONNX"],
+            "deploymentOptions": [
+              "cloud",
+              "browser"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "ONNX"
+            ],
             "lastUpdated": "2023-11-15"
           }
         ],
@@ -132,8 +174,12 @@
             "sizeMB": 136.7,
             "accuracy": 0.537,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2023-11-15"
           }
         ]
@@ -148,8 +194,14 @@
             "sizeMB": 22.4,
             "accuracy": 0.781,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "mobile"],
-            "frameworks": ["PyTorch", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "mobile"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "ONNX"
+            ],
             "lastUpdated": "2023-10-15"
           }
         ],
@@ -162,8 +214,13 @@
             "sizeMB": 158.0,
             "accuracy": 0.867,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-09-22"
           }
         ],
@@ -176,8 +233,12 @@
             "sizeMB": 233.0,
             "accuracy": 0.892,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2023-09-22"
           }
         ]
@@ -194,8 +255,15 @@
             "sizeMB": 255.0,
             "accuracy": 0.97,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow",
+              "ONNX"
+            ],
             "lastUpdated": "2023-05-20"
           },
           {
@@ -206,8 +274,14 @@
             "sizeMB": 44.7,
             "accuracy": 0.89,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-04-12"
           }
         ],
@@ -220,8 +294,13 @@
             "sizeMB": 420.0,
             "accuracy": 0.84,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-03-15"
           },
           {
@@ -232,8 +311,13 @@
             "sizeMB": 478.0,
             "accuracy": 0.876,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-06-08"
           }
         ],
@@ -246,8 +330,13 @@
             "sizeMB": 1340.0,
             "accuracy": 0.864,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-03-15"
           }
         ]
@@ -262,8 +351,12 @@
             "sizeMB": 478.0,
             "accuracy": 0.82,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2023-08-25"
           }
         ],
@@ -276,8 +369,13 @@
             "sizeMB": 681.0,
             "accuracy": 0.79,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-07-18"
           }
         ]
@@ -292,8 +390,15 @@
             "sizeMB": 548.0,
             "accuracy": 0.75,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow",
+              "ONNX"
+            ],
             "lastUpdated": "2023-02-10"
           }
         ],
@@ -306,8 +411,13 @@
             "sizeMB": 1580.0,
             "accuracy": 0.82,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-02-10"
           }
         ],
@@ -320,8 +430,13 @@
             "sizeMB": 3160.0,
             "accuracy": 0.87,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-02-10"
           }
         ]
@@ -336,8 +451,13 @@
             "sizeMB": 15.0,
             "accuracy": 0.85,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server", "edge"],
-            "frameworks": ["SpaCy"],
+            "deploymentOptions": [
+              "cloud",
+              "browser"
+            ],
+            "frameworks": [
+              "SpaCy"
+            ],
             "lastUpdated": "2023-11-01"
           }
         ],
@@ -350,8 +470,13 @@
             "sizeMB": 1340.0,
             "accuracy": 0.91,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-06-14"
           }
         ]
@@ -368,8 +493,13 @@
             "sizeMB": 360.0,
             "accuracy": 0.93,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-09-12"
           }
         ],
@@ -382,8 +512,13 @@
             "sizeMB": 1260.0,
             "accuracy": 0.95,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-09-12"
           }
         ]
@@ -398,8 +533,12 @@
             "sizeMB": 920.0,
             "accuracy": 0.85,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2023-10-05"
           }
         ]
@@ -416,8 +555,13 @@
             "sizeMB": 8.4,
             "accuracy": 0.72,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "cloud"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2024-01-20"
           }
         ],
@@ -430,8 +574,12 @@
             "sizeMB": 42.0,
             "accuracy": 0.78,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2024-01-20"
           }
         ],
@@ -444,8 +592,12 @@
             "sizeMB": 200.0,
             "accuracy": 0.83,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2024-01-20"
           }
         ]
@@ -460,8 +612,14 @@
             "sizeMB": 2.1,
             "accuracy": 0.78,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "cloud"],
-            "frameworks": ["scikit-learn", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "scikit-learn",
+              "ONNX"
+            ],
             "lastUpdated": "2023-12-05"
           }
         ],
@@ -474,8 +632,13 @@
             "sizeMB": 45.2,
             "accuracy": 0.84,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-11-18"
           }
         ]
@@ -492,8 +655,14 @@
             "sizeMB": 8.5,
             "accuracy": 0.76,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "cloud"],
-            "frameworks": ["PyTorch", "scikit-learn"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "scikit-learn"
+            ],
             "lastUpdated": "2023-10-28"
           }
         ],
@@ -506,8 +675,13 @@
             "sizeMB": 152.0,
             "accuracy": 0.82,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "TensorFlow"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
             "lastUpdated": "2023-09-15"
           }
         ]
@@ -522,8 +696,14 @@
             "sizeMB": 12.3,
             "accuracy": 0.71,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "cloud"],
-            "frameworks": ["sentence-transformers", "ONNX"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "sentence-transformers",
+              "ONNX"
+            ],
             "lastUpdated": "2023-11-10"
           }
         ]
@@ -540,8 +720,13 @@
             "sizeMB": 89.4,
             "accuracy": 0.85,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "stable-baselines3"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "stable-baselines3"
+            ],
             "lastUpdated": "2023-08-20"
           }
         ],
@@ -554,8 +739,12 @@
             "sizeMB": 445.0,
             "accuracy": 0.95,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
             "lastUpdated": "2023-07-25"
           }
         ]
@@ -570,8 +759,14 @@
             "sizeMB": 67.8,
             "accuracy": 0.79,
             "environmentalScore": 2,
-            "deploymentOptions": ["edge", "server"],
-            "frameworks": ["PyTorch", "stable-baselines3"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "stable-baselines3"
+            ],
             "lastUpdated": "2023-09-30"
           }
         ]
@@ -588,8 +783,14 @@
             "sizeMB": 5.2,
             "accuracy": 0.88,
             "environmentalScore": 1,
-            "deploymentOptions": ["browser", "edge", "cloud"],
-            "frameworks": ["pandas", "Python"],
+            "deploymentOptions": [
+              "browser",
+              "cloud"
+            ],
+            "frameworks": [
+              "pandas",
+              "Python"
+            ],
             "lastUpdated": "2023-12-01"
           }
         ]
@@ -604,8 +805,13 @@
             "sizeMB": 18.9,
             "accuracy": 0.82,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["Python", "pandas"],
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "Python",
+              "pandas"
+            ],
             "lastUpdated": "2023-11-25"
           }
         ]
@@ -616,27 +822,28 @@
     "scoringCriteria": {
       "1": {
         "label": "Low Impact",
-        "description": "Minimal energy consumption, suitable for edge devices",
-        "estimatedCO2gPerInference": "< 0.1",
-        "powerConsumptionW": "< 5"
+        "description": "Mobile/edge friendly, minimal carbon footprint",
+        "dailyKWh": "< 0.1"
       },
       "2": {
         "label": "Medium Impact", 
-        "description": "Moderate energy consumption, cloud deployment recommended",
-        "estimatedCO2gPerInference": "0.1 - 1.0",
-        "powerConsumptionW": "5 - 50"
+        "description": "Cloud deployment with reasonable usage",
+        "dailyKWh": "0.1 - 1.0"
       },
       "3": {
         "label": "High Impact",
-        "description": "Significant energy consumption, specialized hardware recommended",
-        "estimatedCO2gPerInference": "> 1.0",
-        "powerConsumptionW": "> 50"
+        "description": "Specialized applications, significant footprint", 
+        "dailyKWh": "> 1.0"
       }
     },
-    "methodology": "Estimates based on model size, complexity, and typical deployment scenarios. Values are approximations for comparative purposes."
+    "methodology": "Order-of-magnitude comparisons based on estimated kWh/day usage. See /docs/ENVIRONMENTAL_METHODOLOGY.md for details."
   },
   "selectionRules": {
-    "defaultTierPriority": ["lightweight", "standard", "advanced"],
+    "defaultTierPriority": [
+      "lightweight",
+      "standard",
+      "advanced"
+    ],
     "environmentalWeighting": 0.4,
     "accuracyWeighting": 0.4,
     "deploymentWeighting": 0.2,
