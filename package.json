@@ -32,5 +32,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/your-username/model-selector.git"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.4"
   }
 }

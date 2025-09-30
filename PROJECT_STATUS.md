@@ -1,9 +1,9 @@
 # AI Model Selector - Current Project Status
 
 **Date**: September 30, 2025  
-**Status**: MVP Complete & Deployed ✅  
+**Status**: MVP Complete & Deployed ✅ | Planning v1.1  
 **Live URL**: https://ismaelmartinez.github.io/model-selector  
-**Commit**: 5267feb - Include package-lock.json for GitHub Actions deployment  
+**Last Commit**: f0f06a4 - Trigger GitHub Pages deployment after enabling Pages  
 
 ## 📊 Overall Progress: 100% Complete (36/36 Tasks)
 
@@ -134,19 +134,40 @@ git status         # ✅ Clean working tree
 - Fast, responsive interactions
 - Accessible to users with disabilities
 
-## 📈 Next Iteration Opportunities
+## 📈 Next Iteration: v1.1 (In Planning)
 
-### High Priority
-1. **Classification Accuracy**: Implement browser-compatible SLM for better task understanding
-2. **Test Coverage**: Fix failing edge case tests for better robustness
-3. **Model Data Expansion**: Add more specialized and recent models
+### Phase 2 Focus: Browser-Based SLM Integration
+**PRD**: `tasks/2-prd-browser-slm-classification.md`  
+**Timeline**: 8-12 days  
+**Goal**: Replace keyword-based classification with Small Language Model for 90%+ accuracy
 
-### Medium Priority
-1. **Multi-browser Support**: Test and optimize for Firefox, Safari, Edge
-2. **Advanced Filters**: Allow users to filter by model size, task type, etc.
-3. **Usage Analytics**: Basic privacy-friendly usage tracking
+#### Key Objectives
+1. **Improve Classification Accuracy**: From 83% → 90%+ using zero-shot classification
+2. **Simplify Codebase**: Remove complex keyword matching and decision trees
+3. **Maintain Privacy**: Keep all inference client-side (no external APIs)
+4. **Cross-Browser Support**: Expand beyond Chrome-first to Firefox, Safari, mobile
+5. **Graceful Degradation**: Fall back to keywords if SLM fails to load
 
-### Low Priority
+#### Technical Approach
+- **Library**: Transformers.js v3+ (WebGPU/WASM)
+- **Model**: DistilBERT-based zero-shot classifier (~67M params, quantized)
+- **Inference Time**: ≤10 seconds per classification
+- **Load Time**: ≤30 seconds on broadband (first visit only)
+- **Fallback**: Keyword classifier with user notification
+
+### Future Priorities (Post-v1.1)
+
+#### High Priority
+1. **Test Coverage**: Fix failing edge case tests for better robustness
+2. **Model Data Expansion**: Add more specialized and recent models
+3. **Performance Optimization**: Further reduce inference time
+
+#### Medium Priority
+1. **Advanced Filters**: Allow users to filter by model size, task type, etc.
+2. **Usage Analytics**: Basic privacy-friendly usage tracking
+3. **Multi-SLM Options**: Let users choose speed vs accuracy
+
+#### Low Priority
 1. **Model Performance Metrics**: Add benchmarking data where available
 2. **Community Features**: Model ratings, user reviews
 3. **API Integration**: Real-time model updates from Hugging Face
