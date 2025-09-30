@@ -111,32 +111,7 @@ Each model includes:
 
 ## Environmental Impact Scoring
 
-### Scoring Criteria
-
-| Score | Label | CO2 per Inference | Power Consumption | Deployment |
-|-------|-------|------------------|------------------|------------|
-| 1 | Low Impact | < 0.1g | < 5W | Edge devices, mobile |
-| 2 | Medium Impact | 0.1 - 1.0g | 5 - 50W | Cloud recommended |
-| 3 | High Impact | > 1.0g | > 50W | Specialized hardware |
-
-### Methodology
-
-Environmental estimates are based on:
-- Model size and complexity
-- Typical deployment scenarios
-- Hardware requirements
-- Energy consumption patterns
-
-**Note**: Values are approximations for comparative purposes, not scientifically validated measurements.
-
-### Selection Algorithm
-
-The recommendation engine uses weighted scoring:
-- **Environmental Impact**: 40% weighting
-- **Accuracy**: 40% weighting  
-- **Deployment Compatibility**: 20% weighting
-
-Models are ranked by tier priority (lightweight → standard → advanced) with environmental considerations as the primary differentiator.
+Environmental scores (1-3) based on estimated kWh/day usage. See `/docs/ENVIRONMENTAL_METHODOLOGY.md` for detailed methodology. Selection algorithm weights environmental impact at 40% alongside accuracy (40%) and deployment compatibility (20%).
 
 ## Usage in Application
 

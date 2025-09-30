@@ -35,12 +35,6 @@ We will use SvelteKit with Vite for the MVP, implementing a rules-first approach
 - Requires manual curation of decision graph
 
 ## Alternatives Considered
-- **Next.js**: Heavier runtime, less optimal for static/offline use
-- **Pure HTML/JS**: Too limited for complex decision logic
-- **Electron**: Unnecessarily heavy for a web-first tool
-
-## Implementation Notes
-- Start with simple form-based task categorization
-- Implement decision graph as JSON/YAML configuration
-- Add service worker for PWA functionality
-- Design component structure to accommodate future SLM integration
+**Next.js**: Heavier runtime, less optimal for static/offline use
+**Pure HTML/JS**: Too limited for complex decision logic
+**Electron**: Unnecessarily heavy for web-first tool

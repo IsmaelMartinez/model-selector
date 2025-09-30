@@ -47,61 +47,11 @@ We will implement a **hybrid approach** with tiered classification methods:
 
 ## Alternatives Considered
 
-### Pure Client-Side Transformers.js
-- **Model**: DistilBERT-based zero-shot classification
-- **Rejected**: 60+ MB model size exceeds bundle constraints
-- **Alternative Use**: Potential future optimization with WebGPU acceleration
+**Pure Client-Side Transformers.js**: Rejected due to 60+ MB model size
+**OpenAI/Anthropic APIs**: Rejected due to cost and vendor lock-in  
+**Pure Keyword Matching**: Retained as final fallback only
 
-### OpenAI/Anthropic APIs
-- **Rejected**: Cost prohibitive for MVP, introduces vendor lock-in
-- **Note**: Could be premium tier option in future
-
-### Pure Keyword Matching
-- **Rejected**: Insufficient accuracy for technical task descriptions
-- **Use**: Retained as final fallback only
-
-## Implementation Plan
-
-### Phase 1: API Integration (Task 1.2-1.4)
-1. Test Hugging Face Inference API access and authentication
-2. Implement zero-shot classification with predefined categories
-3. Create error handling and rate limiting
-
-### Phase 2: Client-Side Fallback (Task 2.4)
-1. Integrate sentence transformers for semantic similarity
-2. Pre-compute category embeddings
-3. Implement similarity threshold logic
-
-### Phase 3: Keyword Fallback (Task 4.5)
-1. Define keyword patterns for each category
-2. Implement simple matching algorithm
-3. Integration with main classification pipeline
-
-## Task Categories (Initial Set)
-- computer vision
-- natural language processing
-- object detection and tracking
-- sentiment analysis and text classification
-- text generation and language modeling
-- time series analysis and forecasting
-- speech recognition and processing
-- recommendation systems
-- reinforcement learning
-- data preprocessing and feature engineering
-
-## Success Metrics
-- Classification accuracy >80% on manual test set
-- Response time <3 seconds for online scenarios
-- Offline functionality maintains >70% accuracy
-- System availability >99% with fallback mechanisms
-
-## Dependencies
-- Hugging Face Inference API account and key
-- sentence-transformers browser compatibility
-- Service worker for offline embedding storage
-
-## Future Considerations
-- Integration of local SLM via WebGPU/WebAssembly
-- Model fine-tuning on domain-specific task descriptions
-- A/B testing different model combinations
-- Cost optimization for API usage
+## Implementation
+1. Hugging Face API integration with error handling
+2. Client-side semantic similarity fallback
+3. Keyword pattern matching as ultimate fallback

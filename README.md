@@ -39,7 +39,16 @@ Performance: ~40KB gzipped, <1s load time
 
 ## Deployment
 
-GitHub Pages auto-deploys from main branch. Manual: build and deploy `dist/` directory.
+### Automated
+GitHub Pages auto-deploys from main branch via GitHub Actions.
+
+### Manual
+```bash
+npm run build
+# Deploy contents of `dist/` directory to hosting provider
+```
+
+**Requirements**: Node.js 18+, modern browsers, ~40KB bundle
 
 ## Contributing
 
