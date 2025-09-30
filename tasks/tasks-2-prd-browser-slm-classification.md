@@ -6,7 +6,7 @@
 
 ## Parent Task 1: Research & Model Selection (2-3 days)
 - [x] 1.1 Install and test Transformers.js v3+ integration in development environment
-- [ ] 1.2 Evaluate `Xenova/distilbert-base-uncased-mnli` performance (size, load time, accuracy)
+- [x] 1.2 Evaluate `Xenova/distilbert-base-uncased-mnli` performance (size, load time, accuracy)
 - [ ] 1.3 Evaluate `Xenova/bart-large-mnli` as alternative option (if DistilBERT insufficient)
 - [ ] 1.4 Test zero-shot classification with current task taxonomy (7 categories)
 - [ ] 1.5 Benchmark inference time on target hardware (Chrome desktop/mobile)
