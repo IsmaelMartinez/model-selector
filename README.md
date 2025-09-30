@@ -57,9 +57,10 @@ Help with model data, task categories, classification accuracy, UI/UX, performan
 ## Roadmap
 
 - ✅ MVP: Complete working application
-- 🔄 v1.1: Enhanced model database
-- 🎯 v1.2: Advanced environmental calculations
-- 🚀 v2.0: Local SLM integration
+- ✅ Research: Browser SLM evaluation (see [ADR-001](docs/adr/ADR-001-SLM-Model-Selection.md))
+- 🔄 v1.1: Enhanced model database and classification improvements
+- 🎯 v1.2: Advanced environmental calculations and UI enhancements
+- 🚀 v2.0: API integrations and advanced features
 
 ## License
 

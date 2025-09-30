@@ -4,34 +4,37 @@
 **Timeline**: 6-8 days (simplified without clarification flow)  
 **Target**: 100% classification accuracy with 10s inference time  
 
-## Parent Task 1: Research & Model Selection (2-3 days)
+## ✅ Parent Task 1: Research & Model Selection (2-3 days) - COMPLETED
 - [x] 1.1 Install and test Transformers.js v3+ integration in development environment
 - [x] 1.2 Evaluate `Xenova/distilbert-base-uncased-mnli` performance (size, load time, accuracy)
 - [x] 1.3 Evaluate `Xenova/bart-large-mnli` as alternative option (if DistilBERT insufficient)
 - [x] 1.4 Test zero-shot classification with current task taxonomy (7 categories)
-- [ ] 1.5 Benchmark inference time on target hardware (Chrome desktop/mobile)
-- [ ] 1.6 Test model quantization options (q4, q8) for optimal size/performance balance
-- [ ] 1.7 Validate WebGPU vs WASM performance on Chrome
-- [ ] 1.8 Run accuracy tests against existing 35-test classification suite
-- [ ] 1.9 Create ADR (Architecture Decision Record) documenting model selection rationale
-- [ ] 1.10 Expand test suite to 50+ cases covering edge cases and corner cases
+- [x] 1.5 Benchmark inference time on target hardware (Chrome desktop/mobile) - DistilBERT: 251ms, BART: 2242ms
+- [❌] 1.6 Test model quantization options (q4, q8) for optimal size/performance balance - Cancelled due to accuracy issues
+- [❌] 1.7 Validate WebGPU vs WASM performance on Chrome - Cancelled due to accuracy issues  
+- [x] 1.8 Run accuracy tests against existing 35-test classification suite - DistilBERT: 50%, BART: 30%
+- [x] 1.9 Create ADR (Architecture Decision Record) documenting model selection rationale - Decision: Do not proceed with SLM
+- [❌] 1.10 Expand test suite to 50+ cases covering edge cases and corner cases - Cancelled due to poor baseline performance
 
-## Parent Task 2: Core SLM Integration (3-4 days)
-- [ ] 2.1 Create new `BrowserSLMClassifier.js` component with Transformers.js pipeline
-- [ ] 2.2 Implement zero-shot classification with confidence scoring (REQ-7)
-- [ ] 2.3 Add model caching using Browser Cache API (REQ-13)
-- [ ] 2.4 Integrate SLM classifier into existing `BrowserTaskClassifier.js` as primary method
-- [ ] 2.5 Implement lazy loading for model initialization (load on first classification request)
-- [ ] 2.6 Add WebGPU detection and automatic backend selection (WebGPU > WASM)
-- [ ] 2.7 Map SLM classification results to existing task taxonomy structure
-- [ ] 2.8 Ensure classification results include category and subcategory (REQ-9)
-- [ ] 2.9 Add model performance monitoring and statistics tracking
-- [ ] 2.10 Bundle size optimization to stay under 2MB increase (excluding model weights)
+## ❌ Parent Task 2: Core SLM Integration (3-4 days) - CANCELLED
+**Reason**: SLM classification accuracy insufficient (50% vs 95% requirement)
 
-## ~~Parent Task 3: Clarification Flow~~ **DEFERRED** to Future Iteration
-**Moved to Future Enhancement**: Clarification questions for low-confidence scenarios deferred for MVP simplicity. SLM results will be used as-is regardless of confidence score.
+- [❌] 2.1 Create new `BrowserSLMClassifier.js` component with Transformers.js pipeline - Cancelled
+- [❌] 2.2 Implement zero-shot classification with confidence scoring (REQ-7) - Cancelled  
+- [❌] 2.3 Add model caching using Browser Cache API (REQ-13) - Cancelled
+- [❌] 2.4 Integrate SLM classifier into existing `BrowserTaskClassifier.js` as primary method - Cancelled
+- [❌] 2.5 Implement lazy loading for model initialization (load on first classification request) - Cancelled
+- [❌] 2.6 Add WebGPU detection and automatic backend selection (WebGPU > WASM) - Cancelled
+- [❌] 2.7 Map SLM classification results to existing task taxonomy structure - Cancelled
+- [❌] 2.8 Ensure classification results include category and subcategory (REQ-9) - Cancelled
+- [❌] 2.9 Add model performance monitoring and statistics tracking - Cancelled
+- [❌] 2.10 Bundle size optimization to stay under 2MB increase (excluding model weights) - Cancelled
 
-## Parent Task 3: Fallback & Error Handling (1-2 days)
+## ❌ Parent Task 3: Clarification Flow - CANCELLED
+**Reason**: SLM integration cancelled, clarification flow no longer relevant
+
+## ❌ Parent Task 4: Fallback & Error Handling (1-2 days) - CANCELLED
+**Reason**: SLM integration cancelled, SLM-specific error handling no longer needed
 - [ ] 3.1 Implement technical error detection (browser compatibility, network, memory, timeout)
 - [ ] 3.2 Create fallback notification component for SLM load failures (REQ-15)
 - [ ] 3.3 Add dismissible banner/toast for "⚠️ Using simplified classification" message
