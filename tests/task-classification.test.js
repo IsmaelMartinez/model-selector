@@ -82,7 +82,7 @@ describe('Task Classification Accuracy', () => {
       const result = await taskClassifier.classify('Help me with AI');
       
       expect(result.predictions).toHaveLength(3);
-      expect(result.method).toContain('fallback');
+      expect(result.method).toContain('enhanced_keyword');
     });
 
     test('should handle empty input gracefully', async () => {

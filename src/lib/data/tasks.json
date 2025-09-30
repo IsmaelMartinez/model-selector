@@ -9,7 +9,7 @@
         "image_classification": {
           "label": "Image Classification",
           "description": "Categorizing images into predefined classes", 
-          "keywords": ["classify images", "image recognition", "visual classification", "photo categorization", "categorize images", "identify image type", "image analysis", "visual recognition", "photo classification", "NASA image", "satellite image", "medical image", "image", "photo", "picture", "visual", "from image", "in image", "image from", "space image", "satellite", "aerial"],
+          "keywords": ["classify images", "image recognition", "visual classification", "photo categorization", "categorize images", "identify image type", "image analysis", "visual recognition", "photo classification", "NASA image", "satellite image", "medical image", "space image", "aerial image"],
           "examples": ["Classify dog breeds", "Medical image diagnosis", "Quality control inspection", "Categorize NASA telescope images"]
         },
         "object_detection": {
@@ -33,13 +33,13 @@
         "text_classification": {
           "label": "Text Classification",
           "description": "Categorizing text into predefined classes",
-          "keywords": ["classify text", "text categorization", "document classification", "text analysis"],
+          "keywords": ["classify text", "text categorization", "document classification", "text analysis", "classify tickets", "classify emails", "classify documents", "categorize text", "sort text", "classify customer", "support tickets", "customer support", "email classification", "document sorting", "text sorting"],
           "examples": ["Email spam detection", "News article categorization", "Customer inquiry routing"]
         },
         "sentiment_analysis": {
           "label": "Sentiment Analysis",
           "description": "Determining emotional tone in text",
-          "keywords": ["sentiment", "emotion", "positive negative", "opinion mining", "mood analysis"],
+          "keywords": ["sentiment", "emotion", "positive negative", "opinion mining", "mood analysis", "analyze sentiment", "product reviews", "review analysis", "customer feedback", "social media sentiment", "opinion analysis", "emotional analysis"],
           "examples": ["Product review analysis", "Social media monitoring", "Customer feedback analysis"]
         },
         "text_generation": {
@@ -87,7 +87,7 @@
         "anomaly_detection": {
           "label": "Anomaly Detection",
           "description": "Identifying unusual patterns in temporal data",
-          "keywords": ["anomaly", "outlier", "unusual pattern", "fraud detection", "abnormal behavior"],
+          "keywords": ["anomaly", "outlier", "unusual pattern", "fraud detection", "abnormal behavior", "detect anomalies", "anomaly detection", "server monitoring", "system monitoring", "monitoring data", "unusual data", "abnormal data", "detect outliers", "find anomalies"],
           "examples": ["Fraud detection", "System monitoring", "Quality control"]
         }
       }
