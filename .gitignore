@@ -31,3 +31,8 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Model files (downloaded at runtime, too large for git)
+public/models/
+*.onnx
+*.onnx_data

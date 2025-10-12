@@ -127,15 +127,17 @@ export class ModelAggregator {
    */
   async fetchHuggingFaceModels(categories) {
     const allModels = [];
-    
+
     for (const category of categories) {
       try {
         console.log(`   Fetching ${category.task} models...`);
-        
+
         const url = new URL('https://huggingface.co/api/models');
-        url.searchParams.set('filter', `task:${category.task}`);
+        // Use pipeline_tag instead of filter for newer API
+        url.searchParams.set('pipeline_tag', category.task);
         url.searchParams.set('sort', 'downloads');
-        url.searchParams.set('limit', '50');
+        url.searchParams.set('direction', '-1'); // Descending
+        url.searchParams.set('limit', '20'); // Reduced from 50 to avoid rate limits
 
         const headers = {};
         if (this.huggingFaceToken) {
@@ -143,13 +145,15 @@ export class ModelAggregator {
         }
 
         const response = await fetch(url, { headers });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
         const models = await response.json();
-        
+
+        console.log(`   Found ${models.length} ${category.task} models`);
+
         // Add category information to each model
         const categorizedModels = models.map(model => ({
           ...model,
@@ -161,8 +165,8 @@ export class ModelAggregator {
         allModels.push(...categorizedModels);
         this.stats.processed += models.length;
 
-        // Rate limiting
-        await this.sleep(100);
+        // Rate limiting - be more conservative
+        await this.sleep(500);
 
       } catch (error) {
         console.warn(`   ⚠️ Failed to fetch ${category.task}: ${error.message}`);
@@ -410,17 +414,17 @@ export class ModelAggregator {
   /**
    * Calculate environmental impact score using comprehensive calculator
    */
-  calculateEnvironmentalScore(sizeMB, model = null) {
+  async calculateEnvironmentalScore(sizeMB, model = null) {
     // Use the comprehensive environmental calculator if available
     try {
       // Import dynamically to avoid circular dependencies
       const { environmentalCalculator } = await import('../environmental/EnvironmentalImpactCalculator.js');
-      
+
       const testModel = model || {
         sizeMB,
         deploymentOptions: sizeMB < 100 ? ['browser', 'edge'] : sizeMB < 500 ? ['cloud'] : ['server']
       };
-      
+
       const impact = environmentalCalculator.calculateImpact(testModel);
       return impact.environmentalScore;
     } catch (error) {

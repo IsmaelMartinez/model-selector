@@ -1,20 +1,25 @@
 <script>
   import TaskInput from '../components/TaskInput.svelte';
   import RecommendationDisplay from '../components/RecommendationDisplay.svelte';
+  import { LLMTaskClassifier } from '../lib/classification/LLMTaskClassifier.js';
   import { BrowserTaskClassifier } from '../lib/classification/BrowserTaskClassifier.js';
   import { ModelSelector } from '../lib/recommendation/ModelSelector.js';
-  
+
   // Import data
   import modelsData from '../lib/data/models.json';
   import tasksData from '../lib/data/tasks.json';
-  
+
   // Initialize components
   let taskClassifier;
+  let fallbackClassifier; // Keyword-based fallback
   let modelSelector;
-  
+  let usingFallback = false;
+
   // Component state
   let taskDescription = '';
   let isLoading = false;
+  let isModelLoading = false;
+  let modelLoadProgress = '';
   let recommendations = [];
   let taskCategory = '';
   let taskSubcategory = '';
@@ -22,19 +27,53 @@
   
   // Initialize when component mounts
   import { onMount } from 'svelte';
-  
-  onMount(() => {
+  import { goto } from '$app/navigation';
+
+  onMount(async () => {
     try {
-      taskClassifier = new BrowserTaskClassifier(tasksData);
+      // Initialize model selector immediately
       modelSelector = new ModelSelector(modelsData);
+
+      // Initialize fallback classifier (backup)
+      fallbackClassifier = new BrowserTaskClassifier(tasksData);
+
+      // Initialize LLM classifier with improved loading
+      taskClassifier = new LLMTaskClassifier();
+      usingFallback = false; // Try LLM first
+
       console.log('✅ Data pipeline initialized successfully');
+      console.log('🤖 LLM classifier ready (will load on first use)');
       console.log('📊 Available models:', Object.keys(modelsData.models));
       console.log('📋 Available tasks:', Object.keys(tasksData.taskTaxonomy));
+
+      // Optionally preload the model in the background for better UX
+      // Uncomment this to load model immediately on page load:
+      // preloadModel();
     } catch (err) {
       console.error('❌ Failed to initialize data pipeline:', err);
       error = 'Failed to initialize the model selector. Please refresh the page.';
     }
   });
+
+  async function preloadModel() {
+    if (taskClassifier && !taskClassifier.isReady && !taskClassifier.isLoading) {
+      try {
+        isModelLoading = true;
+        modelLoadProgress = 'Loading AI classification model...';
+        console.log('🔄 Preloading LLM model...');
+
+        await taskClassifier.initialize();
+
+        isModelLoading = false;
+        modelLoadProgress = '';
+        console.log('✅ Model preloaded successfully');
+      } catch (err) {
+        console.error('⚠️ Model preload failed (will load on first use):', err);
+        isModelLoading = false;
+        modelLoadProgress = '';
+      }
+    }
+  }
   
   async function handleTaskSubmit(event) {
     const { taskDescription: description } = event.detail;
@@ -52,10 +91,51 @@
     
     try {
       console.log('🔍 Analyzing task:', description);
-      
-      // Step 1: Classify the task
-      const classificationResult = await taskClassifier.classify(description);
-      console.log('📝 Classification result:', classificationResult);
+
+      let classificationResult;
+
+      // Try LLM classifier first
+      try {
+        // Show model loading status if needed
+        if (!taskClassifier.isReady && !taskClassifier.isLoading && !usingFallback) {
+          modelLoadProgress = 'Loading AI model (first time only, ~700MB)...';
+          isModelLoading = true;
+        }
+
+        // Step 1: Try LLM classification
+        if (!usingFallback) {
+          classificationResult = await taskClassifier.classify(description);
+          console.log('🎯 LLM Classification result:', classificationResult);
+        } else {
+          throw new Error('Using fallback classifier');
+        }
+
+        // Success! Clear loading state
+        isModelLoading = false;
+        modelLoadProgress = '';
+
+      } catch (llmError) {
+        console.warn('⚠️ LLM classifier failed, using semantic fallback:', llmError);
+
+        // Fall back to semantic classifier
+        classificationResult = await fallbackClassifier.classify(description);
+        console.log('📝 Fallback classification result:', classificationResult);
+
+        // Remember to use fallback for future requests
+        usingFallback = true;
+        isModelLoading = false;
+        modelLoadProgress = '';
+
+        // Show temporary warning
+        if (!error) {
+          error = 'Note: Using semantic classification (LLM unavailable). Results may vary.';
+          setTimeout(() => {
+            if (error && error.includes('semantic classification')) {
+              error = null;
+            }
+          }, 5000);
+        }
+      }
       
       // Extract the best prediction from the result
       const topPrediction = classificationResult.subcategoryPredictions[0] || classificationResult.predictions[0];
@@ -100,11 +180,11 @@
       }
       
       recommendations = modelRecommendations;
-      
-      // Update URL for sharing (optional)
-      const url = new URL(window.location);
-      url.searchParams.set('task', encodeURIComponent(description));
-      window.history.replaceState({}, '', url);
+
+      // Update URL for sharing (optional) - using SvelteKit's navigation
+      const currentUrl = new URL(window.location);
+      currentUrl.searchParams.set('task', encodeURIComponent(description));
+      goto(currentUrl.pathname + currentUrl.search, { replaceState: true, noScroll: true });
       
     } catch (err) {
       console.error('❌ Error processing task:', err);
@@ -149,6 +229,19 @@
     </p>
   </header>
   
+  {#if isModelLoading || modelLoadProgress}
+    <div class="model-loading" role="status">
+      <svg class="spinner" aria-hidden="true" width="20" height="20" viewBox="0 0 16 16">
+        <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="9 3" />
+      </svg>
+      <div>
+        <strong>🤖 Loading Llama 3.2 1B Model</strong>
+        <p>{modelLoadProgress || 'Preparing AI model for task classification...'}</p>
+        <p class="small">This happens once per session (~700MB download, cached after first use)</p>
+      </div>
+    </div>
+  {/if}
+
   {#if error && !isLoading}
     <div class="global-error" role="alert">
       <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16">
@@ -160,8 +253,8 @@
       </div>
     </div>
   {/if}
-  
-  <TaskInput 
+
+  <TaskInput
     bind:taskDescription={taskDescription}
     {isLoading}
     on:submit={handleTaskSubmit}
@@ -242,6 +335,49 @@
     line-height: 1.5;
   }
   
+  .model-loading {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    padding: 1rem;
+    background-color: #e6fffa;
+    border: 1px solid #81e6d9;
+    border-radius: 8px;
+    color: #234e52;
+  }
+
+  .model-loading svg {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .model-loading strong {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .model-loading p {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .model-loading p.small {
+    font-size: 0.875rem;
+    color: #2c7a7b;
+    margin-bottom: 0;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   .global-error {
     display: flex;
     align-items: flex-start;
@@ -254,17 +390,17 @@
     border-radius: 8px;
     color: #c53030;
   }
-  
+
   .global-error svg {
     flex-shrink: 0;
     margin-top: 0.125rem;
   }
-  
+
   .global-error strong {
     display: block;
     margin-bottom: 0.25rem;
   }
-  
+
   .global-error p {
     margin: 0;
     line-height: 1.4;

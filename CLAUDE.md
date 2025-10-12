@@ -33,3 +33,4 @@ npm test        # Run tests
 - Component-based architecture
 - Environmental consciousness in recommendations
 - Prioritize PWA capabilities
+- This project uses vite as a framework.

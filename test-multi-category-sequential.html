@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Category Classification - Sequential Testing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .warning-box strong {
+            color: #92400e;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        .info-box h3 {
+            color: #1e40af;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .info-box ul {
+            margin-left: 20px;
+            color: #374151;
+            line-height: 1.8;
+        }
+        .model-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .model-option {
+            flex: 1;
+            min-width: 250px;
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .model-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        .model-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .model-option h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .model-option .info {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .model-status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-loading {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-ready {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-testing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-complete {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        button.secondary {
+            background: #64748b;
+        }
+        button.secondary:hover:not(:disabled) {
+            background: #475569;
+        }
+        .results-section {
+            margin-top: 30px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+        }
+        .result-correct {
+            color: #059669;
+            font-weight: 600;
+        }
+        .result-incorrect {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .summary-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        .summary-card .value {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .summary-card .label {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        .summary-card .details {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .logs {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .log-info { color: #60a5fa; }
+        .log-success { color: #34d399; }
+        .log-error { color: #f87171; }
+        .log-warning { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Multi-Category Classification Test (Sequential)</h1>
+        <p class="subtitle">Testing models with enhanced pre-prompting across all 7 categories - one model at a time</p>
+
+        <div class="warning-box">
+            <strong>Memory Optimization:</strong> Models are tested sequentially to avoid memory issues. Test one model, see results, then test another.
+        </div>
+
+        <div class="info-box">
+            <h3>Test Configuration</h3>
+            <ul>
+                <li><strong>Categories (7)</strong>: Computer Vision, NLP, Speech, Time Series, Data Preprocessing, Recommendations, Reinforcement Learning</li>
+                <li><strong>Test Cases</strong>: 21 total (3 per category)</li>
+                <li><strong>Approach</strong>: Enhanced pre-prompting (role + rules + examples)</li>
+            </ul>
+        </div>
+
+        <h2 style="margin-bottom: 15px; color: #333;">Select Model to Test</h2>
+        <div class="model-selector">
+            <div class="model-option" id="option-distilbert" onclick="selectModel('distilbert')">
+                <h3>DistilBERT-base-uncased-mnli</h3>
+                <div class="info">
+                    <strong>Size:</strong> ~250MB<br>
+                    <strong>Type:</strong> Zero-shot classifier<br>
+                    <strong>Status:</strong> <span class="model-status" id="status-distilbert">Not tested</span>
+                </div>
+            </div>
+
+            <div class="model-option selected" id="option-llama" onclick="selectModel('llama')">
+                <h3>Llama 3.2 1B-Instruct</h3>
+                <div class="info">
+                    <strong>Size:</strong> 1.2GB (q4f16)<br>
+                    <strong>Advantage:</strong> 95.2% accuracy (7 categories)<br>
+                    <strong>Status:</strong> <span class="model-status" id="status-llama">Not tested</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="loadAndTest" onclick="loadAndTest()">Load Selected Model & Run Tests</button>
+            <button class="secondary" id="clearCache" onclick="clearModelCache()">Clear Model Cache</button>
+        </div>
+
+        <div class="results-section" id="results" style="display: none;">
+            <h2 style="margin-bottom: 20px; color: #333;">Test Results</h2>
+            <div id="resultsContainer"></div>
+        </div>
+
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script type="module">
+        import { pipeline, env } from '@huggingface/transformers';
+
+        // Configure Transformers.js
+        env.allowLocalModels = false;
+        env.allowRemoteModels = true;
+        env.useBrowserCache = true;
+
+        // Global state
+        let currentGenerator = null;
+        let selectedModel = 'llama'; // Default to Llama
+
+        // Test cases covering all 7 categories
+        const testCases = [
+            // Computer Vision (3 cases)
+            { input: 'Classify images of products', expected: 'computer_vision' },
+            { input: 'Detect objects in surveillance footage', expected: 'computer_vision' },
+            { input: 'Segment medical images', expected: 'computer_vision' },
+
+            // NLP (3 cases)
+            { input: 'Translate documents to multiple languages', expected: 'natural_language_processing' },
+            { input: 'Analyze customer sentiment in reviews', expected: 'natural_language_processing' },
+            { input: 'Extract named entities from contracts', expected: 'natural_language_processing' },
+
+            // Speech Processing (3 cases)
+            { input: 'Convert speech to text for transcription', expected: 'speech_processing' },
+            { input: 'Synthesize natural sounding voice from text', expected: 'speech_processing' },
+            { input: 'Recognize speaker identity from audio', expected: 'speech_processing' },
+
+            // Time Series (3 cases)
+            { input: 'Forecast stock prices based on historical data', expected: 'time_series' },
+            { input: 'Detect anomalies in sensor readings over time', expected: 'time_series' },
+            { input: 'Predict energy consumption for next month', expected: 'time_series' },
+
+            // Data Preprocessing (3 cases)
+            { input: 'Clean and normalize messy CSV data', expected: 'data_preprocessing' },
+            { input: 'Handle missing values in dataset', expected: 'data_preprocessing' },
+            { input: 'Remove duplicates and outliers from data', expected: 'data_preprocessing' },
+
+            // Recommendation Systems (3 cases)
+            { input: 'Recommend products based on user behavior', expected: 'recommendation_systems' },
+            { input: 'Suggest similar movies to users', expected: 'recommendation_systems' },
+            { input: 'Personalize content recommendations', expected: 'recommendation_systems' },
+
+            // Reinforcement Learning (3 cases)
+            { input: 'Train agent to play chess optimally', expected: 'reinforcement_learning' },
+            { input: 'Optimize robot navigation in environment', expected: 'reinforcement_learning' },
+            { input: 'Learn game strategy through trial and error', expected: 'reinforcement_learning' }
+        ];
+
+        // Category descriptions for the prompt
+        const categoryDescriptions = {
+            'computer_vision': 'visual tasks like image classification, object detection, segmentation, face recognition',
+            'natural_language_processing': 'text tasks like translation, sentiment analysis, summarization, named entity recognition',
+            'speech_processing': 'audio tasks like speech recognition, text-to-speech, speaker identification',
+            'time_series': 'temporal data tasks like forecasting, anomaly detection, trend analysis',
+            'data_preprocessing': 'data cleaning tasks like normalization, handling missing values, removing duplicates',
+            'recommendation_systems': 'personalization tasks like product recommendations, content suggestions',
+            'reinforcement_learning': 'learning through interaction like game playing, robot control, strategy optimization'
+        };
+
+        const modelConfigs = {
+            distilbert: {
+                name: 'DistilBERT-base-uncased-mnli',
+                id: 'Xenova/distilbert-base-uncased-mnli',
+                displayName: 'DistilBERT',
+                isZeroShot: true
+            },
+            llama: {
+                name: 'Llama 3.2 1B-Instruct',
+                id: 'onnx-community/Llama-3.2-1B-Instruct',
+                displayName: 'Llama 3.2 1B',
+                isZeroShot: false
+            }
+        };
+
+        // Logging
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logsDiv.appendChild(entry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        // Model selection
+        window.selectModel = function(model) {
+            selectedModel = model;
+            document.querySelectorAll('.model-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById(`option-${model}`).classList.add('selected');
+            log(`Selected model: ${modelConfigs[model].name}`, 'info');
+        };
+
+        // Load and test
+        window.loadAndTest = async function() {
+            const button = document.getElementById('loadAndTest');
+            button.disabled = true;
+            button.textContent = 'Loading & Testing...';
+
+            const config = modelConfigs[selectedModel];
+            const statusElement = document.getElementById(`status-${selectedModel}`);
+
+            try {
+                // Clear previous model to free memory
+                if (currentGenerator) {
+                    log('Clearing previous model from memory...', 'info');
+                    currentGenerator = null;
+                }
+
+                // Load model
+                log(`Loading ${config.name}...`, 'info');
+                statusElement.textContent = 'Loading...';
+                statusElement.className = 'model-status status-loading';
+
+                const startTime = performance.now();
+
+                if (config.isZeroShot) {
+                    // Load zero-shot classification model (DistilBERT)
+                    currentGenerator = await pipeline('zero-shot-classification', config.id, {
+                        device: 'webgpu',
+                        progress_callback: (progress) => {
+                            if (progress.status === 'downloading') {
+                                const percent = progress.progress ? Math.round(progress.progress) : 0;
+                                log(`Downloading ${progress.file}: ${percent}%`, 'info');
+                            }
+                        }
+                    });
+                } else {
+                    // Load text generation model (Llama)
+                    currentGenerator = await pipeline('text-generation', config.id, {
+                        dtype: 'q4f16',
+                        device: 'webgpu',
+                        progress_callback: (progress) => {
+                            if (progress.status === 'downloading') {
+                                const percent = progress.progress ? Math.round(progress.progress) : 0;
+                                log(`Downloading ${progress.file}: ${percent}%`, 'info');
+                            }
+                        }
+                    });
+                }
+
+                const loadTime = ((performance.now() - startTime) / 1000).toFixed(2);
+                log(`✅ ${config.name} loaded in ${loadTime}s`, 'success');
+                log(`Model type: ${config.isZeroShot ? 'zero-shot' : 'text-generation'}`, 'info');
+                log(`Generator object: ${typeof currentGenerator}`, 'info');
+
+                statusElement.textContent = 'Ready - Testing...';
+                statusElement.className = 'model-status status-testing';
+
+                // Run tests
+                log('Starting test execution...', 'info');
+                try {
+                    await runTests(config.displayName);
+                    log('Tests completed successfully', 'success');
+                } catch (testError) {
+                    log(`❌ Error running tests: ${testError.message}`, 'error');
+                    console.error('Test error details:', testError);
+                    throw testError;
+                }
+
+                statusElement.textContent = 'Complete';
+                statusElement.className = 'model-status status-complete';
+                button.textContent = 'Load Selected Model & Run Tests';
+                button.disabled = false;
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                statusElement.textContent = 'Failed';
+                statusElement.className = 'model-status status-loading';
+                button.textContent = 'Retry';
+                button.disabled = false;
+            }
+        };
+
+        // Classification function with enhanced pre-prompting
+        async function classifyMultiCategory(taskDescription, modelName) {
+            const startTime = performance.now();
+
+            const categoryList = Object.entries(categoryDescriptions)
+                .map(([cat, desc]) => `- ${cat}: ${desc}`)
+                .join('\n');
+
+            const prompt = `You are a specialized AI task classifier. Your job is to categorize user tasks into exactly one of these 7 categories:
+
+${categoryList}
+
+Classification rules:
+1. Read the task description carefully
+2. Identify keywords and domain-specific terms
+3. Match the task to the most appropriate category
+4. Return only the category name, nothing else
+
+Examples:
+
+Task: "Translate text to Spanish"
+Category: natural_language_processing
+
+Task: "Detect faces in photographs"
+Category: computer_vision
+
+Task: "Convert audio to text"
+Category: speech_processing
+
+Task: "Forecast sales for next quarter"
+Category: time_series
+
+Task: "Clean missing data in CSV files"
+Category: data_preprocessing
+
+Task: "Suggest products to users"
+Category: recommendation_systems
+
+Task: "Train robot to navigate maze"
+Category: reinforcement_learning
+
+Now classify this task:
+
+Task: "${taskDescription}"
+Category:`;
+
+            const result = await currentGenerator(prompt, {
+                max_new_tokens: 5,
+                temperature: 0.01,
+                do_sample: false,
+                return_full_text: false
+            });
+
+            const output = result[0].generated_text.trim().toLowerCase();
+            const inferenceTime = performance.now() - startTime;
+
+            // Determine category from output
+            let category = 'unknown';
+            for (const cat of Object.keys(categoryDescriptions)) {
+                if (output.includes(cat) || output.includes(cat.replace(/_/g, ' ')) ||
+                    output.replace(/[^a-z]/g, '').includes(cat.replace(/_/g, ''))) {
+                    category = cat;
+                    break;
+                }
+            }
+
+            return { category, inferenceTime, rawOutput: output, model: modelName };
+        }
+
+        // Run tests
+        async function runTests(modelName) {
+            log(`runTests() called with modelName: ${modelName}`, 'info');
+            document.getElementById('results').style.display = 'block';
+            log(`Starting 7-category tests with ${modelName}...`, 'info');
+
+            const config = modelConfigs[selectedModel];
+            log(`Config: ${JSON.stringify({ name: config.name, isZeroShot: config.isZeroShot })}`, 'info');
+            log(`Total test cases: ${testCases.length}`, 'info');
+
+            const results = {
+                correct: 0,
+                total: 0,
+                times: [],
+                results: [],
+                byCategory: {}
+            };
+
+            // Initialize category stats
+            Object.keys(categoryDescriptions).forEach(cat => {
+                results.byCategory[cat] = { correct: 0, total: 0 };
+            });
+
+            for (let i = 0; i < testCases.length; i++) {
+                const testCase = testCases[i];
+                log(`Test ${i + 1}/${testCases.length}: "${testCase.input.substring(0, 40)}..."`, 'info');
+
+                try {
+                    log(`Calling ${config.isZeroShot ? 'classifyWithZeroShot' : 'classifyMultiCategory'}...`, 'info');
+                    const result = config.isZeroShot
+                        ? await classifyWithZeroShot(testCase.input, modelName)
+                        : await classifyMultiCategory(testCase.input, modelName);
+
+                    log(`Result: ${result.category} (expected: ${testCase.expected})`, result.category === testCase.expected ? 'success' : 'warning');
+                    const correct = result.category === testCase.expected;
+
+                    results.results.push({ ...testCase, ...result, correct });
+                    results.times.push(result.inferenceTime);
+                    if (correct) results.correct++;
+                    results.total++;
+
+                    // Update category stats
+                    results.byCategory[testCase.expected].total++;
+                    if (correct) results.byCategory[testCase.expected].correct++;
+                } catch (classifyError) {
+                    log(`❌ Classification error on test ${i + 1}: ${classifyError.message}`, 'error');
+                    console.error('Classification error:', classifyError);
+                    throw classifyError;
+                }
+            }
+
+            log('Displaying results...', 'info');
+            displayResults(results, modelName);
+            log(`✅ Tests complete! Accuracy: ${(results.correct / results.total * 100).toFixed(1)}%`, 'success');
+        }
+
+        // Zero-shot classification for DistilBERT
+        async function classifyWithZeroShot(taskDescription, modelName) {
+            log(`classifyWithZeroShot() called for: "${taskDescription}"`, 'info');
+            log(`currentGenerator type: ${typeof currentGenerator}`, 'info');
+            log(`currentGenerator is function: ${typeof currentGenerator === 'function'}`, 'info');
+
+            const startTime = performance.now();
+
+            // Create candidate labels - use simple category names
+            const candidateLabels = [
+                'computer vision or image processing',
+                'natural language processing or text analysis',
+                'speech processing or audio analysis',
+                'time series forecasting or temporal data',
+                'data preprocessing or data cleaning',
+                'recommendation system or personalization',
+                'reinforcement learning or agent training'
+            ];
+
+            log(`Candidate labels: ${candidateLabels.length}`, 'info');
+
+            try {
+                log('Calling currentGenerator with text and labels...', 'info');
+
+                // Transformers.js zero-shot expects: classifier(text, candidate_labels, options)
+                const result = await currentGenerator(taskDescription, candidateLabels, {
+                    multi_label: false
+                });
+
+                log('Generator returned result', 'success');
+                log(`Result type: ${typeof result}`, 'info');
+                log(`Result keys: ${JSON.stringify(Object.keys(result))}`, 'info');
+                log(`Full result (first 200 chars): ${JSON.stringify(result).substring(0, 200)}`, 'info');
+
+                const inferenceTime = performance.now() - startTime;
+
+                // Check if result is an array or object
+                let labels, scores;
+                if (Array.isArray(result)) {
+                    // Result might be an array
+                    log('Result is an array', 'info');
+                    labels = result.map(r => r.label || r);
+                    scores = result.map(r => r.score || 0);
+                } else if (result.labels && result.scores) {
+                    // Standard format
+                    labels = result.labels;
+                    scores = result.scores;
+                } else {
+                    log(`Unexpected result format: ${JSON.stringify(result)}`, 'error');
+                    throw new Error('Unexpected result format from zero-shot classifier');
+                }
+
+                log(`Extracted labels (first 3): ${JSON.stringify(labels.slice(0, 3))}`, 'info');
+                log(`Extracted scores (first 3): ${JSON.stringify(scores.slice(0, 3).map(s => (s*100).toFixed(1)))}%`, 'info');
+
+                if (!labels || labels.length === 0) {
+                    throw new Error('No labels returned from classifier');
+                }
+
+                // Map result back to category based on the label
+                const topLabel = String(labels[0]);
+                log(`Top label: "${topLabel}"`, 'info');
+                let category = 'unknown';
+
+                if (topLabel.includes('computer vision') || topLabel.includes('image')) {
+                    category = 'computer_vision';
+                } else if (topLabel.includes('natural language') || topLabel.includes('text')) {
+                    category = 'natural_language_processing';
+                } else if (topLabel.includes('speech') || topLabel.includes('audio')) {
+                    category = 'speech_processing';
+                } else if (topLabel.includes('time series') || topLabel.includes('temporal')) {
+                    category = 'time_series';
+                } else if (topLabel.includes('data preprocessing') || topLabel.includes('data cleaning')) {
+                    category = 'data_preprocessing';
+                } else if (topLabel.includes('recommendation') || topLabel.includes('personalization')) {
+                    category = 'recommendation_systems';
+                } else if (topLabel.includes('reinforcement') || topLabel.includes('agent')) {
+                    category = 'reinforcement_learning';
+                }
+
+                return {
+                    category,
+                    inferenceTime,
+                    rawOutput: `${topLabel} (${(result.scores[0] * 100).toFixed(1)}%)`,
+                    model: modelName
+                };
+            } catch (error) {
+                log(`❌ DistilBERT classification error: ${error.message}`, 'error');
+                return {
+                    category: 'unknown',
+                    inferenceTime: performance.now() - startTime,
+                    rawOutput: `Error: ${error.message}`,
+                    model: modelName
+                };
+            }
+        }
+
+        function displayResults(results, modelName) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            // Summary card
+            const accuracy = (results.correct / results.total * 100).toFixed(1);
+            const avgTime = (results.times.reduce((a, b) => a + b, 0) / results.times.length).toFixed(0);
+
+            const summaryCard = document.createElement('div');
+            summaryCard.className = 'summary-card';
+            summaryCard.innerHTML = `
+                <h3>${modelName} Results</h3>
+                <div class="value">${accuracy}%</div>
+                <div class="label">Overall Accuracy (${results.correct}/${results.total} correct)</div>
+                <div class="details">
+                    Average Inference Time: ${avgTime}ms<br>
+                    Range: ${Math.min(...results.times).toFixed(0)}ms - ${Math.max(...results.times).toFixed(0)}ms
+                </div>
+            `;
+            container.appendChild(summaryCard);
+
+            // Category breakdown
+            const breakdownDiv = document.createElement('div');
+            breakdownDiv.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;';
+
+            Object.entries(results.byCategory).forEach(([cat, stats]) => {
+                const catAccuracy = stats.total > 0 ? (stats.correct / stats.total * 100).toFixed(0) : 0;
+                const card = document.createElement('div');
+                card.style.cssText = 'background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid ' +
+                    (catAccuracy == 100 ? '#059669' : catAccuracy >= 66 ? '#f59e0b' : '#dc2626');
+                card.innerHTML = `
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">${cat.replace(/_/g, ' ')}</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #333;">${catAccuracy}%</div>
+                    <div style="font-size: 12px; color: #666;">${stats.correct}/${stats.total} correct</div>
+                `;
+                breakdownDiv.appendChild(card);
+            });
+            container.appendChild(breakdownDiv);
+
+            // Detailed results table
+            const table = document.createElement('table');
+            table.className = 'comparison-table';
+
+            let tableHTML = `
+                <thead>
+                    <tr>
+                        <th>Test Case</th>
+                        <th>Expected Category</th>
+                        <th>Predicted</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            results.results.forEach(result => {
+                tableHTML += `
+                    <tr>
+                        <td style="max-width: 300px;">${result.input}</td>
+                        <td><strong>${result.expected.replace(/_/g, ' ')}</strong></td>
+                        <td class="${result.correct ? 'result-correct' : 'result-incorrect'}">
+                            ${result.category.replace(/_/g, ' ')}
+                        </td>
+                        <td>${result.inferenceTime.toFixed(0)}ms</td>
+                        <td>${result.correct ? '✅' : '❌'}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody>';
+            table.innerHTML = tableHTML;
+            container.appendChild(table);
+        }
+
+        // Clear cache
+        window.clearModelCache = async function() {
+            if (confirm('This will clear all cached models. You will need to re-download them. Continue?')) {
+                try {
+                    const caches = await window.caches.keys();
+                    for (const cache of caches) {
+                        await window.caches.delete(cache);
+                    }
+                    log('✅ Model cache cleared', 'success');
+                    alert('Cache cleared! Refresh the page to start fresh.');
+                } catch (error) {
+                    log(`❌ Error clearing cache: ${error.message}`, 'error');
+                }
+            }
+        };
+
+        log('Multi-category sequential test page ready', 'success');
+        log('Select a model and click "Load Selected Model & Run Tests"', 'info');
+    </script>
+</body>
+</html>
