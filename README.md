@@ -7,10 +7,11 @@ Open source assistant that helps discover AI models prioritizing environmental s
 ## Features
 
 - **Environmental Focus**: Prioritizes models with lower energy consumption
-- **Smart Classification**: Automatically identifies task type from descriptions
+- **Intelligent Classification**: Browser-based LLM with 95.2% accuracy across 7 categories
 - **Tiered Recommendations**: Lightweight → standard → advanced models
 - **Instant Results**: Client-side processing with fast response
 - **Accessible Interface**: Keyboard navigation and screen reader support
+- **Offline-Capable**: PWA with browser-based AI (no backend required)
 
 ## Live Demo
 
@@ -54,13 +55,21 @@ npm run build
 
 Help with model data, task categories, classification accuracy, UI/UX, performance, or documentation.
 
+## Technical Details
+
+- **Classification**: Llama 3.2 1B-Instruct with enhanced pre-prompting (95.2% accuracy)
+- **Testing**: Comprehensive test suite with acceptance, integration, and LLM tests
+- **Interactive Testing**: `test-multi-category-sequential.html` for model evaluation
+
+See [ADR-0003](docs/adrs/adr-0003-browser-llm-classification-model-selection.md) for detailed model selection rationale and evaluation results.
+
 ## Roadmap
 
 - ✅ MVP: Complete working application
-- ✅ Research: Browser SLM evaluation (see [ADR-001](docs/adr/ADR-001-SLM-Model-Selection.md))
-- 🔄 v1.1: Enhanced model database and classification improvements
-- 🎯 v1.2: Advanced environmental calculations and UI enhancements
-- 🚀 v2.0: API integrations and advanced features
+- ✅ Browser-based LLM classification: 95.2% accuracy across 7 categories
+- 🔄 v1.1: Enhanced model database and UI improvements
+- 🎯 v1.2: Advanced environmental calculations and performance optimizations
+- 🚀 v2.0: Additional categories and advanced features
 
 ## License
 
