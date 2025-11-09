@@ -2,14 +2,14 @@
 
 ## Quick Summary
 
-The model dataset (`src/lib/data/models.json`) contains 35+ curated AI models organized by task and performance tier. Models were selected from Hugging Face Hub and Papers with Code based on popularity, accuracy, and deployment feasibility.
+The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models organized by task and performance tier. Models are automatically aggregated from Hugging Face Hub based on popularity, downloads, and deployment feasibility, with quarterly updates via automated workflows.
 
 ## Data Sources
 
 **Primary Sources:**
-- **Hugging Face Model Hub**: Model metadata, IDs, framework support
-- **Papers with Code**: Benchmark scores and performance validation
-- **Official Documentation**: Vendor specs (Google, Microsoft, Meta)
+- **Hugging Face Model Hub**: Model metadata, IDs, framework support, downloads, popularity
+- **Automated Aggregation**: Monthly updates via GitHub Actions workflow
+- **Official Documentation**: Vendor specs (Google, Microsoft, Meta) for manual validation
 
 **Selection Criteria:**
 - Open-source with Hugging Face availability
@@ -19,48 +19,106 @@ The model dataset (`src/lib/data/models.json`) contains 35+ curated AI models or
 
 ## Data Collection Process
 
-**Automated Collection:**
+**Automated Collection (Primary):**
+
+The project uses an automated GitHub Actions workflow (`.github/workflows/update-models.yml`) that runs monthly:
+
 ```bash
-# Query Hugging Face API for popular models by task
-curl "https://huggingface.co/api/models?filter=task:image-classification&sort=downloads&limit=50"
+# Automated monthly aggregation via workflow
+# Queries Hugging Face API for popular models by task
+npm run update-models
+
+# Manual dry-run for testing
+npm run update-models:dry-run
+
+# Direct API query example
+curl "https://huggingface.co/api/models?pipeline_tag=image-classification&sort=downloads&limit=20"
 ```
 
-**Manual Curation:**
-1. Cross-check model cards for accuracy and compatibility
-2. Verify deployment feasibility (browser/cloud/edge)
-3. Estimate environmental impact based on model size
-4. Organize into 3-tier system (Lightweight/Standard/Advanced)
+**Automated Processing:**
+1. Fetch models from Hugging Face API (sorted by downloads/popularity)
+2. Extract metadata: size, frameworks, last updated, downloads, likes
+3. Categorize by task (7 main categories: CV, NLP, Speech, etc.)
+4. Organize into 3-tier system (Lightweight/Standard/Advanced) based on size
+5. Calculate environmental scores based on size and deployment options
+6. Deduplicate and merge with existing dataset
+7. Create pull request for human review
+
+**Manual Review (Post-Automation):**
+1. Review PR for quality of new models
+2. Verify metadata accuracy
+3. Check for breaking changes
+4. Test bundle size remains acceptable
+5. Approve or reject automated updates
 
 **Environmental Scoring:**
 - Score 1 (Low): <100MB, edge-friendly, <5W power consumption
 - Score 2 (Medium): 100-500MB, cloud deployment, 5-50W power
 - Score 3 (High): >500MB, specialized hardware, >50W power
 
-## Future Updates
+## Automated Update Process
 
-**Quarterly Update Process:**
-1. Query Hugging Face API for trending models
-2. Cross-reference Papers with Code leaderboards  
-3. Validate new model claims and compatibility
-4. Update JSON data and test integration
+**Monthly Automated Updates:**
 
-**Replication Steps:**
+The system now automatically updates via GitHub Actions on the 1st of each month:
+
+1. **Workflow Trigger**: GitHub Actions runs `.github/workflows/update-models.yml`
+2. **Model Aggregation**: `src/lib/aggregation/ModelAggregator.js` fetches from HF API
+3. **Processing**: Models organized, tiered, and validated
+4. **PR Creation**: Automated pull request with updated `models.json`
+5. **Human Review**: Maintainer reviews and approves
+6. **Deployment**: Merged PR triggers automatic deployment to GitHub Pages
+
+**Manual Updates (When Needed):**
+
 ```bash
-# 1. Setup environment
-pip install huggingface_hub requests
+# 1. Setup environment (already in package.json)
+npm install
+
+# 2. Optional: Set Hugging Face token for better rate limits
 export HF_TOKEN="your_token"
 
-# 2. Query for models by category
-curl "https://huggingface.co/api/models?filter=task:CATEGORY&sort=downloads"
+# 3. Test update (dry-run, no file changes)
+npm run update-models:dry-run
 
-# 3. Manual curation and validation
-# 4. Update src/lib/data/models.json
+# 4. Perform actual update
+npm run update-models
+
+# 5. Review changes
+git diff src/lib/data/models.json
+
+# 6. Commit and push (or workflow does this automatically)
+git add src/lib/data/models.json
+git commit -m "chore: update model dataset"
+git push
 ```
 
-**Known Limitations:**
-- Environmental scores are estimates based on model size
-- Accuracy metrics vary by benchmark and may not reflect real-world performance
-- Coverage focused on popular English-language models
+**For Complete Documentation:**
+See [`docs/AUTO_UPDATE_STRATEGY.md`](./AUTO_UPDATE_STRATEGY.md) for:
+- Detailed automation strategy (3 phases)
+- Setup and configuration
+- Monitoring and troubleshooting
+- Free tier limits and costs
+- Future enhancements (Gemini validation, community features)
+
+**Current Implementation Status:**
+- ✅ **Phase 1**: Basic automation with HF API (ACTIVE)
+- 📋 **Phase 2**: Smart validation with Gemini (PLANNED)
+- 💡 **Phase 3**: Community enhancement (FUTURE)
+
+**Known Limitations (Phase 1):**
+- Environmental scores are estimates based on model size (Phase 2 will use real params)
+- Accuracy metrics are estimates (Phase 2 will extract from model cards)
+- No automated quality validation yet (Phase 2 will add Gemini validation)
+- Coverage focused on popular models (sorted by downloads)
+- English-language models primarily
+
+**Monitoring:**
+- Workflow runs: GitHub → Actions → "Update Model Dataset"
+- Review PRs tagged with `automated/model-update-*`
+- Check `models.json` lastUpdated timestamp
+- Verify bundle size remains <2MB after updates
 
 ---
-*Last Updated: September 29, 2025*
+*Last Updated: November 9, 2025*
+*Automation: Phase 1 Active*

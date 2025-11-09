@@ -1,0 +1,196 @@
+name: Update Model Dataset
+
+# Runs on the 1st of every month at 2 AM UTC
+# Can also be triggered manually via GitHub Actions UI
+on:
+  schedule:
+    - cron: '0 2 1 * *'  # Monthly: 1st day of month at 2 AM UTC
+  workflow_dispatch:     # Allow manual triggering
+
+jobs:
+  update-models:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write      # Need write permission to create branches
+      pull-requests: write # Need permission to create PRs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better git operations
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create update branch
+        id: branch
+        run: |
+          # Create branch name with current date
+          BRANCH_NAME="automated/model-update-$(date +%Y-%m-%d)"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          git checkout -b "$BRANCH_NAME"
+
+      - name: Run model aggregation
+        env:
+          # Optional: Add HF_TOKEN secret in repo settings for better rate limits
+          # Without token: 1000 calls/day | With token: Much higher limits
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          echo "🚀 Starting model metadata aggregation..."
+          echo "📅 Update Date: $(date)"
+          echo ""
+
+          # Run the aggregation (not dry-run, actual update)
+          npm run update-models
+
+          echo ""
+          echo "✅ Aggregation complete"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          # Check if models.json was modified
+          if git diff --quiet src/lib/data/models.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected in models.json"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected in models.json"
+          fi
+
+      - name: Commit changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add only the models.json file
+          git add src/lib/data/models.json
+
+          # Create commit with detailed message
+          git commit -m "$(cat <<'EOF'
+          chore: automated model dataset update
+
+          - Updated model metadata from Hugging Face Hub
+          - Aggregation date: $(date +%Y-%m-%d)
+          - Source: Automated monthly update workflow
+
+          This is an automated update. Please review:
+          1. New models added
+          2. Model metadata changes
+          3. Environmental score updates
+          4. Ensure bundle size remains acceptable
+
+          Run \`npm run build\` locally to verify bundle size.
+          EOF
+          )"
+
+      - name: Push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          # Push with retry logic (max 4 attempts with exponential backoff)
+          for i in 1 2 3 4; do
+            if git push -u origin "${{ steps.branch.outputs.branch_name }}"; then
+              echo "✅ Successfully pushed to remote"
+              break
+            else
+              if [ $i -lt 4 ]; then
+                DELAY=$((2 ** $i))
+                echo "⚠️ Push failed, retrying in ${DELAY}s... (attempt $i/4)"
+                sleep $DELAY
+              else
+                echo "❌ Push failed after 4 attempts"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Create PR with detailed description
+          gh pr create \
+            --title "🤖 Automated Model Dataset Update - $(date +%Y-%m-%d)" \
+            --body "$(cat <<'EOF'
+          ## Automated Model Dataset Update
+
+          This PR contains automated updates to the model dataset from Hugging Face Hub.
+
+          ### 📋 Update Details
+          - **Update Date**: $(date +%Y-%m-%d)
+          - **Source**: Monthly scheduled workflow
+          - **File Modified**: `src/lib/data/models.json`
+
+          ### ✅ Review Checklist
+
+          Please review the following before merging:
+
+          - [ ] **New Models**: Check that new models are relevant and high-quality
+          - [ ] **Metadata Quality**: Verify accuracy metrics and environmental scores
+          - [ ] **Breaking Changes**: Ensure no models were unexpectedly removed
+          - [ ] **Bundle Size**: Run `npm run build` and verify bundle size is acceptable
+          - [ ] **Tests Pass**: CI tests should pass automatically
+          - [ ] **Manual Testing**: Test the application locally with new models
+
+          ### 🔍 How to Review
+
+          ```bash
+          # Checkout this branch
+          git fetch origin
+          git checkout ${{ steps.branch.outputs.branch_name }}
+
+          # Install and test
+          npm install
+          npm run build
+          npm run dev
+
+          # Check bundle size
+          ls -lh dist/
+          ```
+
+          ### 📊 Expected Changes
+
+          - New models from Hugging Face Hub (sorted by downloads/popularity)
+          - Updated metadata for existing models
+          - Refreshed environmental impact scores
+          - Updated `lastUpdated` timestamp
+
+          ### 🚨 If Issues Found
+
+          If you find issues with the automated update:
+          1. Close this PR without merging
+          2. Review the aggregation logic in `src/lib/aggregation/ModelAggregator.js`
+          3. Test locally with `npm run update-models:dry-run`
+          4. Create an issue to improve the aggregation logic
+
+          ### 🤖 Automation
+
+          This PR was automatically created by the `update-models.yml` workflow.
+          See `.github/workflows/update-models.yml` for details.
+          EOF
+          )" \
+            --base main \
+            --head "${{ steps.branch.outputs.branch_name }}"
+
+          echo "✅ Pull request created successfully"
+
+      - name: No changes detected
+        if: steps.changes.outputs.has_changes == 'false'
+        run: |
+          echo "ℹ️ No changes to models.json - no PR needed"
+          echo "This likely means:"
+          echo "  1. No new models met the quality criteria"
+          echo "  2. Existing models unchanged since last update"
+          echo "  3. All fetched models were already in the dataset"
+          echo ""
+          echo "This is normal and not an error."
