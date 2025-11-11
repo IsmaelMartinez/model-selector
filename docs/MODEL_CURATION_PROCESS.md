@@ -2,13 +2,13 @@
 
 ## Quick Summary
 
-The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models organized by task and performance tier. Models are automatically aggregated from Hugging Face Hub based on popularity, downloads, and deployment feasibility, with quarterly updates via automated workflows.
+The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models organized by task and performance tier. Models are automatically aggregated from Hugging Face Hub based on popularity, downloads, and deployment feasibility, with daily updates via automated workflows (2 AM UTC).
 
 ## Data Sources
 
 **Primary Sources:**
 - **Hugging Face Model Hub**: Model metadata, IDs, framework support, downloads, popularity
-- **Automated Aggregation**: Monthly updates via GitHub Actions workflow
+- **Automated Aggregation**: Daily updates via GitHub Actions workflow (2 AM UTC)
 - **Official Documentation**: Vendor specs (Google, Microsoft, Meta) for manual validation
 
 **Selection Criteria:**
@@ -21,7 +21,7 @@ The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models o
 
 **Automated Collection (Primary):**
 
-The project uses an automated GitHub Actions workflow (`.github/workflows/update-models.yml`) that runs monthly:
+The project uses an automated GitHub Actions workflow (`.github/workflows/update-models.yml`) that runs daily at 2 AM UTC:
 
 ```bash
 # Automated monthly aggregation via workflow
@@ -58,9 +58,9 @@ curl "https://huggingface.co/api/models?pipeline_tag=image-classification&sort=d
 
 ## Automated Update Process
 
-**Monthly Automated Updates:**
+**Daily Automated Updates:**
 
-The system now automatically updates via GitHub Actions on the 1st of each month:
+The system now automatically updates via GitHub Actions daily at 2 AM UTC:
 
 1. **Workflow Trigger**: GitHub Actions runs `.github/workflows/update-models.yml`
 2. **Model Aggregation**: `src/lib/aggregation/ModelAggregator.js` fetches from HF API
@@ -120,5 +120,6 @@ See [`docs/AUTO_UPDATE_STRATEGY.md`](./AUTO_UPDATE_STRATEGY.md) for:
 - Verify bundle size remains <2MB after updates
 
 ---
-*Last Updated: November 9, 2025*
-*Automation: Phase 1 Active*
+*Last Updated: November 11, 2025*
+*Automation: Phase 1 Active (Daily at 2 AM UTC)*
+*Node.js: 22*

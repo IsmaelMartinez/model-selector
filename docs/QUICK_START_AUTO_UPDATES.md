@@ -1,16 +1,17 @@
 # Quick Start: Automated Model Updates
 
 **Status**: ✅ Phase 1 Implemented
-**Ready to Use**: Yes, workflow active on next month's 1st
+**Schedule**: Daily at 2 AM UTC
+**Node.js**: 22 (latest LTS)
 
 ---
 
 ## What Was Implemented
 
-✅ **Automated Monthly Updates**
-- GitHub Actions workflow runs on 1st of each month at 2 AM UTC
+✅ **Automated Daily Updates**
+- GitHub Actions workflow runs daily at 2 AM UTC
 - Fetches latest models from Hugging Face API
-- Creates pull request with updated models.json
+- Creates pull request with updated models.json (only if changes detected)
 - Human review before merging
 
 ✅ **Manual Trigger Available**
@@ -38,9 +39,9 @@
 ## How to Use
 
 ### Option 1: Wait for Automatic Run
-- Workflow runs automatically on the 1st of each month
+- Workflow runs automatically daily at 2 AM UTC
 - Check GitHub → Actions for execution
-- Review and merge the automated PR
+- Review and merge the automated PR (created only when new models found)
 
 ### Option 2: Manual Trigger
 1. Go to GitHub → Actions tab
@@ -80,7 +81,7 @@ For better rate limits (recommended but not required):
    - Click "Add secret"
 
 3. **Benefits**:
-   - Without token: 1000 calls/day (sufficient for monthly updates)
+   - Without token: 1000 calls/day (sufficient for daily updates - we use ~160/day)
    - With token: Much higher limits (recommended for reliability)
 
 ---
@@ -88,13 +89,13 @@ For better rate limits (recommended but not required):
 ## What Happens Next
 
 ### First Automated Run
-- **When**: 1st of next month at 2 AM UTC
+- **When**: Daily at 2 AM UTC (starting tomorrow)
 - **Duration**: ~2-5 minutes
-- **Output**: Pull request with updated models
+- **Output**: Pull request with updated models (only if new models found)
 
 ### Expected PR Contents
 - Updated `src/lib/data/models.json`
-- 5-15 new models added (typically)
+- 0-5 new models added (varies by day; more during active periods)
 - Updated lastUpdated timestamp
 - Detailed PR description with review checklist
 
@@ -108,7 +109,7 @@ For better rate limits (recommended but not required):
 ### After Merge
 - Automatic deployment to GitHub Pages
 - New models live on your site
-- Next update in 30 days
+- Next update tomorrow (daily schedule)
 
 ---
 
@@ -140,7 +141,8 @@ cat src/lib/data/models.json | grep '"id":' | wc -l
 - Or manually trigger via Actions UI
 
 ### "No changes detected"
-- Normal if all fetched models already in dataset
+- Normal on quiet days when all fetched models already in dataset
+- Many days may have no new models (this is expected)
 - HF API might be returning cached results
 - Try manual dry-run: `npm run update-models:dry-run`
 
@@ -159,14 +161,14 @@ cat src/lib/data/models.json | grep '"id":' | wc -l
 
 ### Immediate
 1. ✅ Changes committed to your branch
-2. ⏳ Push to remote and create PR for review
-3. ⏳ Merge to main branch
-4. ⏳ Wait for first automated run (1st of month)
+2. ✅ Pushed to remote
+3. ⏳ Merge PR to main branch
+4. ⏳ Wait for first automated run (tomorrow at 2 AM UTC)
 
-### Short Term (1-2 months)
+### Short Term (1-2 weeks)
 1. Monitor first few automated PRs
 2. Validate data quality
-3. Adjust settings if needed
+3. Adjust settings if needed (may want to reduce frequency if too noisy)
 4. Consider Phase 2 (Gemini validation)
 
 ### Long Term (3-6 months)
@@ -208,4 +210,4 @@ For complete details, see:
 
 **Ready to go!** 🚀
 
-The automated update system is now active and will run on the 1st of each month.
+The automated update system is now active and will run daily at 2 AM UTC.

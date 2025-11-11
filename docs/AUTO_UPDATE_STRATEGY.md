@@ -1,7 +1,8 @@
 # Automated Model Dataset Update Strategy
 
 **Status**: Phase 1 Implemented ✅
-**Last Updated**: 2025-11-09
+**Last Updated**: 2025-11-11
+**Schedule**: Daily at 2 AM UTC (Node.js 22)
 **Goal**: Keep model dataset fresh without manual intervention
 
 ---
@@ -75,7 +76,7 @@ Monthly Automated Update →
 
 ### What It Does
 
-1. **Scheduled Execution**: Runs monthly on the 1st at 2 AM UTC
+1. **Scheduled Execution**: Runs daily at 2 AM UTC
 2. **Fetches Models**: Queries Hugging Face API for popular models
 3. **Aggregates Metadata**: Size, downloads, frameworks, accuracy estimates
 4. **Creates PR**: Automated pull request with updated `models.json`
@@ -106,7 +107,7 @@ graph LR
 ### How It Works
 
 ```bash
-# 1. Scheduled trigger (1st of each month)
+# 1. Scheduled trigger (daily at 2 AM UTC)
 GitHub Actions starts workflow
 
 # 2. Fetch models from Hugging Face
@@ -138,6 +139,8 @@ ModelAggregator queries HF API
 | Source | What We Get | Free Tier | Authentication |
 |--------|-------------|-----------|----------------|
 | **Hugging Face API** | Model metadata, downloads, size, frameworks | 1000 calls/day (unauthenticated)<br>Much higher with free token | Optional (recommended) |
+
+**Daily Usage Estimate**: ~160 API calls per run = well within free tier limits
 
 ### Limitations (Phase 1)
 
@@ -317,7 +320,7 @@ const validationRules = {
 ### Prerequisites
 
 - GitHub repository with Actions enabled
-- Node.js 18+ environment (provided by workflow)
+- Node.js 22 environment (provided by workflow)
 - Hugging Face account (optional, for better rate limits)
 
 ### Initial Setup
@@ -345,12 +348,12 @@ For better rate limits (recommended but not required):
 #### 3. Enable Workflow
 
 The workflow is configured to run:
-- **Automatically**: 1st of every month at 2 AM UTC
+- **Automatically**: Daily at 2 AM UTC
 - **Manually**: Via GitHub Actions UI → "Run workflow" button
 
 #### 4. Test Run (Manual Trigger)
 
-Before waiting for the monthly schedule:
+Before waiting for the daily schedule:
 
 1. Go to GitHub → Actions tab
 2. Select "Update Model Dataset" workflow
@@ -378,7 +381,7 @@ npm run update-models -- --max-models 5
 
 ### Workflow Schedule
 
-Current schedule: **1st of every month at 2 AM UTC**
+Current schedule: **Daily at 2 AM UTC**
 
 To change the schedule, edit `.github/workflows/update-models.yml`:
 
@@ -391,8 +394,9 @@ on:
     # │ │ │ ┌───────────── month (1 - 12)
     # │ │ │ │ ┌───────────── day of week (0 - 6)
     # │ │ │ │ │
-    - cron: '0 2 1 * *'  # Monthly (current)
+    - cron: '0 2 * * *'  # Daily (current)
     # - cron: '0 2 * * 0'  # Weekly on Sundays
+    # - cron: '0 2 1 * *'  # Monthly on 1st
     # - cron: '0 2 1 */3 *'  # Quarterly
 ```
 
@@ -414,7 +418,7 @@ on:
 **Alert on**:
 - 3+ consecutive failures
 - Execution time >10 minutes
-- No changes detected for 3+ months (might indicate API issues)
+- No changes detected for 7+ days (might indicate API issues)
 
 #### 2. Pull Requests
 
@@ -466,16 +470,16 @@ npm run test -- --run src/lib/data/__tests__/DataStructure.test.js
 
 ### Expected Behavior
 
-#### Normal Month
-1. Workflow runs on 1st at 2 AM UTC
+#### Normal Day
+1. Workflow runs daily at 2 AM UTC
 2. Fetches 100-200 models from HF
 3. Processes and deduplicates
-4. Adds 5-15 new models
-5. Creates PR with changes
+4. Adds 0-5 new models (more on active days)
+5. Creates PR with changes if any
 6. Maintainer reviews and merges
 7. Auto-deploys to GitHub Pages
 
-#### Quiet Month
+#### Quiet Day
 1. Workflow runs
 2. Fetches models
 3. All models already in dataset
@@ -483,7 +487,7 @@ npm run test -- --run src/lib/data/__tests__/DataStructure.test.js
 5. No PR created
 6. "No changes" message in workflow log
 
-#### Failed Month
+#### Failed Day
 1. Workflow runs
 2. API error or network issue
 3. Workflow fails
@@ -495,9 +499,9 @@ npm run test -- --run src/lib/data/__tests__/DataStructure.test.js
 
 | Task | Frequency | Command |
 |------|-----------|---------|
-| Review PRs | As created | GitHub UI |
-| Check workflow health | Monthly | Actions tab |
-| Validate dataset | Quarterly | `npm test` |
+| Review PRs | As created (possibly daily) | GitHub UI |
+| Check workflow health | Weekly | Actions tab |
+| Validate dataset | Monthly | `npm test` |
 | Update dependencies | Quarterly | `npm audit` |
 | Review aggregation logic | Bi-annually | Code review |
 
@@ -665,17 +669,17 @@ npm test -- src/lib/data/__tests__/
 | Free Account | Much higher | Free | Recommended, get token at hf.co/settings/tokens |
 | Pro Account | Unlimited | $9/month | Unnecessary for this use case |
 
-**Our Usage**: ~160 calls/month (8 categories × 20 models each)
+**Our Usage**: ~160 calls/day (8 categories × 20 models each) = well within free tier
 
 ### GitHub Actions
 
 | Resource | Free Tier | Our Usage | Notes |
 |----------|-----------|-----------|-------|
-| Minutes/month | 2000 | <10 | Well within limits |
+| Minutes/month | 2000 | ~150 (5 min × 30 days) | Well within limits |
 | Storage | 500MB | <10MB | Minimal |
 | Concurrent jobs | 20 | 1 | Only one update workflow |
 
-**Cost**: $0 for public repos
+**Cost**: $0 for public repos (daily schedule still free)
 
 ### Gemini (Phase 2 - Planned)
 
@@ -684,7 +688,7 @@ npm test -- src/lib/data/__tests__/
 | Gemini 2.0 Flash | 1500 RPD | Model card parsing | Free |
 | Gemini 1.5 Flash | 1M tokens/day | Fallback parser | Free |
 
-**Our Usage (Phase 2)**: ~50 requests/month (parsing new model cards)
+**Our Usage (Phase 2)**: ~50-150 requests/month (parsing new model cards)
 
 ---
 
@@ -698,7 +702,7 @@ npm test -- src/lib/data/__tests__/
 | **Validation** | Basic | Smart (AI) | Smart + community |
 | **Changelogs** | Generic | Detailed | Interactive |
 | **Cost** | $0 | $0 | $0 |
-| **Maintenance** | 30 min/month | 10 min/month | 5 min/month |
+| **Maintenance** | 10-30 min/week | 5-10 min/week | 2-5 min/week |
 | **Quality** | Good | Excellent | Outstanding |
 
 ---
@@ -709,8 +713,8 @@ npm test -- src/lib/data/__tests__/
 
 1. ✅ Workflow created (`.github/workflows/update-models.yml`)
 2. ✅ Documentation complete (this file)
-3. ⏳ Wait for first automated run (1st of next month)
-4. ⏳ Review and merge first automated PR
+3. ✅ Daily schedule active (2 AM UTC)
+4. ⏳ Review and merge automated PRs as they arrive
 5. ⏳ Monitor for issues
 
 ### Short Term (1-2 Months)
@@ -735,6 +739,7 @@ npm test -- src/lib/data/__tests__/
 |------|-------|--------|--------|
 | 2025-11-09 | 1 | Initial implementation with GitHub Actions workflow | Claude |
 | 2025-11-09 | 1 | Documentation created | Claude |
+| 2025-11-11 | 1 | Updated to daily schedule + Node.js 22 | Claude |
 
 ---
 

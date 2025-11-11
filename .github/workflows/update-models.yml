@@ -1,10 +1,10 @@
 name: Update Model Dataset
 
-# Runs on the 1st of every month at 2 AM UTC
+# Runs daily at 2 AM UTC to keep models fresh
 # Can also be triggered manually via GitHub Actions UI
 on:
   schedule:
-    - cron: '0 2 1 * *'  # Monthly: 1st day of month at 2 AM UTC
+    - cron: '0 2 * * *'  # Daily: Every day at 2 AM UTC
   workflow_dispatch:     # Allow manual triggering
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -81,7 +81,7 @@ jobs:
 
           - Updated model metadata from Hugging Face Hub
           - Aggregation date: $(date +%Y-%m-%d)
-          - Source: Automated monthly update workflow
+          - Source: Automated daily update workflow
 
           This is an automated update. Please review:
           1. New models added
@@ -128,7 +128,7 @@ jobs:
 
           ### 📋 Update Details
           - **Update Date**: $(date +%Y-%m-%d)
-          - **Source**: Monthly scheduled workflow
+          - **Source**: Daily scheduled workflow
           - **File Modified**: `src/lib/data/models.json`
 
           ### ✅ Review Checklist
