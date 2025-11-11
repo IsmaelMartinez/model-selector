@@ -99,7 +99,7 @@ graph LR
 
 | File | Purpose |
 |------|---------|
-| `.github/workflows/update-models.yml` | Monthly automation workflow |
+| `.github/workflows/update-models.yml` | Daily automation workflow |
 | `src/lib/aggregation/ModelAggregator.js` | Fetches and processes HF data |
 | `src/lib/aggregation/cli.js` | CLI interface for manual runs |
 | `src/lib/data/models.json` | Target file for updates |
