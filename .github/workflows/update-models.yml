@@ -76,11 +76,11 @@ jobs:
           git add src/lib/data/models.json
 
           # Create commit with detailed message
-          git commit -m "$(cat <<'EOF'
-          chore: automated model dataset update
+          CURRENT_DATE=$(date +%Y-%m-%d)
+          git commit -m "chore: automated model dataset update
 
           - Updated model metadata from Hugging Face Hub
-          - Aggregation date: $(date +%Y-%m-%d)
+          - Aggregation date: ${CURRENT_DATE}
           - Source: Automated daily update workflow
 
           This is an automated update. Please review:
@@ -89,9 +89,7 @@ jobs:
           3. Environmental score updates
           4. Ensure bundle size remains acceptable
 
-          Run \`npm run build\` locally to verify bundle size.
-          EOF
-          )"
+          Run \`npm run build\` locally to verify bundle size."
 
       - name: Push changes
         if: steps.changes.outputs.has_changes == 'true'
@@ -119,17 +117,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # Create PR with detailed description
+          CURRENT_DATE=$(date +%Y-%m-%d)
           gh pr create \
-            --title "🤖 Automated Model Dataset Update - $(date +%Y-%m-%d)" \
-            --body "$(cat <<'EOF'
-          ## Automated Model Dataset Update
+            --title "🤖 Automated Model Dataset Update - ${CURRENT_DATE}" \
+            --body "## Automated Model Dataset Update
 
           This PR contains automated updates to the model dataset from Hugging Face Hub.
 
           ### 📋 Update Details
-          - **Update Date**: $(date +%Y-%m-%d)
+          - **Update Date**: ${CURRENT_DATE}
           - **Source**: Daily scheduled workflow
-          - **File Modified**: `src/lib/data/models.json`
+          - **File Modified**: \`src/lib/data/models.json\`
 
           ### ✅ Review Checklist
 
@@ -175,10 +173,8 @@ jobs:
 
           ### 🤖 Automation
 
-          This PR was automatically created by the `update-models.yml` workflow.
-          See `.github/workflows/update-models.yml` for details.
-          EOF
-          )" \
+          This PR was automatically created by the \`update-models.yml\` workflow.
+          See \`.github/workflows/update-models.yml\` for details." \
             --base main \
             --head "${{ steps.branch.outputs.branch_name }}"
 
