@@ -29,7 +29,7 @@
 
 | File | Status | Purpose |
 |------|--------|---------|
-| `.github/workflows/update-models.yml` | ✅ New | Monthly automation workflow |
+| `.github/workflows/update-models.yml` | ✅ New | Daily automation workflow |
 | `docs/AUTO_UPDATE_STRATEGY.md` | ✅ New | Complete strategy documentation |
 | `docs/MODEL_CURATION_PROCESS.md` | ✅ Updated | Removed defunct Papers with Code |
 | `docs/QUICK_START_AUTO_UPDATES.md` | ✅ New | This file - quick reference |
