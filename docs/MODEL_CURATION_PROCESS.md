@@ -24,7 +24,7 @@ The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models o
 The project uses an automated GitHub Actions workflow (`.github/workflows/update-models.yml`) that runs daily at 2 AM UTC:
 
 ```bash
-# Automated monthly aggregation via workflow
+# Automated daily aggregation via workflow
 # Queries Hugging Face API for popular models by task
 npm run update-models
 
