@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-10-12",
+  "lastUpdated": "2025-11-13",
   "tiers": {
     "lightweight": {
       "label": "Lightweight Models",
@@ -450,6 +450,24 @@
         ],
         "advanced": [
           {
+            "id": "ustc-community_dfine-xlarge-obj365",
+            "name": "Dfine Xlarge Obj365",
+            "huggingFaceId": "ustc-community/dfine-xlarge-obj365",
+            "description": "Dfine Xlarge Obj365 model for object detection",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
+          },
+          {
             "id": "yolo_v8x",
             "name": "YOLOv8 Extra Large",
             "huggingFaceId": "ultralytics/yolov8x",
@@ -701,6 +719,42 @@
             "lastUpdated": "2025-10-12"
           },
           {
+            "id": "microsoft_deberta-xlarge-mnli",
+            "name": "Deberta Xlarge Mnli",
+            "huggingFaceId": "microsoft/deberta-xlarge-mnli",
+            "description": "Deberta Xlarge Mnli model for text classification",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
+          },
+          {
+            "id": "facebookai_roberta-large-mnli",
+            "name": "Roberta Large Mnli",
+            "huggingFaceId": "FacebookAI/roberta-large-mnli",
+            "description": "Roberta Large Mnli model for text classification",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
+          },
+          {
             "id": "bert_large_uncased",
             "name": "BERT Large Uncased",
             "huggingFaceId": "bert-large-uncased",
@@ -874,6 +928,42 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
+          },
+          {
+            "id": "microsoft_deberta-xlarge-mnli",
+            "name": "Deberta Xlarge Mnli",
+            "huggingFaceId": "microsoft/deberta-xlarge-mnli",
+            "description": "Deberta Xlarge Mnli model for text classification",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
+          },
+          {
+            "id": "facebookai_roberta-large-mnli",
+            "name": "Roberta Large Mnli",
+            "huggingFaceId": "FacebookAI/roberta-large-mnli",
+            "description": "Roberta Large Mnli model for text classification",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
           }
         ]
       },
@@ -1392,6 +1482,27 @@
               "PyTorch"
             ],
             "lastUpdated": "2023-10-05"
+          },
+          {
+            "id": "suno_bark-small",
+            "name": "Bark Small",
+            "huggingFaceId": "suno/bark-small",
+            "description": "Bark Small model for text to speech",
+            "sizeMB": 25,
+            "accuracy": 0.72,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-13"
           }
         ],
         "standard": [
