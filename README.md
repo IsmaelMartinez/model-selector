@@ -26,9 +26,22 @@ Computer Vision, Natural Language Processing, Speech Processing, Time Series, Re
 ```bash
 npm install     # Install dependencies
 npm run dev     # Start development server
-npm test        # Run tests
 npm run build   # Build for production
 ```
+
+### Testing
+
+```bash
+npm test          # Run fast tests (~2s, CI-friendly)
+npm run test:llm  # Run LLM accuracy tests (~3min, local-only)
+```
+
+**Test Commands:**
+- `npm test`: Fast unit and integration tests (23 tests, ~2s)
+- `npm run test:llm`: Full LLM classification tests (48 tests, ~3min)
+  - Downloads Llama 3.2 1B model (1.2GB) on first run
+  - Validates 95.2% classification accuracy
+  - Local-only, NOT for CI/CD pipelines
 
 ## Environmental Impact
 

@@ -7,11 +7,24 @@ import modelsData from '../src/lib/data/models.json' assert { type: 'json' };
  *
  * These tests verify the accuracy of the enhanced pre-prompting approach
  * for classifying user tasks into 7 categories with 95.2% accuracy.
+ *
+ * IMPORTANT: These tests are LOCAL-ONLY and should NOT run in CI/CD:
+ * - Requires 1.2GB model download (slow, expensive in CI)
+ * - Takes ~3 minutes to complete (vs 1.5s for fast tests)
+ * - Designed for pre-deployment validation, not rapid iteration
+ *
+ * To run these tests locally:
+ *   npm run test:llm
+ *
+ * Regular test suite (fast, CI-friendly):
+ *   npm test
  */
 
-// Note: These tests are designed for browser WebGPU environment (ADR-0003)
-// Skip in Node.js test environment as WebGPU is not available
-describe.skip('LLM Task Classification (Llama 3.2 1B) - Browser Only', () => {
+// Only run LLM tests when explicitly requested via RUN_LLM_TESTS env var
+const shouldRunLLMTests = process.env.RUN_LLM_TESTS === 'true';
+const describeOrSkip = shouldRunLLMTests ? describe : describe.skip;
+
+describeOrSkip('LLM Task Classification (Llama 3.2 1B) - Local Only', () => {
   let generator = null;
   const TIMEOUT = 60000; // 60 seconds for model loading
 
