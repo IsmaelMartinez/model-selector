@@ -13,18 +13,13 @@ import modelsData from '../src/lib/data/models.json' assert { type: 'json' };
  * - Takes ~3 minutes to complete (vs 1.5s for fast tests)
  * - Designed for pre-deployment validation, not rapid iteration
  *
- * To run these tests locally:
- *   npm run test:llm
- *
- * Regular test suite (fast, CI-friendly):
- *   npm test
+ * Test Commands:
+ *   npm test          # Fast tests only (excludes this file)
+ *   npm run test:llm  # Run only LLM tests
+ *   npm run test:all  # Run all tests including LLM
  */
 
-// Only run LLM tests when explicitly requested via RUN_LLM_TESTS env var
-const shouldRunLLMTests = process.env.RUN_LLM_TESTS === 'true';
-const describeOrSkip = shouldRunLLMTests ? describe : describe.skip;
-
-describeOrSkip('LLM Task Classification (Llama 3.2 1B) - Local Only', () => {
+describe('LLM Task Classification (Llama 3.2 1B) - Local Only', () => {
   let generator = null;
   const TIMEOUT = 60000; // 60 seconds for model loading
 
