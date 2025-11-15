@@ -7,6 +7,7 @@
 **Live:** https://ismaelmartinez.github.io/model-selector
 **Status:** MVP Complete ✅ (95.2% LLM classification accuracy)
 **Tech:** SvelteKit 2 + Vite 5 + Transformers.js (Browser-based Llama 3.2 1B)
+**Platform:** Desktop only (mobile not recommended - requires ~700 MB model download)
 **Details:** See `PROJECT_STATUS.md`, `PROJECT_VISION.md`, `README.md`
 
 ---
@@ -108,6 +109,7 @@ Ranking: lightweight tier > standard tier > advanced tier (within tier, smaller 
 - No backend/API calls during runtime
 - All ML runs in browser (transformers.js)
 - Target: <50KB bundle, <1s load time
+- **Platform Requirement:** Desktop/laptop only - ~700 MB LLM model too large for mobile devices
 
 ### 4. Accessibility Required
 - Full keyboard navigation (Tab, Enter, Ctrl+Enter)

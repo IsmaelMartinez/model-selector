@@ -16,7 +16,7 @@ All MVP tasks from `tasks/tasks-1-prd-mvp-model-selector.md` have been completed
 - **Model Recommendations**: 3-tiered system (Lightweight/Standard/Advanced)
 - **Environmental Focus**: "Smaller is better" algorithm prioritizing efficient models
 - **Accessibility**: Full keyboard navigation, ARIA labels, screen reader support
-- **Responsive Design**: Works across desktop and mobile devices
+- **Responsive Design**: Works on desktop devices (mobile not recommended due to ~700 MB model size)
 - **Offline Capability**: Fully static PWA with no external API calls
 
 ### ✅ Technical Implementation
@@ -60,6 +60,13 @@ src/
 - ✅ Documentation in `docs/` directory
 
 ## ⚠️ Known Issues & Limitations
+
+### Platform Compatibility
+- **Mobile Device Support**: ❌ Not recommended
+  - Application requires downloading ~700 MB language model for classification
+  - Model size exceeds typical mobile device memory and bandwidth constraints
+  - Desktop or laptop computers recommended for optimal performance
+  - Future optimization may include lighter models or progressive loading for mobile
 
 ### Test Status (All Passing ✅)
 - **Fast Tests (CI/CD)**: 23/23 passing (acceptance + integration, ~2s)
