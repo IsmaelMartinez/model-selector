@@ -10,6 +10,19 @@ import {
   clearPreferences
 } from '../src/lib/storage/preferences.js';
 
+// Mock localStorage for Node.js environment
+const localStorageMock = (() => {
+  let store = {};
+  return {
+    getItem: (key) => store[key] || null,
+    setItem: (key, value) => { store[key] = value.toString(); },
+    removeItem: (key) => { delete store[key]; },
+    clear: () => { store = {}; }
+  };
+})();
+
+global.localStorage = localStorageMock;
+
 // Mock model data for testing
 const mockModelsData = {
   models: {
@@ -214,8 +227,8 @@ describe('ModelSelector - Accuracy Filtering', () => {
 
 describe('Preferences Storage', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
-    clearPreferences();
+    // Clear localStorage mock before each test
+    localStorage.clear();
   });
 
   describe('saveAccuracyThreshold', () => {
