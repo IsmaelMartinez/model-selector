@@ -14,6 +14,10 @@ Open source assistant that helps discover AI models prioritizing environmental s
 - **Accessible Interface**: Keyboard navigation and screen reader support
 - **Offline-Capable**: PWA with browser-based AI (no backend required)
 
+### ⚠️ Platform Limitations
+
+**Mobile Devices**: The application requires downloading a ~700 MB language model for classification, which may be too large for most mobile devices. Desktop or laptop computers with sufficient memory and bandwidth are recommended for optimal performance.
+
 ## Live Demo
 
 [AI Model Selector](https://ismaelmartinez.github.io/model-selector)
@@ -63,7 +67,9 @@ npm run build
 # Deploy contents of `dist/` directory to hosting provider
 ```
 
-**Requirements**: Node.js 18+, modern browsers, ~40KB bundle
+**Requirements**: Node.js 18+, modern browsers (desktop recommended), ~40KB bundle
+
+**Note**: Runtime requires downloading ~700 MB classification model - not recommended for mobile devices.
 
 ## Contributing
 
