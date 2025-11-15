@@ -302,7 +302,7 @@
 
 **Task 28**: Update documentation for ensemble mode
 - [ ] Add ensemble mode section to `docs/USER_GUIDE.md`
-- [ ] Document voting algorithm in `docs/ENVIRONMENTAL_METHODOLOGY.md` or new doc
+- [ ] Document voting algorithm in `docs/ENVIRONMENT_METHODOLOGY.md` or new doc
 - [ ] Update README with ensemble mode feature
 - [ ] Add screenshots of mode toggle and confidence scores
 - [ ] Document when to use fast vs ensemble mode
