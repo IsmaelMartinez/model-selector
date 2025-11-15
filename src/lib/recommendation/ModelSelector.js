@@ -50,9 +50,90 @@ export class ModelSelector {
    * @returns {Array} Models ranked by efficiency (best first)
    */
   rankBySize(models) {
-    return models.sort((a, b) => 
+    return models.sort((a, b) =>
       a.tierPriority - b.tierPriority || a.sizeMB - b.sizeMB
     );
+  }
+
+  /**
+   * Filter models by accuracy threshold
+   * Models with missing accuracy data are treated as 0%
+   * @param {Array} models - Models to filter
+   * @param {number} threshold - Minimum accuracy (0-95, where 0 means show all)
+   * @returns {Object} Object with filtered models and metadata
+   */
+  filterByAccuracy(models, threshold = 0) {
+    // If threshold is 0, return all models
+    if (threshold === 0) {
+      return {
+        filtered: models,
+        total: models.length,
+        hidden: 0
+      };
+    }
+
+    // Convert threshold from percentage to decimal (75 -> 0.75)
+    const thresholdDecimal = threshold / 100;
+
+    // Filter models
+    const filtered = models.filter(model => {
+      // Treat missing accuracy as 0
+      const accuracy = model.accuracy ?? 0;
+      return accuracy >= thresholdDecimal;
+    });
+
+    return {
+      filtered,
+      total: models.length,
+      hidden: models.length - filtered.length
+    };
+  }
+
+  /**
+   * Get models grouped by tier with accuracy filtering
+   * @param {string} category - Main category
+   * @param {string} subcategory - Subcategory
+   * @param {number} accuracyThreshold - Minimum accuracy threshold (0-95)
+   * @returns {Object} Models grouped by tier with filter metadata
+   */
+  getTaskModelsGroupedByTier(category, subcategory, accuracyThreshold = 0) {
+    const taskData = this.modelsData.models[category]?.[subcategory];
+    if (!taskData) {
+      return {
+        lightweight: { models: [], hidden: 0 },
+        standard: { models: [], hidden: 0 },
+        advanced: { models: [], hidden: 0 },
+        totalHidden: 0,
+        totalShown: 0
+      };
+    }
+
+    const tiers = ['lightweight', 'standard', 'advanced'];
+    const result = {
+      totalHidden: 0,
+      totalShown: 0
+    };
+
+    tiers.forEach(tier => {
+      const tierModels = (taskData[tier] || []).map(model => ({
+        ...model,
+        tier,
+        category,
+        subcategory
+      }));
+
+      const filterResult = this.filterByAccuracy(tierModels, accuracyThreshold);
+
+      result[tier] = {
+        models: this.rankBySize(filterResult.filtered),
+        hidden: filterResult.hidden
+      };
+
+      result.totalHidden += filterResult.hidden;
+      result.totalShown += filterResult.filtered.length;
+    });
+
+    return result;
   }
 }
 

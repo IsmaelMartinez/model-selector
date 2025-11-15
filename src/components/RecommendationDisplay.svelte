@@ -3,6 +3,8 @@
   export let taskCategory = '';
   export let taskSubcategory = '';
   export let isLoading = false;
+  export let totalHidden = 0; // Number of models hidden by accuracy filter
+  export let accuracyThreshold = 0; // Current accuracy threshold
   
   function getEnvironmentalBadge(score) {
     switch (score) {
@@ -47,6 +49,14 @@
         <span class="icon">🌍</span>
         Ranked by environmental efficiency - smaller, more efficient models first
       </p>
+
+      {#if totalHidden > 0}
+        <div class="filter-status" aria-live="polite">
+          <span class="icon">🔍</span>
+          Showing {recommendations.length} {recommendations.length === 1 ? 'model' : 'models'}
+          ({totalHidden} hidden by {accuracyThreshold}% accuracy filter)
+        </div>
+      {/if}
     </div>
     
     <div class="recommendations-grid" role="list">
@@ -90,7 +100,9 @@
             
             <div class="stat">
               <span class="stat-label">Accuracy:</span>
-              <span class="stat-value">{(model.accuracy * 100).toFixed(1)}%</span>
+              <span class="stat-value">
+                <span aria-hidden="true">📊 </span>{model.accuracy ? (model.accuracy * 100).toFixed(1) : 'N/A'}{model.accuracy ? '%' : ''}
+              </span>
             </div>
             
             <div class="stat">
@@ -146,7 +158,15 @@
   {:else}
     <div class="no-results">
       <h2>No models found</h2>
-      <p>We couldn't find models for this task. Try describing your task differently.</p>
+      {#if accuracyThreshold > 0}
+        <p>No models meet your {accuracyThreshold}% accuracy threshold.</p>
+        <p class="suggestion">
+          <span aria-hidden="true">💡</span>
+          Try lowering the accuracy filter to see more options.
+        </p>
+      {:else}
+        <p>We couldn't find models for this task. Try describing your task differently.</p>
+      {/if}
     </div>
   {/if}
 </div>
@@ -202,6 +222,23 @@
     padding: 0.75rem;
     border-radius: 6px;
     border-left: 4px solid #38a169;
+  }
+
+  .filter-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #2c5282;
+    font-size: 0.9rem;
+    background: #bee3f8;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #4299e1;
+    margin-top: 0.75rem;
+  }
+
+  .filter-status .icon {
+    font-size: 1rem;
   }
   
   .recommendations-grid {
@@ -381,6 +418,18 @@
   .no-results h2 {
     color: #4a5568;
     margin-bottom: 0.5rem;
+  }
+
+  .no-results .suggestion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fef5e7;
+    color: #744210;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    font-weight: 500;
   }
   
   .visually-hidden {

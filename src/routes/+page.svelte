@@ -1,6 +1,7 @@
 <script>
   import TaskInput from '../components/TaskInput.svelte';
   import RecommendationDisplay from '../components/RecommendationDisplay.svelte';
+  import AccuracyFilter from '../components/AccuracyFilter.svelte';
   import { LLMTaskClassifier } from '../lib/classification/LLMTaskClassifier.js';
   import { BrowserTaskClassifier } from '../lib/classification/BrowserTaskClassifier.js';
   import { ModelSelector } from '../lib/recommendation/ModelSelector.js';
@@ -24,6 +25,8 @@
   let taskCategory = '';
   let taskSubcategory = '';
   let error = null;
+  let accuracyThreshold = 0; // Accuracy filter threshold (0-95)
+  let totalHidden = 0; // Number of models hidden by filter
   
   // Initialize when component mounts
   import { onMount } from 'svelte';
@@ -166,20 +169,29 @@
       taskCategory = classification.category;
       taskSubcategory = classification.subcategory;
       
-      // Step 2: Get model recommendations using our "smaller is better" logic
-      const modelRecommendations = modelSelector.selectModels(
-        classification.category, 
-        classification.subcategory, 
-        3 // Get top 3 recommendations
+      // Step 2: Get model recommendations with accuracy filtering
+      const groupedModels = modelSelector.getTaskModelsGroupedByTier(
+        classification.category,
+        classification.subcategory,
+        accuracyThreshold
       );
-      
-      console.log('🤖 Model recommendations:', modelRecommendations);
-      
-      if (modelRecommendations.length === 0) {
+
+      console.log('🤖 Grouped models:', groupedModels);
+
+      // Flatten the grouped models back into a single array for display
+      const filteredRecommendations = [
+        ...groupedModels.lightweight.models,
+        ...groupedModels.standard.models,
+        ...groupedModels.advanced.models
+      ];
+
+      totalHidden = groupedModels.totalHidden;
+
+      if (filteredRecommendations.length === 0) {
         throw new Error(`No models found for ${classification.category} → ${classification.subcategory}. This task type may not be supported yet.`);
       }
-      
-      recommendations = modelRecommendations;
+
+      recommendations = filteredRecommendations;
 
       // Update URL for sharing (optional) - using SvelteKit's navigation
       const currentUrl = new URL(window.location);
@@ -194,6 +206,35 @@
     }
   }
   
+  // Handle accuracy filter change
+  function handleAccuracyFilterChange(newThreshold) {
+    accuracyThreshold = newThreshold;
+
+    // If we have results, refilter them
+    if (taskCategory && taskSubcategory && modelSelector) {
+      const groupedModels = modelSelector.getTaskModelsGroupedByTier(
+        taskCategory,
+        taskSubcategory,
+        accuracyThreshold
+      );
+
+      // Flatten the grouped models
+      const filteredRecommendations = [
+        ...groupedModels.lightweight.models,
+        ...groupedModels.standard.models,
+        ...groupedModels.advanced.models
+      ];
+
+      totalHidden = groupedModels.totalHidden;
+      recommendations = filteredRecommendations;
+
+      console.log(`🔍 Filter changed to ${newThreshold}%:`, {
+        shown: filteredRecommendations.length,
+        hidden: totalHidden
+      });
+    }
+  }
+
   // Load task from URL on mount (for sharing)
   onMount(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -259,12 +300,19 @@
     {isLoading}
     on:submit={handleTaskSubmit}
   />
-  
-  <RecommendationDisplay 
+
+  <AccuracyFilter
+    threshold={accuracyThreshold}
+    onChange={handleAccuracyFilterChange}
+  />
+
+  <RecommendationDisplay
     {recommendations}
     {taskCategory}
     {taskSubcategory}
     {isLoading}
+    {totalHidden}
+    {accuracyThreshold}
   />
   
   <footer class="app-footer">

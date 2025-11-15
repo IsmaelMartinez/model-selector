@@ -8,6 +8,7 @@ Open source assistant that helps discover AI models prioritizing environmental s
 
 - **Environmental Focus**: Prioritizes models with lower energy consumption
 - **Intelligent Classification**: Browser-based LLM with 95.2% accuracy across 7 categories
+- **Accuracy Filtering**: Filter recommendations by minimum accuracy threshold (50-95%)
 - **Tiered Recommendations**: Lightweight → standard → advanced models
 - **Instant Results**: Client-side processing with fast response
 - **Accessible Interface**: Keyboard navigation and screen reader support
@@ -80,8 +81,8 @@ See [ADR-0003](docs/adrs/adr-0003-browser-llm-classification-model-selection.md)
 
 - ✅ MVP: Complete working application
 - ✅ Browser-based LLM classification: 95.2% accuracy across 7 categories
-- 🔄 v1.1: Enhanced model database and UI improvements
-- 🎯 v1.2: Advanced environmental calculations and performance optimizations
+- 🔄 v1.1: Accuracy filtering and quality control features
+- 🎯 v1.2: Ensemble classification and smart clarifications
 - 🚀 v2.0: Additional categories and advanced features
 
 ## License
