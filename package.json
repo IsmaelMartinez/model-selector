@@ -10,9 +10,8 @@
     "dev:vanilla": "vite --config vite.config.vanilla.js",
     "build:vanilla": "vite build --config vite.config.vanilla.js",
     "preview:vanilla": "vite preview --config vite.config.vanilla.js",
-    "test": "vitest --exclude tests/llm-*.test.js",
-    "test:llm": "vitest run tests/llm-*.test.js",
-    "test:all": "vitest",
+    "test": "vitest",
+    "test:llm": "RUN_LLM_TESTS=true vitest --run",
     "update-models": "node src/lib/aggregation/cli.js",
     "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run"
   },
