@@ -35,7 +35,7 @@
         name="classification-mode"
         value="fast"
         checked={mode === 'fast'}
-        onchange={() => handleModeChange('fast')}
+        on:change={() => handleModeChange('fast')}
         aria-label="Fast mode - single classification"
       />
       <span class="mode-name">Fast</span>
@@ -48,7 +48,7 @@
         name="classification-mode"
         value="ensemble"
         checked={mode === 'ensemble'}
-        onchange={() => handleModeChange('ensemble')}
+        on:change={() => handleModeChange('ensemble')}
         aria-label="Ensemble mode - 3x parallel with voting"
       />
       <span class="mode-name">Ensemble</span>
