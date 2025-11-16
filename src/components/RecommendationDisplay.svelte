@@ -5,6 +5,7 @@
   export let isLoading = false;
   export let totalHidden = 0; // Number of models hidden by accuracy filter
   export let accuracyThreshold = 0; // Current accuracy threshold
+  export let ensembleInfo = null; // Ensemble voting information (votes, total, confidence)
   
   function getEnvironmentalBadge(score) {
     switch (score) {
@@ -49,6 +50,14 @@
         <span class="icon">🌍</span>
         Ranked by environmental efficiency - smaller, more efficient models first
       </p>
+
+      {#if ensembleInfo}
+        <div class="ensemble-status" aria-live="polite">
+          <span class="icon">🎯</span>
+          <strong>Ensemble Mode:</strong> {ensembleInfo.votes}/{ensembleInfo.total} agents agree
+          ({(ensembleInfo.confidence * 100).toFixed(0)}% confidence)
+        </div>
+      {/if}
 
       {#if totalHidden > 0}
         <div class="filter-status" aria-live="polite">
@@ -222,6 +231,23 @@
     padding: 0.75rem;
     border-radius: 6px;
     border-left: 4px solid #38a169;
+  }
+
+  .ensemble-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5a4a8d;
+    font-size: 0.9rem;
+    background: #e9d8fd;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #9f7aea;
+    margin-top: 0.75rem;
+  }
+
+  .ensemble-status .icon {
+    font-size: 1rem;
   }
 
   .filter-status {

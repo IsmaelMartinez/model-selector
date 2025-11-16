@@ -68,6 +68,39 @@ export function saveAccuracyThreshold(threshold) {
 }
 
 /**
+ * Get classification mode preference
+ * @returns {string} Mode ('fast' or 'ensemble'), default 'fast'
+ */
+export function getClassificationMode() {
+  const prefs = getPreferences();
+  const mode = prefs.classificationMode;
+
+  // Validate and return
+  if (mode === 'fast' || mode === 'ensemble') {
+    return mode;
+  }
+
+  return 'fast'; // Default: fast mode
+}
+
+/**
+ * Save classification mode preference
+ * @param {string} mode - Mode ('fast' or 'ensemble')
+ * @returns {boolean} Success status
+ */
+export function saveClassificationMode(mode) {
+  // Validate input
+  if (mode !== 'fast' && mode !== 'ensemble') {
+    console.error('Invalid classification mode:', mode);
+    return false;
+  }
+
+  const prefs = getPreferences();
+  prefs.classificationMode = mode;
+  return savePreferences(prefs);
+}
+
+/**
  * Clear all preferences (useful for testing/reset)
  * @returns {boolean} Success status
  */
