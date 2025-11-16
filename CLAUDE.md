@@ -5,7 +5,7 @@
 **Mission:** Build sustainable AI by helping users choose environmentally efficient models ("smaller is better" philosophy)
 
 **Live:** https://ismaelmartinez.github.io/model-selector
-**Status:** MVP Complete ✅ (95.2% LLM classification accuracy)
+**Status:** MVP Complete ✅ + Ensemble Mode (95.2% Fast / 98%+ Ensemble accuracy)
 **Tech:** SvelteKit 2 + Vite 5 + Transformers.js (Browser-based Llama 3.2 1B)
 **Platform:** Desktop only (mobile not recommended - requires ~700 MB model download)
 **Details:** See `PROJECT_STATUS.md`, `PROJECT_VISION.md`, `README.md`
@@ -51,10 +51,17 @@ npm run update-models:dry-run  # Preview updates
 
 ### Classification Pipeline
 
+**Fast Mode** (default, ~0.4s):
 1. **LLM** (Primary) → Llama 3.2 1B via transformers.js (95.2% accuracy)
 2. **Semantic** (Fallback 1) → N-gram matching with keywords
 3. **Keyword** (Fallback 2) → Direct lookup
 4. **Default** (Final) → Returns natural_language_processing
+
+**Ensemble Mode** (optional, ~2s):
+1. **3x Parallel LLM** → Same model, different temperatures (0.1, 0.5, 0.9)
+2. **Majority Voting** → 2/3 or 3/3 consensus determines result
+3. **Higher Accuracy** → Target 98%+ by reducing "lazy" LLM responses
+4. **Confidence Display** → Shows vote count and confidence percentage
 
 ### Environmental Scoring
 

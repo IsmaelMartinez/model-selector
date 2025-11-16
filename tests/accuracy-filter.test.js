@@ -7,6 +7,8 @@ import { ModelSelector } from '../src/lib/recommendation/ModelSelector.js';
 import {
   getAccuracyThreshold,
   saveAccuracyThreshold,
+  getClassificationMode,
+  saveClassificationMode,
   clearPreferences
 } from '../src/lib/storage/preferences.js';
 
@@ -298,13 +300,67 @@ describe('Preferences Storage', () => {
     });
   });
 
+  describe('saveClassificationMode', () => {
+    test('saves valid mode to localStorage', () => {
+      const result = saveClassificationMode('ensemble');
+      expect(result).toBe(true);
+
+      const saved = getClassificationMode();
+      expect(saved).toBe('ensemble');
+    });
+
+    test('saves fast mode', () => {
+      const result = saveClassificationMode('fast');
+      expect(result).toBe(true);
+
+      const saved = getClassificationMode();
+      expect(saved).toBe('fast');
+    });
+
+    test('rejects invalid mode', () => {
+      const result = saveClassificationMode('invalid');
+      expect(result).toBe(false);
+
+      const saved = getClassificationMode();
+      expect(saved).toBe('fast'); // Should return default
+    });
+
+    test('rejects non-string values', () => {
+      const result = saveClassificationMode(123);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('getClassificationMode', () => {
+    test('returns default "fast" when nothing saved', () => {
+      const result = getClassificationMode();
+      expect(result).toBe('fast');
+    });
+
+    test('returns saved mode', () => {
+      saveClassificationMode('ensemble');
+      const result = getClassificationMode();
+      expect(result).toBe('ensemble');
+    });
+
+    test('handles corrupted localStorage data', () => {
+      // Manually set invalid data
+      localStorage.setItem('modelSelector', 'invalid json');
+      const result = getClassificationMode();
+      expect(result).toBe('fast'); // Should return default
+    });
+  });
+
   describe('clearPreferences', () => {
     test('clears all preferences', () => {
       saveAccuracyThreshold(75);
+      saveClassificationMode('ensemble');
       expect(getAccuracyThreshold()).toBe(75);
+      expect(getClassificationMode()).toBe('ensemble');
 
       clearPreferences();
       expect(getAccuracyThreshold()).toBe(0);
+      expect(getClassificationMode()).toBe('fast');
     });
   });
 });
