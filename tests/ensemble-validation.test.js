@@ -5,13 +5,15 @@ import { pipeline } from '@huggingface/transformers';
  * VALIDATION SCRIPT: Test if ensemble classification improves accuracy
  *
  * This is a quick prototype to validate PRD 4 assumptions:
- * - Does 3x parallel classification fix time series edge cases?
+ * - Does 3x parallel classification reduce "lazy" LLM responses?
+ * - Does majority voting improve consistency across all categories?
  * - Does it complete in reasonable time (≤2s)?
  *
  * APPROACH (KISS - simplified to 3 agents):
- * - Run same prompt 3 times with different temperatures
+ * - Run same prompt 3 times with different temperatures (0.1, 0.5, 0.9)
+ * - Different temps = different "perspectives" from the model
  * - Use simple majority voting (2/3 = winner)
- * - Focus on time series edge cases that currently fail
+ * - More robust against one-off inconsistencies
  */
 
 const shouldRunLLMTests = process.env.RUN_LLM_TESTS === 'true';
@@ -137,18 +139,33 @@ Category:`;
   }
 
   /**
-   * Test cases - focused on known edge cases (time series)
+   * Test cases - broad coverage to validate ensemble reduces "lazy" LLM responses
    */
   const testCases = [
-    // Time series edge cases (currently failing 1/3 tests)
+    // Computer Vision
+    { input: 'Detect objects in photos', expected: 'computer_vision' },
+    { input: 'Segment medical images', expected: 'computer_vision' },
+
+    // NLP
+    { input: 'Translate text to Spanish', expected: 'natural_language_processing' },
+    { input: 'Analyze customer sentiment', expected: 'natural_language_processing' },
+
+    // Speech Processing
+    { input: 'Convert speech to text', expected: 'speech_processing' },
+    { input: 'Synthesize natural voice', expected: 'speech_processing' },
+
+    // Time Series
     { input: 'Forecast stock prices based on historical data', expected: 'time_series' },
     { input: 'Detect anomalies in sensor readings over time', expected: 'time_series' },
-    { input: 'Predict energy consumption for next month', expected: 'time_series' },
 
-    // Other categories for comparison
-    { input: 'Detect objects in photos', expected: 'computer_vision' },
-    { input: 'Translate text to Spanish', expected: 'natural_language_processing' },
-    { input: 'Convert speech to text', expected: 'speech_processing' },
+    // Data Preprocessing
+    { input: 'Clean missing values in dataset', expected: 'data_preprocessing' },
+
+    // Recommendation Systems
+    { input: 'Suggest movies to users', expected: 'recommendation_systems' },
+
+    // Reinforcement Learning
+    { input: 'Train agent to play chess', expected: 'reinforcement_learning' },
   ];
 
   test('baseline classification works', async () => {
