@@ -2,6 +2,7 @@
   import TaskInput from '../components/TaskInput.svelte';
   import RecommendationDisplay from '../components/RecommendationDisplay.svelte';
   import AccuracyFilter from '../components/AccuracyFilter.svelte';
+  import ClassificationMode from '../components/ClassificationMode.svelte';
   import { LLMTaskClassifier } from '../lib/classification/LLMTaskClassifier.js';
   import { BrowserTaskClassifier } from '../lib/classification/BrowserTaskClassifier.js';
   import { ModelSelector } from '../lib/recommendation/ModelSelector.js';
@@ -27,6 +28,8 @@
   let error = null;
   let accuracyThreshold = 0; // Accuracy filter threshold (0-95)
   let totalHidden = 0; // Number of models hidden by filter
+  let classificationMode = 'fast'; // Classification mode: 'fast' or 'ensemble'
+  let ensembleInfo = null; // Ensemble voting information
   
   // Initialize when component mounts
   import { onMount } from 'svelte';
@@ -105,10 +108,24 @@
           isModelLoading = true;
         }
 
-        // Step 1: Try LLM classification
+        // Step 1: Try LLM classification (fast or ensemble mode)
         if (!usingFallback) {
-          classificationResult = await taskClassifier.classify(description);
-          console.log('🎯 LLM Classification result:', classificationResult);
+          if (classificationMode === 'ensemble') {
+            classificationResult = await taskClassifier.classifyEnsemble(description);
+            console.log('🎯 Ensemble Classification result:', classificationResult);
+
+            // Store ensemble voting info for display
+            ensembleInfo = {
+              votes: classificationResult.ensembleVotes,
+              total: classificationResult.ensembleTotal,
+              confidence: classificationResult.ensembleConfidence,
+              allVotes: classificationResult.allVotes
+            };
+          } else {
+            classificationResult = await taskClassifier.classify(description);
+            console.log('🎯 LLM Classification result:', classificationResult);
+            ensembleInfo = null; // Clear ensemble info in fast mode
+          }
         } else {
           throw new Error('Using fallback classifier');
         }
@@ -301,6 +318,11 @@
     on:submit={handleTaskSubmit}
   />
 
+  <ClassificationMode
+    bind:mode={classificationMode}
+    onModeChange={(newMode) => { classificationMode = newMode; }}
+  />
+
   <AccuracyFilter
     threshold={accuracyThreshold}
     onChange={handleAccuracyFilterChange}
@@ -313,6 +335,7 @@
     {isLoading}
     {totalHidden}
     {accuracyThreshold}
+    {ensembleInfo}
   />
   
   <footer class="app-footer">

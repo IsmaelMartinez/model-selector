@@ -1,9 +1,9 @@
 # AI Model Selector - Current Project Status
 
-**Date**: September 30, 2025  
-**Status**: MVP Complete & Deployed ✅ | Planning v1.1  
-**Live URL**: https://ismaelmartinez.github.io/model-selector  
-**Last Commit**: f0f06a4 - Trigger GitHub Pages deployment after enabling Pages  
+**Date**: November 16, 2025
+**Status**: MVP Complete & Deployed ✅ + Ensemble Mode ✅
+**Live URL**: https://ismaelmartinez.github.io/model-selector
+**Last Commit**: 6269a5c - feat: implement 3-agent ensemble classification mode (PRD 4)  
 
 ## 📊 Overall Progress: 100% Complete (36/36 Tasks)
 
@@ -12,7 +12,10 @@ All MVP tasks from `tasks/tasks-1-prd-mvp-model-selector.md` have been completed
 ## 🎯 MVP Accomplishments
 
 ### ✅ Core Features Working
-- **Task Classification**: Browser-based semantic similarity + keyword matching
+- **Task Classification**: Browser-based LLM (Llama 3.2 1B) with semantic fallback
+  - **Fast Mode** (default): Single LLM call, ~0.4s, 95.2% accuracy
+  - **Ensemble Mode** (optional): 3x parallel LLM with voting, ~2s, 98%+ accuracy target
+- **Model Accuracy Filtering**: User-controlled threshold (50-95%) with localStorage persistence
 - **Model Recommendations**: 3-tiered system (Lightweight/Standard/Advanced)
 - **Environmental Focus**: "Smaller is better" algorithm prioritizing efficient models
 - **Accessibility**: Full keyboard navigation, ARIA labels, screen reader support
@@ -43,12 +46,17 @@ src/
 │   │   ├── models.json ✅ (Comprehensive dataset)
 │   │   └── tasks.json ✅ (Task taxonomy with keywords)
 │   ├── classification/
-│   │   └── BrowserTaskClassifier.js ✅ (Semantic + keyword classification)
-│   └── recommendation/
-│       └── ModelSelector.js ✅ ("Smaller is better" logic)
+│   │   ├── LLMTaskClassifier.js ✅ (Llama 3.2 1B + Ensemble mode)
+│   │   └── BrowserTaskClassifier.js ✅ (Semantic fallback)
+│   ├── recommendation/
+│   │   └── ModelSelector.js ✅ ("Smaller is better" + accuracy filtering)
+│   └── storage/
+│       └── preferences.js ✅ (localStorage for mode & filters)
 ├── components/
-│   ├── TaskInput.svelte ✅ (Accessible input with validation)
-│   └── RecommendationDisplay.svelte ✅ (Tiered display system)
+│   ├── TaskInput.svelte ✅ (Accessible input)
+│   ├── ClassificationMode.svelte ✅ (Fast/Ensemble toggle)
+│   ├── AccuracyFilter.svelte ✅ (Accuracy threshold slider)
+│   └── RecommendationDisplay.svelte ✅ (Tiered display + ensemble info)
 └── routes/
     └── +page.svelte ✅ (Main application)
 ```

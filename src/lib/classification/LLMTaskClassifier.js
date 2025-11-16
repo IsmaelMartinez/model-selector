@@ -223,9 +223,109 @@ export class LLMTaskClassifier {
   }
 
   /**
+   * Ensemble classification (3x parallel with majority voting)
+   * Reduces "lazy" LLM responses by running 3 classifications with different temperatures
+   * and using majority vote for more reliable results.
+   */
+  async classifyEnsemble(taskDescription, options = {}) {
+    const startTime = performance.now();
+
+    // Initialize model if not ready
+    if (!this.isReady) {
+      await this.initialize();
+    }
+
+    try {
+      // Run 3 classifications in parallel with different temperatures
+      const temperatures = [0.1, 0.5, 0.9];
+
+      const promises = temperatures.map(temp =>
+        this.classifySingleWithTemp(taskDescription, temp)
+      );
+
+      const results = await Promise.all(promises);
+      const time = performance.now() - startTime;
+
+      // Extract categories from results
+      const categories = results.map(r => r.predictions[0].category);
+
+      // Count votes
+      const votes = {};
+      categories.forEach(cat => {
+        votes[cat] = (votes[cat] || 0) + 1;
+      });
+
+      // Find winner (majority vote)
+      const sortedVotes = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+      const winner = sortedVotes[0];
+      const winnerCategory = winner[0];
+      const winnerVotes = winner[1];
+
+      // Calculate confidence based on vote count
+      const ensembleConfidence = winnerVotes / 3; // 3/3 = 1.0, 2/3 = 0.67
+
+      // Get the full result for the winner (use first matching result)
+      const winnerResult = results.find(r => r.predictions[0].category === winnerCategory);
+
+      return {
+        ...winnerResult,
+        method: 'llm_ensemble',
+        ensembleVotes: winnerVotes,
+        ensembleTotal: 3,
+        ensembleConfidence,
+        allVotes: categories,
+        confidence: ensembleConfidence,
+        confidenceLevel: this.getConfidenceLevel(ensembleConfidence),
+        processingTime: time,
+        modelInfo: {
+          model: 'Llama-3.2-1B-Instruct (3x Ensemble)',
+          device: this.modelConfig.device
+        }
+      };
+    } catch (error) {
+      console.error('Ensemble classification error:', error);
+      // Fallback to single classification
+      return this.classify(taskDescription, options);
+    }
+  }
+
+  /**
+   * Single classification with specific temperature (for ensemble)
+   */
+  async classifySingleWithTemp(taskDescription, temperature) {
+    // Step 1: Classify into high-level category
+    const categoryResult = await this.classifyCategory(taskDescription, temperature);
+
+    // Step 2: Classify into subcategory
+    const subcategoryResult = await this.classifySubcategory(
+      taskDescription,
+      categoryResult.category
+    );
+
+    return {
+      input: taskDescription,
+      predictions: [{
+        category: categoryResult.category,
+        score: categoryResult.confidence
+      }],
+      subcategoryPredictions: [{
+        category: categoryResult.category,
+        subcategory: subcategoryResult.subcategory,
+        score: subcategoryResult.confidence
+      }],
+      method: 'llm_classification_temp_' + temperature,
+      confidence: Math.min(categoryResult.confidence, subcategoryResult.confidence),
+      confidenceLevel: this.getConfidenceLevel(
+        Math.min(categoryResult.confidence, subcategoryResult.confidence)
+      ),
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  /**
    * Classify task into high-level category (computer-vision or nlp)
    */
-  async classifyCategory(taskDescription) {
+  async classifyCategory(taskDescription, temperature = 0.1) {
     const prompt = `You are a task classifier. Classify this request into exactly one category.
 
 Categories:
@@ -246,8 +346,8 @@ Category:`;
 
     const result = await this.generator(prompt, {
       max_new_tokens: 15,
-      temperature: 0.1,
-      do_sample: false,
+      temperature: temperature,
+      do_sample: temperature > 0.1,
       return_full_text: false
     });
 
