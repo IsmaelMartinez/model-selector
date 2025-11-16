@@ -5,13 +5,13 @@ import { pipeline } from '@huggingface/transformers';
  * VALIDATION SCRIPT: Test if ensemble classification improves accuracy
  *
  * This is a quick prototype to validate PRD 4 assumptions:
- * - Does 5x parallel classification actually improve accuracy?
- * - Does it complete in reasonable time (≤3s)?
+ * - Does 3x parallel classification fix time series edge cases?
+ * - Does it complete in reasonable time (≤2s)?
  *
- * APPROACH (KISS):
- * - Run same prompt 5 times with different temperatures
- * - Use simple majority voting
- * - Compare accuracy against baseline
+ * APPROACH (KISS - simplified to 3 agents):
+ * - Run same prompt 3 times with different temperatures
+ * - Use simple majority voting (2/3 = winner)
+ * - Focus on time series edge cases that currently fail
  */
 
 const shouldRunLLMTests = process.env.RUN_LLM_TESTS === 'true';
@@ -57,14 +57,14 @@ Category:`;
   }
 
   /**
-   * Ensemble classification (5x parallel with different temperatures)
+   * Ensemble classification (3x parallel with different temperatures)
    */
   async function classifyEnsemble(taskDescription) {
     const prompt = `You are a task classifier. Classify this into one category:
 - computer_vision: images, photos, visual
 - natural_language_processing: text, language, translation
 - speech_processing: audio, speech, voice
-- time_series: forecasting, temporal data
+- time_series: forecasting, temporal data, predictions over time
 - data_preprocessing: data cleaning, normalization
 - recommendation_systems: recommendations, suggestions
 - reinforcement_learning: learning through interaction, game playing
@@ -72,8 +72,8 @@ Category:`;
 Task: "${taskDescription}"
 Category:`;
 
-    // Run 5 classifications in parallel with different temperatures
-    const temperatures = [0.1, 0.3, 0.5, 0.7, 0.9];
+    // Run 3 classifications in parallel with different temperatures (KISS)
+    const temperatures = [0.1, 0.5, 0.9];
 
     const startTime = performance.now();
     const promises = temperatures.map(temp =>
@@ -103,12 +103,12 @@ Category:`;
     const winner = Object.entries(votes)
       .sort((a, b) => b[1] - a[1])[0];
 
-    const confidence = winner[1] / 5; // 5/5 = 1.0, 4/5 = 0.8, etc.
+    const confidence = winner[1] / 3; // 3/3 = 1.0, 2/3 = 0.67
 
     return {
       category: winner[0],
       votes: winner[1],
-      total: 5,
+      total: 3,
       confidence,
       allVotes: categories,
       time
@@ -137,18 +137,18 @@ Category:`;
   }
 
   /**
-   * Test cases - subset of most important scenarios
+   * Test cases - focused on known edge cases (time series)
    */
   const testCases = [
-    // Clear cases (should work in both)
+    // Time series edge cases (currently failing 1/3 tests)
+    { input: 'Forecast stock prices based on historical data', expected: 'time_series' },
+    { input: 'Detect anomalies in sensor readings over time', expected: 'time_series' },
+    { input: 'Predict energy consumption for next month', expected: 'time_series' },
+
+    // Other categories for comparison
     { input: 'Detect objects in photos', expected: 'computer_vision' },
     { input: 'Translate text to Spanish', expected: 'natural_language_processing' },
     { input: 'Convert speech to text', expected: 'speech_processing' },
-
-    // Edge cases (may benefit from ensemble)
-    { input: 'Predict stock prices over time', expected: 'time_series' },
-    { input: 'Clean missing values in dataset', expected: 'data_preprocessing' },
-    { input: 'Suggest movies to users', expected: 'recommendation_systems' },
   ];
 
   test('baseline classification works', async () => {
@@ -159,8 +159,8 @@ Category:`;
   test('ensemble classification works', async () => {
     const result = await classifyEnsemble('Detect objects in photos');
     expect(result.category).toBe('computer_vision');
-    expect(result.votes).toBeGreaterThanOrEqual(3); // At least majority
-    expect(result.time).toBeLessThan(5000); // Should be under 5s
+    expect(result.votes).toBeGreaterThanOrEqual(2); // At least 2/3 majority
+    expect(result.time).toBeLessThan(3000); // Should be under 3s (faster with 3 agents)
 
     console.log('Ensemble result:', result);
   }, 15000);
@@ -197,7 +197,7 @@ Category:`;
         ensemble: {
           result: ensembleResult.category,
           correct: ensembleMatch,
-          votes: `${ensembleResult.votes}/5`,
+          votes: `${ensembleResult.votes}/3`,
           confidence: ensembleResult.confidence,
           time: Math.round(ensembleTime)
         }
@@ -208,7 +208,7 @@ Category:`;
       console.log(`Test: "${testCase.input}"`);
       console.log(`  Expected: ${testCase.expected}`);
       console.log(`  Baseline: ${baselineResult} ${baselineMatch ? '✓' : '✗'} (${Math.round(baselineTime)}ms)`);
-      console.log(`  Ensemble: ${ensembleResult.category} ${ensembleMatch ? '✓' : '✗'} (${ensembleResult.votes}/5 votes, ${Math.round(ensembleTime)}ms)`);
+      console.log(`  Ensemble: ${ensembleResult.category} ${ensembleMatch ? '✓' : '✗'} (${ensembleResult.votes}/3 votes, ${Math.round(ensembleTime)}ms)`);
       console.log('');
     }
 
