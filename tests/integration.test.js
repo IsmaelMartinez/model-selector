@@ -99,6 +99,7 @@ describe('Integration Tests - Real User Scenarios', () => {
       const testCategories = [
         ['computer_vision', 'image_classification'],
         ['natural_language_processing', 'text_classification'],
+        ['natural_language_processing', 'code_assistant'],
         ['speech_processing', 'speech_recognition'],
         ['time_series', 'forecasting']
       ];
@@ -106,7 +107,7 @@ describe('Integration Tests - Real User Scenarios', () => {
       testCategories.forEach(([category, subcategory]) => {
         const models = modelSelector.selectModels(category, subcategory, 3);
         expect(models.length).toBeGreaterThan(0);
-        
+
         models.forEach(model => {
           expect(model.category).toBe(category);
           expect(model.subcategory).toBe(subcategory);
