@@ -293,7 +293,8 @@ export class ModelAggregator {
       natural_language_processing: {
         text_classification: { lightweight: [], standard: [], advanced: [] },
         sentiment_analysis: { lightweight: [], standard: [], advanced: [] },
-        text_generation: { lightweight: [], standard: [], advanced: [] }
+        text_generation: { lightweight: [], standard: [], advanced: [] },
+        code_assistant: { lightweight: [], standard: [], advanced: [] }
       },
       speech_processing: {
         speech_recognition: { lightweight: [], standard: [], advanced: [] },
@@ -592,6 +593,7 @@ export class ModelAggregator {
       { category: 'natural_language_processing', subcategory: 'text_classification', task: 'text-classification' },
       { category: 'natural_language_processing', subcategory: 'sentiment_analysis', task: 'text-classification' },
       { category: 'natural_language_processing', subcategory: 'text_generation', task: 'text-generation' },
+      { category: 'natural_language_processing', subcategory: 'code_assistant', task: 'text-generation' },
       { category: 'speech_processing', subcategory: 'speech_recognition', task: 'automatic-speech-recognition' },
       { category: 'speech_processing', subcategory: 'text_to_speech', task: 'text-to-speech' },
       { category: 'time_series', subcategory: 'forecasting', task: 'time-series-forecasting' }

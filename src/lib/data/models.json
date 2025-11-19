@@ -1189,6 +1189,110 @@
             "lastUpdated": "2023-06-14"
           }
         ]
+      },
+      "code_assistant": {
+        "lightweight": [
+          {
+            "id": "qwen_qwen2.5-coder-0.5b-instruct",
+            "name": "Qwen2.5 Coder 0.5B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+            "description": "Lightweight code generation model optimized for efficiency",
+            "sizeMB": 500,
+            "accuracy": 0.72,
+            "environmentalScore": 1,
+            "deploymentOptions": ["edge", "cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "deepseek-ai_deepseek-coder-1.3b-instruct",
+            "name": "DeepSeek Coder 1.3B Instruct",
+            "huggingFaceId": "deepseek-ai/deepseek-coder-1.3b-instruct",
+            "description": "Efficient code model for code generation and understanding",
+            "sizeMB": 2600,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          }
+        ],
+        "standard": [
+          {
+            "id": "qwen_qwen2.5-coder-3b-instruct",
+            "name": "Qwen2.5 Coder 3B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-Coder-3B-Instruct",
+            "description": "Balanced code generation model with good accuracy",
+            "sizeMB": 6000,
+            "accuracy": 0.78,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "bigcode_starcoder2-3b",
+            "name": "StarCoder2 3B",
+            "huggingFaceId": "bigcode/starcoder2-3b",
+            "description": "Code generation model trained on The Stack v2",
+            "sizeMB": 6000,
+            "accuracy": 0.76,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "deepseek-ai_deepseek-coder-6.7b-instruct",
+            "name": "DeepSeek Coder 6.7B Instruct",
+            "huggingFaceId": "deepseek-ai/deepseek-coder-6.7b-instruct",
+            "description": "Mid-size code model for complex code tasks",
+            "sizeMB": 13400,
+            "accuracy": 0.82,
+            "environmentalScore": 2,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          }
+        ],
+        "advanced": [
+          {
+            "id": "qwen_qwen2.5-coder-7b-instruct",
+            "name": "Qwen2.5 Coder 7B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-Coder-7B-Instruct",
+            "description": "High-accuracy code generation for complex programming tasks",
+            "sizeMB": 14000,
+            "accuracy": 0.85,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "bigcode_starcoder2-7b",
+            "name": "StarCoder2 7B",
+            "huggingFaceId": "bigcode/starcoder2-7b",
+            "description": "Large code generation model with strong benchmark performance",
+            "sizeMB": 14000,
+            "accuracy": 0.84,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "codellama_codellama-7b-instruct-hf",
+            "name": "CodeLlama 7B Instruct",
+            "huggingFaceId": "codellama/CodeLlama-7b-Instruct-hf",
+            "description": "Meta's code-specialized Llama model for code generation",
+            "sizeMB": 14000,
+            "accuracy": 0.83,
+            "environmentalScore": 3,
+            "deploymentOptions": ["cloud", "server"],
+            "frameworks": ["PyTorch", "Transformers"],
+            "lastUpdated": "2025-11-19"
+          }
+        ]
       }
     },
     "speech_processing": {

@@ -53,6 +53,26 @@
           "description": "Identifying and extracting entities from text",
           "keywords": ["entity extraction", "ner", "named entities", "information extraction"],
           "examples": ["Extract person names", "Location identification", "Company name extraction"]
+        },
+        "code_assistant": {
+          "label": "Code Assistant",
+          "description": "Understanding, generating, and refactoring source code",
+          "keywords": [
+            "code", "coding", "programming", "source code", "function", "class",
+            "method", "module", "refactor", "clean up code", "improve code",
+            "code review", "explain code", "codebase", "repository", "pull request",
+            "unit test", "integration test", "debug", "bug fix", "stack trace",
+            "typescript", "javascript", "python", "java", "c#", "csharp", "go", "rust",
+            "generate code", "write code", "write function", "code generation",
+            "analyze code", "code analysis", "code simplification", "code improvement"
+          ],
+          "examples": [
+            "Review this repository and suggest refactors",
+            "Explain this function and write tests for it",
+            "Suggest improvements to this Python module",
+            "Analyze this codebase and suggest simplifications",
+            "Generate a function to parse JSON data"
+          ]
         }
       }
     },
