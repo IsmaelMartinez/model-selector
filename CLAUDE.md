@@ -58,7 +58,7 @@ npm run update-models:dry-run  # Preview updates
 4. **Default** (Final) → Returns natural_language_processing
 
 **Ensemble Mode** (optional, ~2s):
-1. **3x Parallel LLM** → Same model, different temperatures (0.1, 0.5, 0.9)
+1. **3x Parallel LLM** → Same model, different temperatures (0.0, 0.2, 0.4)
 2. **Majority Voting** → 2/3 or 3/3 consensus determines result
 3. **Higher Accuracy** → Target 98%+ by reducing "lazy" LLM responses
 4. **Confidence Display** → Shows vote count and confidence percentage

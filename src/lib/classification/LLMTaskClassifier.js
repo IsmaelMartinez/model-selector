@@ -236,7 +236,8 @@ export class LLMTaskClassifier {
 
     try {
       // Run 3 classifications in parallel with different temperatures
-      const temperatures = [0.1, 0.5, 0.9];
+      // Using lower temps (0.0, 0.2, 0.4) for certainty over randomness
+      const temperatures = [0.0, 0.2, 0.4];
 
       const promises = temperatures.map(temp =>
         this.classifySingleWithTemp(taskDescription, temp)
@@ -324,7 +325,7 @@ export class LLMTaskClassifier {
   /**
    * Classify task into high-level category (computer-vision or nlp)
    */
-  async classifyCategory(taskDescription, temperature = 0.1) {
+  async classifyCategory(taskDescription, temperature = 0.0) {
     const prompt = `You are a task classifier. Classify this request into exactly one category.
 
 Categories:
@@ -346,7 +347,7 @@ Category:`;
     const result = await this.generator(prompt, {
       max_new_tokens: 15,
       temperature: temperature,
-      do_sample: temperature > 0.1,
+      do_sample: temperature > 0,
       return_full_text: false
     });
 
