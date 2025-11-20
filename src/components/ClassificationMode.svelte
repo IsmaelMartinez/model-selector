@@ -20,13 +20,13 @@
   }
 </script>
 
-<div class="classification-mode">
-  <label class="mode-label">
+<fieldset class="classification-mode">
+  <legend class="mode-legend">
     Classification Mode:
     <span class="info-icon" title="Fast mode uses single classification (~0.4s). Ensemble mode uses 3 parallel classifications with majority voting for higher accuracy (~2s).">
       ℹ️
     </span>
-  </label>
+  </legend>
 
   <div class="mode-options">
     <label class="mode-option">
@@ -55,7 +55,7 @@
       <span class="mode-desc">(~2s, 98%+ accuracy)</span>
     </label>
   </div>
-</div>
+</fieldset>
 
 <style>
   .classification-mode {
@@ -63,13 +63,16 @@
     padding: 1rem;
     background: var(--bg-secondary, #f5f5f5);
     border-radius: 8px;
+    border: none;
   }
 
-  .mode-label {
+  .mode-legend {
     display: block;
     font-weight: 600;
     margin-bottom: 0.75rem;
     color: var(--text-primary, #333);
+    padding: 0;
+    border: none;
   }
 
   .info-icon {
