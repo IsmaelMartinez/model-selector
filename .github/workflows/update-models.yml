@@ -36,7 +36,16 @@ jobs:
           # Create branch name with current date
           BRANCH_NAME="automated/model-update-$(date +%Y-%m-%d)"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          git checkout -b "$BRANCH_NAME"
+
+          # Check if branch exists on remote
+          if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+            echo "ℹ️ Branch $BRANCH_NAME already exists on remote, fetching and checking out..."
+            git fetch origin "$BRANCH_NAME"
+            git checkout -b "$BRANCH_NAME" "origin/$BRANCH_NAME"
+          else
+            echo "ℹ️ Creating new branch $BRANCH_NAME"
+            git checkout -b "$BRANCH_NAME"
+          fi
 
       - name: Run model aggregation
         env:
