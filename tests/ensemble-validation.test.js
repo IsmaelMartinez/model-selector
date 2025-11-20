@@ -10,7 +10,7 @@ import { pipeline } from '@huggingface/transformers';
  * - Does it complete in reasonable time (≤2s)?
  *
  * APPROACH (KISS - simplified to 3 agents):
- * - Run same prompt 3 times with different temperatures (0.1, 0.5, 0.9)
+ * - Run same prompt 3 times with different temperatures (0.0, 0.2, 0.4)
  * - Different temps = different "perspectives" from the model
  * - Use simple majority voting (2/3 = winner)
  * - More robust against one-off inconsistencies
@@ -75,14 +75,15 @@ Task: "${taskDescription}"
 Category:`;
 
     // Run 3 classifications in parallel with different temperatures (KISS)
-    const temperatures = [0.1, 0.5, 0.9];
+    // Using lower temps (0.0, 0.2, 0.4) for certainty over randomness
+    const temperatures = [0.0, 0.2, 0.4];
 
     const startTime = performance.now();
     const promises = temperatures.map(temp =>
       generator(prompt, {
         max_new_tokens: 5,
         temperature: temp,
-        do_sample: temp > 0.1, // Only sample for higher temps
+        do_sample: temp > 0, // Only sample for higher temps
         return_full_text: false
       })
     );
