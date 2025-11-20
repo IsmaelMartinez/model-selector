@@ -5,8 +5,10 @@
  * Achieves 97.5% accuracy for computer-vision vs NLP classification
  */
 
+import tasksDataModule from '../data/tasks.json' assert { type: 'json' };
+
 let pipelinePromise = null;
-let tasksData = null;
+const tasksData = tasksDataModule;
 
 // Use CDN import to avoid Vite bundling issues (same approach as working test-slm-simple.html)
 async function loadDependencies() {
@@ -39,9 +41,6 @@ async function loadDependencies() {
         console.error('❌ Failed to load transformers.js from CDN:', err);
         throw err;
       });
-  }
-  if (!tasksData) {
-    tasksData = (await import('../data/tasks.json')).default;
   }
   return pipelinePromise;
 }
