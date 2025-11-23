@@ -38,6 +38,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           destination_dir: pr/${{ github.event.pull_request.number }}
+          keep_files: true
 
       - name: Comment PR
         uses: actions/github-script@v7
