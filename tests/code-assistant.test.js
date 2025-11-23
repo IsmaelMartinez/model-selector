@@ -43,6 +43,31 @@ describe('Code Assistant Classification Tests', () => {
       expect(topPrediction.subcategory).toBe('code_assistant');
     });
 
+    // Natural language queries that should be classified as code_assistant
+    // These test the LLM's ability to understand code review intent
+    const naturalLanguageCodeQueries = [
+      'I want to review some code written in python',
+      'I need help reviewing my javascript code',
+      'can you help me review this python script',
+      'looking to get some code reviewed',
+      'need assistance with a code review task'
+    ];
+
+    test.each(naturalLanguageCodeQueries)('should classify natural language query "%s" as code_assistant', async (query) => {
+      const result = await taskClassifier.classify(query);
+
+      expect(result.predictions.length).toBeGreaterThan(0);
+
+      const topPrediction = result.subcategoryPredictions[0] || result.predictions[0];
+      expect(topPrediction).toBeDefined();
+
+      // Should be classified under natural_language_processing
+      expect(topPrediction.category).toBe('natural_language_processing');
+
+      // Should be classified as code_assistant
+      expect(topPrediction.subcategory).toBe('code_assistant');
+    });
+
     test('should not classify general text tasks as code_assistant', async () => {
       const nonCodeQueries = [
         'classify customer support tickets',
