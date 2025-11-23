@@ -318,15 +318,17 @@
     on:submit={handleTaskSubmit}
   />
 
-  <ClassificationMode
-    bind:mode={classificationMode}
-    onModeChange={(newMode) => { classificationMode = newMode; }}
-  />
+  <div class="settings-panel">
+    <ClassificationMode
+      bind:mode={classificationMode}
+      onModeChange={(newMode) => { classificationMode = newMode; }}
+    />
 
-  <AccuracyFilter
-    threshold={accuracyThreshold}
-    onChange={handleAccuracyFilterChange}
-  />
+    <AccuracyFilter
+      threshold={accuracyThreshold}
+      onChange={handleAccuracyFilterChange}
+    />
+  </div>
 
   <RecommendationDisplay
     {recommendations}
@@ -475,6 +477,32 @@
   .global-error p {
     margin: 0;
     line-height: 1.4;
+  }
+
+  .settings-panel {
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    padding: 1rem;
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+
+  .settings-panel :global(.classification-mode) {
+    margin: 0 0 1rem 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .settings-panel :global(.accuracy-filter) {
+    max-width: none;
+    margin: 0;
+    padding: 1rem 0 0 0;
+    background: transparent;
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0;
   }
   
   .app-footer {
