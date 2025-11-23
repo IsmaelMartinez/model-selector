@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="./_app/immutable/assets/2.BAEiNESK.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.CatyLLXf.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/FJ0fD_sG.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CnZs3dRg.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CHOCdRvH.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.BkYlhnPU.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/u63YINqd.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DTWdWxG_.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/B2LF6woC.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.Ck9ISlJv.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CTfa6Njk.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.DSEB8_9d.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/u3QvVOAD.js"><!--1uha8ag--><meta name="description" content="Get personalized AI model recommendations prioritizing environmental efficiency. Find the smallest, most effective models for your machine learning tasks."/><!----><title>AI Model Selector - Find the Most Efficient Models for Your Task</title>
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><!--[--><!----><main class="svelte-1uha8ag"><header class="app-header svelte-1uha8ag"><h1 class="svelte-1uha8ag"><span class="icon svelte-1uha8ag" aria-hidden="true">🤖</span> AI Model Selector</h1> <p class="tagline svelte-1uha8ag">Find the most <strong class="svelte-1uha8ag">environmentally efficient</strong> AI models for your task</p> <p class="subtitle svelte-1uha8ag">We prioritize smaller, more efficient models that reduce energy consumption while maintaining performance</p></header> <!--[!--><!--]--> <!--[!--><!--]--> <form class="task-input-form svelte-hh3wj7" novalidate><div class="input-group svelte-hh3wj7"><label for="task-description" class="visually-required svelte-hh3wj7">Describe your AI task <span class="required-indicator svelte-hh3wj7" aria-label="required">*</span></label> <div class="textarea-container svelte-hh3wj7"><textarea id="task-description" placeholder="Example: I want to classify customer support tickets by urgency level" rows="4" maxlength="500" required aria-describedby="task-description-help  character-count" aria-invalid="false" class="svelte-hh3wj7"></textarea> <div class="character-count svelte-hh3wj7" id="character-count" aria-live="polite"><span class="svelte-hh3wj7">0/500</span></div></div> <div id="task-description-help" class="help-text svelte-hh3wj7">Be specific about your task. Examples: "classify images of animals", "analyze sentiment in reviews", "detect objects in photos" <br/> <kbd class="svelte-hh3wj7">Ctrl + Enter</kbd> to submit quickly</div> <!--[!--><!--]--></div> <button type="submit" class="submit-button svelte-hh3wj7" disabled aria-describedby="submit-button-help"><!--[!-->Get AI Model Recommendations<!--]--></button> <div id="submit-button-help" class="help-text svelte-hh3wj7">We'll analyze your task and recommend the most environmentally efficient AI models</div></form><!----> <div class="settings-panel svelte-1uha8ag"><fieldset class="classification-mode svelte-1049usd"><legend class="mode-legend svelte-1049usd">Classification Mode: <span class="info-icon svelte-1049usd" title="Fast mode uses single classification (~0.4s). Ensemble mode uses 3 parallel classifications with majority voting for higher accuracy (~2s).">ℹ️</span></legend> <div class="mode-options svelte-1049usd"><label class="mode-option svelte-1049usd"><input type="radio" name="classification-mode" value="fast" checked aria-label="Fast mode - single classification" class="svelte-1049usd"/> <span class="mode-name svelte-1049usd">Fast</span> <span class="mode-desc svelte-1049usd">(~0.4s, 95.2% accuracy)</span></label> <label class="mode-option svelte-1049usd"><input type="radio" name="classification-mode" value="ensemble" aria-label="Ensemble mode - 3x parallel with voting" class="svelte-1049usd"/> <span class="mode-name svelte-1049usd">Ensemble</span> <span class="mode-desc svelte-1049usd">(~2s, 98%+ accuracy)</span></label></div></fieldset><!----> <div class="accuracy-filter svelte-139whjx"><div class="filter-header svelte-139whjx"><label for="accuracy-threshold" class="svelte-139whjx">Minimum Accuracy <button type="button" class="info-button svelte-139whjx" aria-label="Information about accuracy filtering"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM6.5 5h3v1.5h-1V11H10v1.5H6V11h1.5V6.5H6.5V5zm1-2.5a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"></path></svg></button></label> <!--[!--><!--]--></div> <div class="filter-controls svelte-139whjx"><div class="slider-container svelte-139whjx"><!--[!--><input type="range" id="accuracy-threshold" min="0" max="95" step="5" value="0" aria-label="Minimum accuracy threshold" aria-valuemin="0" aria-valuemax="95" aria-valuenow="0" aria-valuetext="Show all models, no filtering" class="slider inactive svelte-139whjx" disabled/><!--]--> <div class="threshold-display svelte-139whjx" aria-live="polite" aria-atomic="true"><span class="threshold-value svelte-139whjx">All models</span></div></div> <div class="button-group svelte-139whjx"><!--[--><button type="button" class="filter-button svelte-139whjx">Enable Filter</button><!--]--></div></div> <!--[!--><!--]--></div><!----></div> <div class="recommendations-container svelte-10ewcav"><!--[!--><!--[!--><div class="no-results svelte-10ewcav"><h2 class="svelte-10ewcav">No models found</h2> <!--[!--><p>We couldn't find models for this task. Try describing your task differently.</p><!--]--></div><!--]--><!--]--></div><!----> <footer class="app-footer svelte-1uha8ag"><div class="footer-content svelte-1uha8ag"><p class="svelte-1uha8ag"><span class="icon svelte-1uha8ag" aria-hidden="true">🌍</span> <strong class="svelte-1uha8ag">Environmental Focus:</strong> We prioritize models that minimize energy consumption and carbon footprint</p> <p class="data-info svelte-1uha8ag">Model data sourced from Hugging Face Hub • Updated 2025-11-13</p></div></footer></main><!----><!--]--><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_er8sop = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/model-selector/pr/15"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.CatyLLXf.js"),
+						import("./_app/immutable/entry/app.BkYlhnPU.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
