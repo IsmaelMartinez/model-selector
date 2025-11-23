@@ -330,13 +330,16 @@ export class LLMTaskClassifier {
 
 Categories:
 - "computer-vision" for tasks about images, photos, visual analysis, object detection, face recognition, image segmentation, OCR, visual understanding
-- "nlp" for tasks about text, language, translation, sentiment analysis, summarization, text generation, question answering, named entity recognition
+- "nlp" for tasks about text, language, translation, sentiment analysis, summarization, text generation, question answering, named entity recognition, code review, programming, coding assistance
 
 Examples:
 Request: "Identify objects in this image" → Category: computer-vision
 Request: "Translate English to French" → Category: nlp
 Request: "Analyze sentiment of reviews" → Category: nlp
 Request: "Detect faces in a photo" → Category: computer-vision
+Request: "Review some code written in Python" → Category: nlp
+Request: "Help me refactor this function" → Category: nlp
+Request: "Write a unit test for this class" → Category: nlp
 
 Now classify:
 Request: "${taskDescription}"
@@ -449,7 +452,7 @@ Subcategory:`;
 
     // Simple keyword-based fallback
     const visionKeywords = ['image', 'photo', 'picture', 'visual', 'face', 'object', 'detect', 'segment', 'ocr', 'recognize'];
-    const nlpKeywords = ['text', 'language', 'translate', 'sentiment', 'summarize', 'classify', 'analyze', 'chat', 'conversation'];
+    const nlpKeywords = ['text', 'language', 'translate', 'sentiment', 'summarize', 'classify', 'analyze', 'chat', 'conversation', 'code', 'python', 'javascript', 'function', 'refactor', 'review', 'programming'];
 
     const visionScore = visionKeywords.filter(k => lower.includes(k)).length;
     const nlpScore = nlpKeywords.filter(k => lower.includes(k)).length;
