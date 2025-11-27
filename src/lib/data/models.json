@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-11-13",
+  "lastUpdated": "2025-11-27",
   "tiers": {
     "lightweight": {
       "label": "Lightweight Models",
@@ -1193,6 +1193,27 @@
       "code_assistant": {
         "lightweight": [
           {
+            "id": "trl-internal-testing_tiny-qwen2forcausallm-2.5",
+            "name": "Tiny Qwen2ForCausalLM 2.5",
+            "huggingFaceId": "trl-internal-testing/tiny-Qwen2ForCausalLM-2.5",
+            "description": "Tiny Qwen2ForCausalLM 2.5 model for text generation",
+            "sizeMB": 8,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-27"
+          },
+          {
             "id": "qwen_qwen2.5-coder-0.5b-instruct",
             "name": "Qwen2.5 Coder 0.5B Instruct",
             "huggingFaceId": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
@@ -1200,8 +1221,15 @@
             "sizeMB": 500,
             "accuracy": 0.72,
             "environmentalScore": 1,
-            "deploymentOptions": ["edge", "cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           },
           {
@@ -1212,8 +1240,14 @@
             "sizeMB": 2600,
             "accuracy": 0.75,
             "environmentalScore": 1,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           }
         ],
@@ -1226,20 +1260,14 @@
             "sizeMB": 6000,
             "accuracy": 0.78,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
-            "lastUpdated": "2025-11-19"
-          },
-          {
-            "id": "bigcode_starcoder2-3b",
-            "name": "StarCoder2 3B",
-            "huggingFaceId": "bigcode/starcoder2-3b",
-            "description": "Code generation model trained on The Stack v2",
-            "sizeMB": 6000,
-            "accuracy": 0.76,
-            "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           },
           {
@@ -1250,9 +1278,75 @@
             "sizeMB": 13400,
             "accuracy": 0.82,
             "environmentalScore": 2,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "openai-community_gpt2",
+            "name": "Gpt2",
+            "huggingFaceId": "openai-community/gpt2",
+            "description": "Gpt2 model for text generation",
+            "sizeMB": 100,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-27"
+          },
+          {
+            "id": "qwen_qwen2.5-7b-instruct",
+            "name": "Qwen2.5 7B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-7B-Instruct",
+            "description": "Qwen2.5 7B Instruct model for text generation",
+            "sizeMB": 100,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-27"
+          },
+          {
+            "id": "qwen_qwen3-0.6b",
+            "name": "Qwen3 0.6B",
+            "huggingFaceId": "Qwen/Qwen3-0.6B",
+            "description": "Qwen3 0.6B model for text generation",
+            "sizeMB": 100,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-11-27"
           }
         ],
         "advanced": [
@@ -1264,8 +1358,14 @@
             "sizeMB": 14000,
             "accuracy": 0.85,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           },
           {
@@ -1276,8 +1376,14 @@
             "sizeMB": 14000,
             "accuracy": 0.84,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           },
           {
@@ -1288,8 +1394,14 @@
             "sizeMB": 14000,
             "accuracy": 0.83,
             "environmentalScore": 3,
-            "deploymentOptions": ["cloud", "server"],
-            "frameworks": ["PyTorch", "Transformers"],
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
             "lastUpdated": "2025-11-19"
           }
         ]
