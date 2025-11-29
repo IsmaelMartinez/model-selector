@@ -3,7 +3,7 @@
  * Tests that our MVP can work entirely client-side without real-time API calls
  */
 
-import { TaskClassifier } from '../classification/TaskClassifier.js';
+import { BrowserTaskClassifier } from '../classification/BrowserTaskClassifier.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -17,7 +17,7 @@ const modelsData = JSON.parse(readFileSync(join(__dirname, '../data/models.json'
 
 export class AggregationValidator {
   constructor() {
-    this.classifier = new TaskClassifier();
+    this.classifier = new BrowserTaskClassifier();
     this.tasksData = tasksData;
     this.modelsData = modelsData;
   }
