@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-11-27",
+  "lastUpdated": "2025-12-10",
   "tiers": {
     "lightweight": {
       "label": "Lightweight Models",
@@ -2054,6 +2054,23 @@
               "PyTorch"
             ],
             "lastUpdated": "2024-01-20"
+          },
+          {
+            "id": "amazon_chronos-t5-large",
+            "name": "Chronos T5 Large",
+            "huggingFaceId": "amazon/chronos-t5-large",
+            "description": "Chronos T5 Large model for time series forecasting",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-12-10"
           }
         ]
       },
