@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-12-10",
+  "lastUpdated": "2025-12-11",
   "tiers": {
     "lightweight": {
       "label": "Lightweight Models",
@@ -28,6 +28,26 @@
     "computer_vision": {
       "image_classification": {
         "lightweight": [
+          {
+            "id": "timm_mobilenetv3_large_100.ra_in1k",
+            "name": "Mobilenetv3 Large 100.Ra In1k",
+            "huggingFaceId": "timm/mobilenetv3_large_100.ra_in1k",
+            "description": "Mobilenetv3 Large 100.Ra In1k model for image classification",
+            "sizeMB": 25,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-12-11"
+          },
           {
             "id": "efficientnet_b0",
             "name": "EfficientNet B0",
@@ -104,26 +124,6 @@
             "frameworks": [
               "PyTorch",
               "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "timm_edgenext_small.usi_in1k",
-            "name": "Edgenext Small.Usi In1k",
-            "huggingFaceId": "timm/edgenext_small.usi_in1k",
-            "description": "Edgenext Small.Usi In1k model for image classification",
-            "sizeMB": 25,
-            "accuracy": 0.72,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
             ],
             "lastUpdated": "2025-10-12"
           }
