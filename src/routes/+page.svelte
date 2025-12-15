@@ -433,7 +433,7 @@
         <div class="footer-meta">
           <span>Data from Hugging Face Hub</span>
           <span class="dot">•</span>
-          <span>Updated {modelsData.lastUpdated}</span>
+          <span>Updated {new Date(modelsData.lastUpdated).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
         </div>
       </div>
     </footer>

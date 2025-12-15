@@ -31,6 +31,20 @@
     return `${(sizeMB / 1000).toFixed(1)}GB`;
   }
 
+  function formatDate(dateStr) {
+    if (!dateStr) return 'N/A';
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-GB', { 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric' 
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
   function formatCategory(cat) {
     return cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
@@ -137,7 +151,7 @@
             <div class="stat">
               <span class="stat-icon">📅</span>
               <div class="stat-content">
-                <span class="stat-value">{model.lastUpdated}</span>
+                <span class="stat-value">{formatDate(model.lastUpdated)}</span>
                 <span class="stat-label">Updated</span>
               </div>
             </div>
