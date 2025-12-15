@@ -2308,7 +2308,7 @@
         "dailyKWh": "> 1.0"
       }
     },
-    "methodology": "Order-of-magnitude comparisons based on estimated kWh/day usage. See /docs/ENVIRONMENTAL_METHODOLOGY.md for details."
+    "methodology": "Order-of-magnitude comparisons based on estimated kWh/day usage. See /docs/environmental-methodology.md for details."
   },
   "selectionRules": {
     "defaultTierPriority": [

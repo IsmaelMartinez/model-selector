@@ -5,9 +5,9 @@
 **Live URL**: https://ismaelmartinez.github.io/model-selector
 **Last Commit**: 6269a5c - feat: implement 3-agent ensemble classification mode (PRD 4)  
 
-## 📊 Overall Progress: 100% Complete (36/36 Tasks)
+## 📊 Overall Progress: 100% Complete
 
-All MVP tasks from `tasks/tasks-1-prd-mvp-model-selector.md` have been completed successfully.
+All MVP tasks have been completed successfully. See [ADR documentation](docs/adrs/) for architectural decisions.
 
 ## 🎯 MVP Accomplishments
 
@@ -160,24 +160,16 @@ git status         # ✅ Clean working tree
 
 ## 📈 Next Iteration: v1.1 (In Planning)
 
-### Phase 2 Focus: Browser-Based SLM Integration
-**PRD**: `tasks/2-prd-browser-slm-classification.md`  
-**Timeline**: 8-12 days  
-**Goal**: Replace keyword-based classification with Small Language Model for 90%+ accuracy
+### Phase 2 Focus: Enhanced Features & Data Quality
+**Documentation**: See [ADR documentation](docs/adrs/) for architectural decisions  
+**Timeline**: Ongoing  
+**Goal**: Improve data quality and expand features
 
 #### Key Objectives
-1. **Improve Classification Accuracy**: From 83% → 90%+ using zero-shot classification
-2. **Simplify Codebase**: Remove complex keyword matching and decision trees
-3. **Maintain Privacy**: Keep all inference client-side (no external APIs)
-4. **Cross-Browser Support**: Expand beyond Chrome-first to Firefox, Safari, mobile
-5. **Graceful Degradation**: Fall back to keywords if SLM fails to load
-
-#### Technical Approach
-- **Library**: Transformers.js v3+ (WebGPU/WASM)
-- **Model**: DistilBERT-based zero-shot classifier (~67M params, quantized)
-- **Inference Time**: ≤10 seconds per classification
-- **Load Time**: ≤30 seconds on broadband (first visit only)
-- **Fallback**: Keyword classifier with user notification
+1. **Phase 2 Auto-Updates**: Add Gemini-based validation for model card parsing
+2. **Improved Accuracy Data**: Extract real metrics from model cards
+3. **Cross-Browser Support**: Expand beyond Chrome-first to Firefox, Safari
+4. **Community Features**: User feedback and model suggestions
 
 ### Future Priorities (Post-v1.1)
 

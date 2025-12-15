@@ -8,7 +8,7 @@
 **Status:** MVP Complete ✅ + Ensemble Mode (95.2% Fast / 98%+ Ensemble accuracy)
 **Tech:** SvelteKit 2 + Vite 5 + Transformers.js (Browser-based Llama 3.2 1B)
 **Platform:** Desktop only (mobile not recommended - requires ~700 MB model download)
-**Details:** See `PROJECT_STATUS.md`, `PROJECT_VISION.md`, `README.md`
+**Details:** See `project-status.md`, `project-vision.md`, `README.md`
 
 ---
 
@@ -91,7 +91,7 @@ git commit -m "feat: ..." && git push
 2. Run `npm test` to validate
 3. Check UI with `npm run dev`
 
-Reference: See "Adding a New Model" in this file or `docs/MODEL_CURATION_PROCESS.md`
+Reference: See "Adding a New Model" in this file or `docs/model-curation-process.md`
 
 ### Adding Categories
 1. Edit `src/lib/data/tasks.json` (add keywords and examples)
@@ -211,11 +211,11 @@ describe('Module', () => {
 ## Resources
 
 **Project Docs:**
-- `PROJECT_STATUS.md` - Current status, test results, known issues
-- `PROJECT_VISION.md` - Mission, roadmap, success metrics
+- `project-status.md` - Current status, test results, known issues
+- `project-vision.md` - Mission, roadmap, success metrics
 - `docs/adrs/` - Architecture Decision Records
-- `docs/ENVIRONMENTAL_METHODOLOGY.md` - Impact calculation details
-- `docs/MODEL_CURATION_PROCESS.md` - Data curation guide
+- `docs/environmental-methodology.md` - Impact calculation details
+- `docs/model-curation-process.md` - Data curation guide
 
 **External:**
 - [SvelteKit](https://kit.svelte.dev/docs) | [Vite](https://vitejs.dev/) | [Transformers.js](https://huggingface.co/docs/transformers.js) | [Vitest](https://vitest.dev/)

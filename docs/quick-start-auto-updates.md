@@ -30,9 +30,9 @@
 | File | Status | Purpose |
 |------|--------|---------|
 | `.github/workflows/update-models.yml` | ✅ New | Daily automation workflow |
-| `docs/AUTO_UPDATE_STRATEGY.md` | ✅ New | Complete strategy documentation |
-| `docs/MODEL_CURATION_PROCESS.md` | ✅ Updated | Removed defunct Papers with Code |
-| `docs/QUICK_START_AUTO_UPDATES.md` | ✅ New | This file - quick reference |
+| `docs/auto-update-strategy.md` | ✅ New | Complete strategy documentation |
+| `docs/model-curation-process.md` | ✅ Updated | Removed defunct Papers with Code |
+| `docs/quick-start-auto-updates.md` | ✅ New | This file - quick reference |
 
 ---
 
@@ -182,8 +182,8 @@ cat src/lib/data/models.json | grep '"id":' | wc -l
 
 For complete details, see:
 
-- **Full Strategy**: [`AUTO_UPDATE_STRATEGY.md`](./AUTO_UPDATE_STRATEGY.md)
-- **Curation Process**: [`MODEL_CURATION_PROCESS.md`](./MODEL_CURATION_PROCESS.md)
+- **Full Strategy**: [`auto-update-strategy.md`](./auto-update-strategy.md)
+- **Curation Process**: [`model-curation-process.md`](./model-curation-process.md)
 - **Workflow File**: [`../.github/workflows/update-models.yml`](../.github/workflows/update-models.yml)
 - **Aggregator Code**: [`../src/lib/aggregation/ModelAggregator.js`](../src/lib/aggregation/ModelAggregator.js)
 
@@ -201,7 +201,7 @@ For complete details, see:
 
 ## Questions?
 
-- Review full documentation in `docs/AUTO_UPDATE_STRATEGY.md`
+- Review full documentation in `docs/auto-update-strategy.md`
 - Check workflow logs in GitHub Actions
 - Test locally with `npm run update-models:dry-run`
 - Open GitHub issue for bugs or improvements

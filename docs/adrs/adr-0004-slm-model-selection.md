@@ -129,9 +129,9 @@ Tested 4 different label formats:
 5. **When to use AI** - Best for unstructured, complex, or creative tasks
 
 ## Related Documents
-- [Task Classification PRD](../tasks/2-prd-browser-slm-classification.md)
-- [Task Taxonomy](../src/lib/data/tasks.json)
-- [Existing Keyword Classifier](../src/lib/classification/BrowserTaskClassifier.js)
+- [Browser SLM Learnings](../research/browser-slm-learnings.md)
+- [Task Taxonomy](../../src/lib/data/tasks.json)
+- [Existing Keyword Classifier](../../src/lib/classification/BrowserTaskClassifier.js)
 
 ## Metrics
 - **Models tested**: 2

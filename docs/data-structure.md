@@ -111,7 +111,7 @@ Each model includes:
 
 ## Environmental Impact Scoring
 
-Environmental scores (1-3) based on estimated kWh/day usage. See `/docs/ENVIRONMENTAL_METHODOLOGY.md` for detailed methodology. Selection algorithm weights environmental impact at 40% alongside accuracy (40%) and deployment compatibility (20%).
+Environmental scores (1-3) based on estimated kWh/day usage. See `/docs/environmental-methodology.md` for detailed methodology. Selection algorithm weights environmental impact at 40% alongside accuracy (40%) and deployment compatibility (20%).
 
 ## Usage in Application
 
