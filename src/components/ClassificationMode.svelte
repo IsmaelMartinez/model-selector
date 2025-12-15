@@ -2,17 +2,14 @@
   import { onMount } from 'svelte';
   import { getClassificationMode, saveClassificationMode } from '../lib/storage/preferences.js';
 
-  // Props
-  export let mode = 'fast'; // 'fast' or 'ensemble'
-  export let onModeChange = () => {}; // Callback when mode changes
+  export let mode = 'fast';
+  export let onModeChange = () => {};
 
-  // Load saved mode on mount
   onMount(() => {
     const savedMode = getClassificationMode();
     mode = savedMode;
   });
 
-  // Handle mode change
   function handleModeChange(newMode) {
     mode = newMode;
     saveClassificationMode(newMode);
@@ -20,120 +17,166 @@
   }
 </script>
 
-<fieldset class="classification-mode">
-  <legend class="mode-legend">
-    Classification Mode:
-    <span class="info-icon" title="Fast mode uses single classification (~0.4s). Ensemble mode uses 3 parallel classifications with majority voting for higher accuracy (~2s).">
-      ℹ️
-    </span>
-  </legend>
+<div class="mode-card">
+  <div class="mode-header">
+    <div class="mode-title">
+      <span class="mode-icon">⚡</span>
+      <span>Classification Mode</span>
+    </div>
+  </div>
 
   <div class="mode-options">
-    <label class="mode-option">
-      <input
-        type="radio"
-        name="classification-mode"
-        value="fast"
-        checked={mode === 'fast'}
-        on:change={() => handleModeChange('fast')}
-        aria-label="Fast mode - single classification"
-      />
-      <span class="mode-name">Fast</span>
-      <span class="mode-desc">(~0.4s, 95.2% accuracy)</span>
-    </label>
+    <button 
+      class="mode-option" 
+      class:active={mode === 'fast'}
+      on:click={() => handleModeChange('fast')}
+      aria-pressed={mode === 'fast'}
+    >
+      <div class="option-header">
+        <span class="option-icon">🚀</span>
+        <span class="option-name">Fast</span>
+      </div>
+      <div class="option-stats">
+        <span class="stat">~0.4s</span>
+        <span class="dot">•</span>
+        <span class="stat">95.2%</span>
+      </div>
+    </button>
 
-    <label class="mode-option">
-      <input
-        type="radio"
-        name="classification-mode"
-        value="ensemble"
-        checked={mode === 'ensemble'}
-        on:change={() => handleModeChange('ensemble')}
-        aria-label="Ensemble mode - 3x parallel with voting"
-      />
-      <span class="mode-name">Ensemble</span>
-      <span class="mode-desc">(~2s, 98%+ accuracy)</span>
-    </label>
+    <button 
+      class="mode-option" 
+      class:active={mode === 'ensemble'}
+      on:click={() => handleModeChange('ensemble')}
+      aria-pressed={mode === 'ensemble'}
+    >
+      <div class="option-header">
+        <span class="option-icon">🎯</span>
+        <span class="option-name">Ensemble</span>
+      </div>
+      <div class="option-stats">
+        <span class="stat">~2s</span>
+        <span class="dot">•</span>
+        <span class="stat">98%+</span>
+      </div>
+    </button>
   </div>
-</fieldset>
+
+  <p class="mode-description">
+    {#if mode === 'fast'}
+      Single AI classification for quick results.
+    {:else}
+      3x parallel classifications with voting for higher accuracy.
+    {/if}
+  </p>
+</div>
 
 <style>
-  .classification-mode {
-    margin: 1rem 0;
-    padding: 1rem;
-    background: var(--bg-secondary, #f5f5f5);
-    border-radius: 8px;
-    border: none;
+  .mode-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: border-color 0.2s ease;
   }
 
-  .mode-legend {
-    display: block;
+  .mode-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .mode-header {
+    margin-bottom: 1rem;
+  }
+
+  .mode-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 600;
-    margin-bottom: 0.75rem;
-    color: var(--text-primary, #333);
-    padding: 0;
-    border: none;
+    color: #e8f5e9;
+    font-size: 0.9rem;
   }
 
-  .info-icon {
-    cursor: help;
-    font-size: 0.9em;
-    opacity: 0.7;
+  .mode-icon {
+    font-size: 1rem;
   }
 
   .mode-options {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .mode-option {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
+    padding: 0.75rem 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
   }
 
   .mode-option:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.06);
   }
 
-  .mode-option input[type="radio"] {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
+  .mode-option.active {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
   }
 
-  .mode-name {
-    font-weight: 500;
-    color: var(--text-primary, #333);
+  .mode-option:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
   }
 
-  .mode-desc {
-    font-size: 0.85em;
-    color: var(--text-secondary, #666);
+  .option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
   }
 
-  /* Accessibility: Focus styles */
-  .mode-option input[type="radio"]:focus {
-    outline: 2px solid var(--primary-color, #007bff);
-    outline-offset: 2px;
+  .option-icon {
+    font-size: 1rem;
   }
 
-  /* Mobile responsive */
-  @media (max-width: 640px) {
-    .mode-options {
-      flex-direction: column;
-      gap: 0.75rem;
-    }
+  .option-name {
+    font-weight: 600;
+    color: #e8f5e9;
+    font-size: 0.85rem;
+  }
 
-    .mode-desc {
-      display: block;
-      margin-left: 1.5rem;
-      margin-top: 0.25rem;
+  .option-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  .mode-option.active .option-stats {
+    color: #34d399;
+  }
+
+  .dot {
+    opacity: 0.5;
+  }
+
+  .mode-description {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #4b5563;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mode-option {
+      transition: none;
     }
   }
 </style>

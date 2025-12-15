@@ -10,6 +10,7 @@
   let textareaElement;
   let characterCount = 0;
   const maxLength = 500;
+  let isFocused = false;
   
   $: characterCount = taskDescription.length;
   $: isNearLimit = characterCount > maxLength * 0.8;
@@ -19,13 +20,13 @@
     event.preventDefault();
     
     if (!taskDescription.trim()) {
-      error = 'Please describe your AI task before getting recommendations.';
+      error = 'Please describe your AI task first.';
       textareaElement?.focus();
       return;
     }
     
     if (isOverLimit) {
-      error = `Task description is too long (${characterCount}/${maxLength} characters). Please shorten it.`;
+      error = `Description too long (${characterCount}/${maxLength}). Please shorten it.`;
       textareaElement?.focus();
       return;
     }
@@ -35,276 +36,348 @@
   }
   
   function handleInput() {
-    // Clear error when user starts typing
-    if (error) {
-      error = null;
-    }
+    if (error) error = null;
   }
   
   function handleKeydown(event) {
-    // Submit on Ctrl+Enter
     if (event.ctrlKey && event.key === 'Enter') {
       handleSubmit(event);
     }
   }
+
+  const exampleQueries = [
+    "Classify customer support tickets by urgency",
+    "Detect objects in security camera footage",
+    "Analyze sentiment in product reviews",
+    "Generate text summaries for articles",
+  ];
+
+  function useExample(example) {
+    taskDescription = example;
+    textareaElement?.focus();
+  }
 </script>
 
-<form on:submit={handleSubmit} class="task-input-form" novalidate>
-  <div class="input-group">
-    <label for="task-description" class="visually-required">
-      Describe your AI task
-      <span class="required-indicator" aria-label="required">*</span>
-    </label>
+<form on:submit={handleSubmit} class="task-form" novalidate>
+  <div class="input-wrapper" class:focused={isFocused} class:has-error={error}>
+    <label for="task-description" class="sr-only">Describe your AI task</label>
     
-    <div class="textarea-container">
-      <textarea
-        id="task-description"
-        bind:this={textareaElement}
-        bind:value={taskDescription}
-        on:input={handleInput}
-        on:keydown={handleKeydown}
-        placeholder="Example: I want to classify customer support tickets by urgency level"
-        rows="4"
-        maxlength={maxLength}
-        required
-        aria-describedby="task-description-help {error ? 'task-description-error' : ''} character-count"
-        aria-invalid={error ? 'true' : 'false'}
-        class:error={error}
-        class:near-limit={isNearLimit && !isOverLimit}
-        class:over-limit={isOverLimit}
-        disabled={isLoading}
-      ></textarea>
-      
-      <div class="character-count" id="character-count" aria-live="polite">
-        <span class:warning={isNearLimit} class:error={isOverLimit}>
-          {characterCount}/{maxLength}
-        </span>
-      </div>
+    <textarea
+      id="task-description"
+      bind:this={textareaElement}
+      bind:value={taskDescription}
+      on:input={handleInput}
+      on:keydown={handleKeydown}
+      on:focus={() => isFocused = true}
+      on:blur={() => isFocused = false}
+      placeholder="Describe your AI task... e.g., 'Classify customer reviews by sentiment'"
+      rows="3"
+      maxlength={maxLength}
+      required
+      aria-describedby="task-help"
+      aria-invalid={error ? 'true' : 'false'}
+      disabled={isLoading}
+    ></textarea>
+    
+    <div class="input-footer">
+      <span class="char-count" class:warning={isNearLimit} class:error={isOverLimit}>
+        {characterCount}/{maxLength}
+      </span>
+      <span class="keyboard-hint">
+        <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to submit
+      </span>
     </div>
-    
-    <div id="task-description-help" class="help-text">
-      Be specific about your task. Examples: "classify images of animals", "analyze sentiment in reviews", "detect objects in photos"
-      <br>
-      <kbd>Ctrl + Enter</kbd> to submit quickly
+  </div>
+  
+  {#if error}
+    <div class="error-message" role="alert">
+      <span class="error-icon">⚠️</span>
+      {error}
     </div>
-    
-    {#if error}
-      <div id="task-description-error" class="error-message" role="alert" aria-live="assertive">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
-          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8S12.42 0 8 0zM7 3h2v6H7V3zm0 8h2v2H7v-2z"/>
-        </svg>
-        {error}
-      </div>
-    {/if}
+  {/if}
+
+  <div class="examples-section">
+    <span class="examples-label">Try:</span>
+    <div class="examples-list">
+      {#each exampleQueries as example}
+        <button 
+          type="button" 
+          class="example-chip"
+          on:click={() => useExample(example)}
+          disabled={isLoading}
+        >
+          {example}
+        </button>
+      {/each}
+    </div>
   </div>
   
   <button 
     type="submit" 
     class="submit-button"
     disabled={isLoading || !taskDescription.trim() || isOverLimit}
-    aria-describedby="submit-button-help"
   >
     {#if isLoading}
-      <svg class="spinner" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
-        <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="9 3" />
+      <svg class="spinner" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="40 60" />
       </svg>
-      Getting Recommendations...
+      <span>Finding models...</span>
     {:else}
-      Get AI Model Recommendations
+      <span>Find Eco-Friendly Models</span>
+      <span class="arrow">→</span>
     {/if}
   </button>
-  
-  <div id="submit-button-help" class="help-text">
-    We'll analyze your task and recommend the most environmentally efficient AI models
-  </div>
 </form>
 
 <style>
-  .task-input-form {
-    max-width: 600px;
-    margin: 0 auto;
+  .task-form {
+    margin-bottom: 2rem;
   }
-  
-  .input-group {
-    margin-bottom: 1.5rem;
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
-  
-  label {
-    display: block;
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #2d3748;
-  }
-  
-  .required-indicator {
-    color: #e53e3e;
-    font-weight: normal;
-  }
-  
-  .textarea-container {
+
+  .input-wrapper {
     position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    overflow: hidden;
   }
-  
+
+  .input-wrapper.focused {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  }
+
+  .input-wrapper.has-error {
+    border-color: #ef4444;
+  }
+
   textarea {
     width: 100%;
-    padding: 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    padding: 1.25rem 1.25rem 0.75rem;
+    background: transparent;
+    border: none;
+    color: #e8f5e9;
     font-family: inherit;
-    font-size: 1rem;
-    line-height: 1.5;
-    resize: vertical;
-    min-height: 120px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    background: #ffffff;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    resize: none;
+    min-height: 100px;
   }
-  
+
+  textarea::placeholder {
+    color: #4b5563;
+  }
+
   textarea:focus {
     outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
   }
-  
-  textarea.near-limit {
-    border-color: #ed8936;
-  }
-  
-  textarea.over-limit,
-  textarea.error {
-    border-color: #e53e3e;
-  }
-  
+
   textarea:disabled {
-    background-color: #f7fafc;
-    color: #a0aec0;
+    color: #6b7280;
     cursor: not-allowed;
   }
-  
-  .character-count {
-    position: absolute;
-    bottom: 0.5rem;
-    right: 0.75rem;
-    font-size: 0.875rem;
-    color: #718096;
-    pointer-events: none;
+
+  .input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2);
   }
-  
-  .character-count .warning {
-    color: #ed8936;
-    font-weight: 500;
-  }
-  
-  .character-count .error {
-    color: #e53e3e;
-    font-weight: 600;
-  }
-  
-  .help-text {
-    font-size: 0.875rem;
-    color: #718096;
-    margin-top: 0.5rem;
-    line-height: 1.4;
-  }
-  
-  .help-text kbd {
-    background: #edf2f7;
-    border: 1px solid #cbd5e0;
-    border-radius: 3px;
-    padding: 2px 4px;
+
+  .char-count {
     font-size: 0.75rem;
-    font-family: monospace;
+    color: #4b5563;
+    font-variant-numeric: tabular-nums;
   }
-  
+
+  .char-count.warning {
+    color: #f59e0b;
+  }
+
+  .char-count.error {
+    color: #ef4444;
+  }
+
+  .keyboard-hint {
+    font-size: 0.75rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+    font-family: inherit;
+  }
+
   .error-message {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding: 0.75rem;
-    background-color: #fed7d7;
-    border: 1px solid #feb2b2;
-    border-radius: 6px;
-    color: #c53030;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    color: #fca5a5;
     font-size: 0.875rem;
-    line-height: 1.4;
   }
-  
-  .error-message svg {
+
+  .error-icon {
     flex-shrink: 0;
-    margin-top: 0.125rem;
   }
-  
+
+  .examples-section {
+    margin: 1.25rem 0;
+  }
+
+  .examples-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .examples-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .example-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    padding: 0.4rem 0.85rem;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .example-chip:hover:not(:disabled) {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+  }
+
+  .example-chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .submit-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: 100%;
-    padding: 1rem 1.5rem;
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    padding: 1.1rem 1.5rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-height: 56px;
+    position: relative;
+    overflow: hidden;
   }
-  
+
+  .submit-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
   .submit-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
   }
-  
+
+  .submit-button:hover:not(:disabled)::before {
+    opacity: 1;
+  }
+
   .submit-button:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   .submit-button:disabled {
-    background: #cbd5e0;
-    color: #a0aec0;
+    background: #1f2937;
+    color: #4b5563;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
   }
-  
+
+  .submit-button .arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .submit-button:hover:not(:disabled) .arrow {
+    transform: translateX(4px);
+  }
+
   .spinner {
+    width: 20px;
+    height: 20px;
     animation: spin 1s linear infinite;
   }
-  
+
   @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-  
-  /* Focus visible improvements for better keyboard navigation */
-  .submit-button:focus-visible {
-    outline: 2px solid #4299e1;
-    outline-offset: 2px;
-  }
-  
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    textarea {
-      border-width: 2px;
+
+  @media (max-width: 640px) {
+    .examples-list {
+      gap: 0.4rem;
     }
-    
-    .submit-button {
-      border: 2px solid transparent;
+
+    .example-chip {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.7rem;
+    }
+
+    .keyboard-hint {
+      display: none;
     }
   }
-  
-  /* Reduced motion support */
+
   @media (prefers-reduced-motion: reduce) {
-    textarea,
-    .submit-button {
-      transition: none;
-    }
-    
+    .input-wrapper,
+    .submit-button,
+    .example-chip,
     .spinner {
+      transition: none;
       animation: none;
     }
   }
