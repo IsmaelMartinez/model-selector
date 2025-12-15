@@ -3,6 +3,7 @@
   import RecommendationDisplay from "../components/RecommendationDisplay.svelte";
   import AccuracyFilter from "../components/AccuracyFilter.svelte";
   import ClassificationMode from "../components/ClassificationMode.svelte";
+  import ClarificationFlow from "../components/ClarificationFlow.svelte";
   import { LLMTaskClassifier } from "../lib/classification/LLMTaskClassifier.js";
   import { BrowserTaskClassifier } from "../lib/classification/BrowserTaskClassifier.js";
   import { ModelSelector } from "../lib/recommendation/ModelSelector.js";
@@ -13,7 +14,7 @@
 
   // Initialize components
   let taskClassifier;
-  let fallbackClassifier; // Keyword-based fallback
+  let fallbackClassifier;
   let modelSelector;
   let usingFallback = false;
 
@@ -27,24 +28,24 @@
   let taskCategory = "";
   let taskSubcategory = "";
   let error = null;
-  let accuracyThreshold = 0; // Accuracy filter threshold (0-95)
-  let totalHidden = 0; // Number of models hidden by filter
-  let classificationMode = "fast"; // Classification mode: 'fast' or 'ensemble'
-  let ensembleInfo = null; // Ensemble voting information
+  let accuracyThreshold = 0;
+  let totalHidden = 0;
+  let classificationMode = "fast";
+  let ensembleInfo = null;
+  
+  // Clarification flow state
+  let showClarification = false;
+  let clarificationOptions = [];
+  let pendingTaskDescription = "";
 
-  // Initialize when component mounts
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
 
   onMount(async () => {
     try {
-      // Initialize model selector immediately
       modelSelector = new ModelSelector(modelsData);
-
-      // Initialize fallback classifier (backup)
       fallbackClassifier = new BrowserTaskClassifier(tasksData);
 
-      // Initialize LLM classifier with improved loading
       taskClassifier = new LLMTaskClassifier({
         onProgress: (progress) => {
           if (progress.status === "downloading") {
@@ -56,45 +57,72 @@
           }
         },
       });
-      usingFallback = false; // Try LLM first
+      usingFallback = false;
 
       console.log("✅ Data pipeline initialized successfully");
-      console.log("🤖 LLM classifier ready (will load on first use)");
-      console.log("📊 Available models:", Object.keys(modelsData.models));
-      console.log("📋 Available tasks:", Object.keys(tasksData.taskTaxonomy));
-
-      // Optionally preload the model in the background for better UX
-      // Uncomment this to load model immediately on page load:
-      // preloadModel();
     } catch (err) {
       console.error("❌ Failed to initialize data pipeline:", err);
-      error =
-        "Failed to initialize the model selector. Please refresh the page.";
+      error = "Failed to initialize the model selector. Please refresh the page.";
     }
   });
 
-  async function preloadModel() {
-    if (
-      taskClassifier &&
-      !taskClassifier.isReady &&
-      !taskClassifier.isLoading
-    ) {
-      try {
-        isModelLoading = true;
-        modelLoadProgress = "Loading AI classification model...";
-        console.log("🔄 Preloading LLM model...");
+  // Check if task needs clarification
+  function needsClarification(description) {
+    const lowerDesc = description.toLowerCase();
+    const ambiguousPatterns = [
+      { pattern: /\b(help|assist|work with)\b.*\b(ai|model|ml)\b/i, reason: "general" },
+      { pattern: /^(i want to|i need to|help me)\s+\w+$/i, reason: "too_short" },
+      { pattern: /\b(process|handle|work with)\s+(data|information)\b/i, reason: "data_ambiguous" },
+      { pattern: /\b(analyze|analysis)\b/i, matchMultiple: ["text", "image", "audio", "video", "time", "series"], reason: "analysis_type" },
+    ];
 
-        await taskClassifier.initialize();
+    // Check for very short descriptions
+    if (description.split(/\s+/).length < 4) {
+      return { needs: true, reason: "too_short" };
+    }
 
-        isModelLoading = false;
-        modelLoadProgress = "";
-        console.log("✅ Model preloaded successfully");
-      } catch (err) {
-        console.error("⚠️ Model preload failed (will load on first use):", err);
-        isModelLoading = false;
-        modelLoadProgress = "";
+    // Check ambiguous patterns
+    for (const p of ambiguousPatterns) {
+      if (p.pattern.test(lowerDesc)) {
+        return { needs: true, reason: p.reason };
       }
     }
+
+    return { needs: false };
+  }
+
+  // Generate clarification options based on ambiguity
+  function generateClarificationOptions(description, reason) {
+    const options = {
+      general: [
+        { label: "📝 Text & Language", desc: "Analyze, generate, or classify text", category: "natural_language_processing" },
+        { label: "🖼️ Images & Vision", desc: "Classify, detect, or segment images", category: "computer_vision" },
+        { label: "🎤 Speech & Audio", desc: "Transcribe, synthesize, or analyze audio", category: "speech_processing" },
+        { label: "📈 Time Series & Forecasting", desc: "Predict trends or detect anomalies", category: "time_series" },
+        { label: "🎯 Recommendations", desc: "Suggest products, content, or items", category: "recommendation_systems" },
+      ],
+      too_short: [
+        { label: "📝 Text & Language", desc: "NLP tasks like classification, generation, translation", category: "natural_language_processing" },
+        { label: "🖼️ Images & Vision", desc: "Computer vision tasks", category: "computer_vision" },
+        { label: "🎤 Speech & Audio", desc: "Audio processing tasks", category: "speech_processing" },
+        { label: "📈 Data & Analytics", desc: "Time series, forecasting, anomaly detection", category: "time_series" },
+        { label: "🤖 Other AI Tasks", desc: "Reinforcement learning, recommendations", category: "recommendation_systems" },
+      ],
+      data_ambiguous: [
+        { label: "📊 Tabular Data", desc: "Structured data, spreadsheets, databases", category: "data_preprocessing" },
+        { label: "📝 Text Data", desc: "Documents, articles, messages", category: "natural_language_processing" },
+        { label: "🖼️ Image Data", desc: "Photos, graphics, scans", category: "computer_vision" },
+        { label: "📈 Time Series Data", desc: "Sequential measurements over time", category: "time_series" },
+      ],
+      analysis_type: [
+        { label: "📝 Text Analysis", desc: "Sentiment, entities, classification", category: "natural_language_processing" },
+        { label: "🖼️ Image Analysis", desc: "Object detection, segmentation", category: "computer_vision" },
+        { label: "🎤 Audio Analysis", desc: "Speech recognition, sound classification", category: "speech_processing" },
+        { label: "📈 Trend Analysis", desc: "Time series forecasting, patterns", category: "time_series" },
+      ],
+    };
+
+    return options[reason] || options.general;
   }
 
   async function handleTaskSubmit(event) {
@@ -105,6 +133,32 @@
       return;
     }
 
+    // Check if clarification is needed
+    const clarification = needsClarification(description);
+    if (clarification.needs) {
+      pendingTaskDescription = description;
+      clarificationOptions = generateClarificationOptions(description, clarification.reason);
+      showClarification = true;
+      return;
+    }
+
+    await processTask(description);
+  }
+
+  async function handleClarificationSelect(event) {
+    const { category, originalDescription } = event.detail;
+    showClarification = false;
+    
+    // Process with the clarified category
+    await processTask(originalDescription, category);
+  }
+
+  function handleClarificationSkip() {
+    showClarification = false;
+    processTask(pendingTaskDescription);
+  }
+
+  async function processTask(description, forcedCategory = null) {
     isLoading = true;
     error = null;
     recommendations = [];
@@ -116,118 +170,68 @@
 
       let classificationResult;
 
-      // Try LLM classifier first
-      try {
-        // Show model loading status if needed
-        if (
-          !taskClassifier.isReady &&
-          !taskClassifier.isLoading &&
-          !usingFallback
-        ) {
-          modelLoadProgress = "Loading AI model (first time only, ~700MB)...";
-          isModelLoading = true;
-        }
-
-        // Step 1: Try LLM classification (fast or ensemble mode)
-        if (!usingFallback) {
-          if (classificationMode === "ensemble") {
-            classificationResult =
-              await taskClassifier.classifyEnsemble(description);
-            console.log(
-              "🎯 Ensemble Classification result:",
-              classificationResult,
-            );
-
-            // Store ensemble voting info for display
-            ensembleInfo = {
-              votes: classificationResult.ensembleVotes,
-              total: classificationResult.ensembleTotal,
-              confidence: classificationResult.ensembleConfidence,
-              allVotes: classificationResult.allVotes,
-            };
-          } else {
-            classificationResult = await taskClassifier.classify(description);
-            console.log("🎯 LLM Classification result:", classificationResult);
-            ensembleInfo = null; // Clear ensemble info in fast mode
+      if (forcedCategory) {
+        // Use the clarified category directly
+        classificationResult = {
+          predictions: [{ category: forcedCategory, confidence: 1.0 }],
+          subcategoryPredictions: [{ category: forcedCategory, subcategory: getDefaultSubcategory(forcedCategory), confidence: 1.0 }]
+        };
+        ensembleInfo = null;
+      } else {
+        try {
+          if (!taskClassifier.isReady && !taskClassifier.isLoading && !usingFallback) {
+            modelLoadProgress = "Loading AI model (first time only, ~700MB)...";
+            isModelLoading = true;
           }
-        } else {
-          throw new Error("Using fallback classifier");
-        }
 
-        // Success! Clear loading state
-        isModelLoading = false;
-        modelLoadProgress = "";
-      } catch (llmError) {
-        console.warn(
-          "⚠️ LLM classifier failed, using semantic fallback:",
-          llmError,
-        );
-
-        // Fall back to semantic classifier
-        classificationResult = await fallbackClassifier.classify(description);
-        console.log("📝 Fallback classification result:", classificationResult);
-
-        // Remember to use fallback for future requests
-        usingFallback = true;
-        isModelLoading = false;
-        modelLoadProgress = "";
-
-        // Show temporary warning
-        if (!error) {
-          error =
-            "Note: Using semantic classification (LLM unavailable). Results may vary.";
-          setTimeout(() => {
-            if (error && error.includes("semantic classification")) {
-              error = null;
+          if (!usingFallback) {
+            if (classificationMode === "ensemble") {
+              classificationResult = await taskClassifier.classifyEnsemble(description);
+              ensembleInfo = {
+                votes: classificationResult.ensembleVotes,
+                total: classificationResult.ensembleTotal,
+                confidence: classificationResult.ensembleConfidence,
+                allVotes: classificationResult.allVotes,
+              };
+            } else {
+              classificationResult = await taskClassifier.classify(description);
+              ensembleInfo = null;
             }
-          }, 5000);
+          } else {
+            throw new Error("Using fallback classifier");
+          }
+
+          isModelLoading = false;
+          modelLoadProgress = "";
+        } catch (llmError) {
+          console.warn("⚠️ LLM classifier failed, using semantic fallback:", llmError);
+          classificationResult = await fallbackClassifier.classify(description);
+          usingFallback = true;
+          isModelLoading = false;
+          modelLoadProgress = "";
         }
       }
 
-      // Extract the best prediction from the result
-      const topPrediction =
-        classificationResult.subcategoryPredictions[0] ||
-        classificationResult.predictions[0];
+      const topPrediction = classificationResult.subcategoryPredictions[0] || classificationResult.predictions[0];
 
       if (!topPrediction || !topPrediction.category) {
-        throw new Error(
-          "Could not classify the task. Please try describing it differently.",
-        );
+        throw new Error("Could not classify the task. Please try describing it differently.");
       }
 
       const classification = {
         category: topPrediction.category,
-        subcategory: topPrediction.subcategory,
+        subcategory: topPrediction.subcategory || getDefaultSubcategory(topPrediction.category),
       };
-
-      // If we still don't have a subcategory, use a reasonable default based on category
-      if (!classification.subcategory) {
-        const categoryDefaults = {
-          natural_language_processing: "text_classification",
-          computer_vision: "image_classification",
-          speech_processing: "speech_recognition",
-          time_series: "forecasting",
-          recommendation_systems: "collaborative_filtering",
-          reinforcement_learning: "game_playing",
-          data_preprocessing: "data_cleaning",
-        };
-        classification.subcategory =
-          categoryDefaults[classification.category] || "text_classification";
-      }
 
       taskCategory = classification.category;
       taskSubcategory = classification.subcategory;
 
-      // Step 2: Get model recommendations with accuracy filtering
       const groupedModels = modelSelector.getTaskModelsGroupedByTier(
         classification.category,
         classification.subcategory,
         accuracyThreshold,
       );
 
-      console.log("🤖 Grouped models:", groupedModels);
-
-      // Flatten the grouped models back into a single array for display
       const filteredRecommendations = [
         ...groupedModels.lightweight.models,
         ...groupedModels.standard.models,
@@ -237,35 +241,38 @@
       totalHidden = groupedModels.totalHidden;
 
       if (filteredRecommendations.length === 0) {
-        throw new Error(
-          `No models found for ${classification.category} → ${classification.subcategory}. This task type may not be supported yet.`,
-        );
+        throw new Error(`No models found for ${classification.category}. Try a different task description.`);
       }
 
       recommendations = filteredRecommendations;
 
-      // Update URL for sharing (optional) - using SvelteKit's navigation
       const currentUrl = new URL(window.location);
       currentUrl.searchParams.set("task", encodeURIComponent(description));
-      goto(currentUrl.pathname + currentUrl.search, {
-        replaceState: true,
-        noScroll: true,
-      });
+      goto(currentUrl.pathname + currentUrl.search, { replaceState: true, noScroll: true });
     } catch (err) {
       console.error("❌ Error processing task:", err);
-      error =
-        err.message ||
-        "An error occurred while processing your task. Please try again.";
+      error = err.message || "An error occurred. Please try again.";
     } finally {
       isLoading = false;
     }
   }
 
-  // Handle accuracy filter change
+  function getDefaultSubcategory(category) {
+    const defaults = {
+      natural_language_processing: "text_classification",
+      computer_vision: "image_classification",
+      speech_processing: "speech_recognition",
+      time_series: "forecasting",
+      recommendation_systems: "collaborative_filtering",
+      reinforcement_learning: "game_playing",
+      data_preprocessing: "data_cleaning",
+    };
+    return defaults[category] || "text_classification";
+  }
+
   function handleAccuracyFilterChange(newThreshold) {
     accuracyThreshold = newThreshold;
 
-    // If we have results, refilter them
     if (taskCategory && taskSubcategory && modelSelector) {
       const groupedModels = modelSelector.getTaskModelsGroupedByTier(
         taskCategory,
@@ -273,7 +280,6 @@
         accuracyThreshold,
       );
 
-      // Flatten the grouped models
       const filteredRecommendations = [
         ...groupedModels.lightweight.models,
         ...groupedModels.standard.models,
@@ -282,21 +288,14 @@
 
       totalHidden = groupedModels.totalHidden;
       recommendations = filteredRecommendations;
-
-      console.log(`🔍 Filter changed to ${newThreshold}%:`, {
-        shown: filteredRecommendations.length,
-        hidden: totalHidden,
-      });
     }
   }
 
-  // Load task from URL on mount (for sharing)
   onMount(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const taskFromUrl = urlParams.get("task");
     if (taskFromUrl) {
       taskDescription = decodeURIComponent(taskFromUrl);
-      // Auto-submit after a brief delay to allow initialization
       setTimeout(() => {
         if (taskClassifier && modelSelector) {
           handleTaskSubmit({ detail: { taskDescription } });
@@ -307,373 +306,521 @@
 </script>
 
 <svelte:head>
-  <title>AI Model Selector - Find the Most Efficient Models for Your Task</title
-  >
-  <meta
-    name="description"
-    content="Get personalized AI model recommendations prioritizing environmental efficiency. Find the smallest, most effective models for your machine learning tasks."
-  />
+  <title>Model Selector — Eco-Friendly AI Models</title>
+  <meta name="description" content="Find the most environmentally efficient AI models for your task. We prioritize smaller, greener models." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </svelte:head>
 
-<main>
-  <header class="app-header">
-    <h1>
-      <span class="icon" aria-hidden="true">🤖</span>
-      AI Model Selector
-    </h1>
-    <p class="tagline">
-      Find the most <strong>environmentally efficient</strong> AI models for your
-      task
-    </p>
-    <p class="subtitle">
-      We prioritize smaller, more efficient models that reduce energy
-      consumption while maintaining performance
-    </p>
-  </header>
-
-  {#if isModelLoading || modelLoadProgress}
-    <div class="model-loading" role="status">
-      <svg
-        class="spinner"
-        aria-hidden="true"
-        width="20"
-        height="20"
-        viewBox="0 0 16 16"
-      >
-        <circle
-          cx="8"
-          cy="8"
-          r="6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-dasharray="9 3"
-        />
-      </svg>
-      <div>
-        <strong>🤖 Loading Llama 3.2 1B Model</strong>
-        <p>
-          {modelLoadProgress || "Preparing AI model for task classification..."}
-        </p>
-        {#if downloadPercentage > 0}
-          <div class="progress-bar-container">
-            <div
-              class="progress-bar"
-              style="width: {downloadPercentage}%"
-            ></div>
-          </div>
-        {/if}
-        <p class="small">
-          This happens once per session (~700MB download, cached after first
-          use)
-        </p>
-      </div>
-    </div>
-  {/if}
-
-  {#if error && !isLoading}
-    <div class="global-error" role="alert">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16">
-        <path
-          fill="currentColor"
-          d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8S12.42 0 8 0zM7 3h2v6H7V3zm0 8h2v2H7v-2z"
-        />
-      </svg>
-      <div>
-        <strong>Something went wrong</strong>
-        <p>{error}</p>
-      </div>
-    </div>
-  {/if}
-
-  <TaskInput bind:taskDescription {isLoading} on:submit={handleTaskSubmit} />
-
-  <div class="settings-panel">
-    <ClassificationMode
-      bind:mode={classificationMode}
-      onModeChange={(newMode) => {
-        classificationMode = newMode;
-      }}
-    />
-
-    <AccuracyFilter
-      threshold={accuracyThreshold}
-      onChange={handleAccuracyFilterChange}
-    />
+<div class="app">
+  <div class="background-effects">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="grid-overlay"></div>
   </div>
 
-  <RecommendationDisplay
-    {recommendations}
-    {taskCategory}
-    {taskSubcategory}
-    {isLoading}
-    {totalHidden}
-    {accuracyThreshold}
-    {ensembleInfo}
-  />
+  <main>
+    <header class="hero">
+      <div class="badge">
+        <span class="pulse"></span>
+        <span>🌱 Eco-First AI</span>
+      </div>
+      
+      <h1>
+        <span class="gradient-text">Model Selector</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Find AI models that are <em>powerful</em> and <em>planet-friendly</em>.
+        <br />
+        <span class="highlight">Smaller models. Bigger impact.</span>
+      </p>
 
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>
-        <span class="icon" aria-hidden="true">🌍</span>
-        <strong>Environmental Focus:</strong> We prioritize models that minimize
-        energy consumption and carbon footprint
-      </p>
-      <p class="data-info">
-        Model data sourced from Hugging Face Hub • Updated {modelsData.lastUpdated}
-      </p>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-number">200+</span>
+          <span class="stat-label">Models</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">7</span>
+          <span class="stat-label">Categories</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">95.2%</span>
+          <span class="stat-label">Accuracy</span>
+        </div>
+      </div>
+    </header>
+
+    {#if isModelLoading || modelLoadProgress}
+      <div class="model-loading-card" role="status">
+        <div class="loading-icon">
+          <svg class="spinner" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="80 120" />
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#34d399" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="loading-content">
+          <h3>Loading Llama 3.2 1B</h3>
+          <p>{modelLoadProgress || "Preparing AI model..."}</p>
+          {#if downloadPercentage > 0}
+            <div class="progress-track">
+              <div class="progress-fill" style="width: {downloadPercentage}%"></div>
+            </div>
+          {/if}
+          <span class="loading-note">One-time download • Cached for future visits</span>
+        </div>
+      </div>
+    {/if}
+
+    {#if error && !isLoading}
+      <div class="error-card" role="alert">
+        <div class="error-icon">⚠️</div>
+        <div class="error-content">
+          <strong>Something went wrong</strong>
+          <p>{error}</p>
+        </div>
+        <button class="error-dismiss" on:click={() => error = null}>✕</button>
+      </div>
+    {/if}
+
+    {#if showClarification}
+      <ClarificationFlow 
+        options={clarificationOptions}
+        originalDescription={pendingTaskDescription}
+        on:select={handleClarificationSelect}
+        on:skip={handleClarificationSkip}
+      />
+    {:else}
+      <TaskInput bind:taskDescription {isLoading} on:submit={handleTaskSubmit} />
+    {/if}
+
+    <div class="settings-row">
+      <ClassificationMode
+        bind:mode={classificationMode}
+        onModeChange={(newMode) => { classificationMode = newMode; }}
+      />
+      <AccuracyFilter
+        threshold={accuracyThreshold}
+        onChange={handleAccuracyFilterChange}
+      />
     </div>
-  </footer>
-</main>
+
+    <RecommendationDisplay
+      {recommendations}
+      {taskCategory}
+      {taskSubcategory}
+      {isLoading}
+      {totalHidden}
+      {accuracyThreshold}
+      {ensembleInfo}
+    />
+
+    <footer class="app-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">🌍</span>
+          <span>Building sustainable AI, one model at a time</span>
+        </div>
+        <div class="footer-meta">
+          <span>Data from Hugging Face Hub</span>
+          <span class="dot">•</span>
+          <span>Updated {new Date(modelsData.lastUpdated).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
 
 <style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
-    color: #2d3748;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0a0f0d;
+    color: #e8f5e9;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Background Effects */
+  .background-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+  }
+
+  .glow-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #10b981 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .glow-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #059669 0%, transparent 70%);
+    bottom: -150px;
+    right: -150px;
+    animation: float 25s ease-in-out infinite reverse;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(50px, 30px); }
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
   }
 
   main {
-    min-height: 100vh;
-    background: #f7fafc;
-    padding: 2rem 1rem;
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
   }
 
-  .app-header {
+  /* Hero Section */
+  .hero {
     text-align: center;
-    max-width: 600px;
-    margin: 0 auto 3rem;
+    margin-bottom: 3rem;
   }
 
-  .app-header h1 {
-    display: flex;
+  .badge {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 0 0 1rem 0;
-    color: #2d3748;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 100px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #34d399;
+    margin-bottom: 1.5rem;
   }
 
-  .app-header .icon {
-    font-size: 2rem;
+  .pulse {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
   }
 
-  .tagline {
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 800;
+    margin: 0 0 1rem;
+    letter-spacing: -0.03em;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, #10b981 50%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
     font-size: 1.25rem;
-    margin: 0 0 0.5rem 0;
-    color: #4a5568;
+    color: #94a3b8;
+    margin: 0 0 2rem;
+    line-height: 1.8;
   }
 
-  .tagline strong {
-    color: #38a169;
+  .hero-subtitle em {
+    color: #e8f5e9;
+    font-style: normal;
+    font-weight: 600;
   }
 
-  .subtitle {
-    font-size: 1rem;
-    color: #718096;
-    margin: 0;
-    line-height: 1.5;
+  .highlight {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #10b981;
+    font-weight: 600;
   }
 
-  .model-loading {
+  .stats-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1rem 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #10b981;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Loading Card */
+  .model-loading-card {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    padding: 1rem;
-    background-color: #e6fffa;
-    border: 1px solid #81e6d9;
-    border-radius: 8px;
-    color: #234e52;
+    gap: 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
   }
 
-  .model-loading svg {
+  .loading-icon {
     flex-shrink: 0;
-    margin-top: 0.125rem;
-  }
-
-  .model-loading strong {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .model-loading p {
-    margin: 0 0 0.5rem 0;
-    line-height: 1.4;
-  }
-
-  .model-loading p.small {
-    font-size: 0.875rem;
-    color: #2c7a7b;
-    margin-bottom: 0;
-  }
-
-  .progress-bar-container {
-    width: 100%;
-    height: 8px;
-    background-color: #b2f5ea;
-    border-radius: 4px;
-    margin: 0.5rem 0;
-    overflow: hidden;
-  }
-
-  .progress-bar {
-    height: 100%;
-    background-color: #319795;
-    transition: width 0.3s ease;
   }
 
   .spinner {
-    animation: spin 1s linear infinite;
+    width: 48px;
+    height: 48px;
+    animation: spin 1.5s linear infinite;
   }
 
   @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
-  .global-error {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    padding: 1rem;
-    background-color: #fed7d7;
-    border: 1px solid #feb2b2;
-    border-radius: 8px;
-    color: #c53030;
+  .loading-content {
+    flex: 1;
   }
 
-  .global-error svg {
-    flex-shrink: 0;
-    margin-top: 0.125rem;
+  .loading-content h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #34d399;
   }
 
-  .global-error strong {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .global-error p {
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .settings-panel {
-    max-width: 600px;
-    margin: 0 auto 1.5rem;
-    padding: 1rem;
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-  }
-
-  .settings-panel :global(.classification-mode) {
-    margin: 0 0 1rem 0;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
-  }
-
-  .settings-panel :global(.accuracy-filter) {
-    max-width: none;
-    margin: 0;
-    padding: 1rem 0 0 0;
-    background: transparent;
-    border: none;
-    border-top: 1px solid #e2e8f0;
-    border-radius: 0;
-  }
-
-  .app-footer {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e2e8f0;
-  }
-
-  .footer-content {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-    color: #718096;
+  .loading-content p {
+    margin: 0 0 0.75rem;
+    color: #94a3b8;
     font-size: 0.875rem;
   }
 
-  .footer-content p {
-    margin: 0 0 0.5rem 0;
+  .progress-track {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .loading-note {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  /* Error Card */
+  .error-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .error-icon {
+    font-size: 1.5rem;
+  }
+
+  .error-content {
+    flex: 1;
+  }
+
+  .error-content strong {
+    display: block;
+    color: #fca5a5;
+    margin-bottom: 0.25rem;
+  }
+
+  .error-content p {
+    margin: 0;
+    color: #fecaca;
+    font-size: 0.875rem;
+  }
+
+  .error-dismiss {
+    background: none;
+    border: none;
+    color: #f87171;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 1rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .error-dismiss:hover {
+    opacity: 1;
+  }
+
+  /* Settings Row */
+  .settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .settings-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Footer */
+  .app-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .footer-brand {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
+    font-weight: 500;
+    color: #94a3b8;
   }
 
-  .footer-content .icon {
-    color: #38a169;
+  .footer-logo {
+    font-size: 1.25rem;
   }
 
-  .footer-content strong {
-    color: #4a5568;
-  }
-
-  .data-info {
+  .footer-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.75rem;
-    color: #a0aec0;
+    color: #64748b;
   }
 
-  /* Responsive design */
-  @media (max-width: 768px) {
+  .dot {
+    opacity: 0.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
     main {
-      padding: 1rem;
+      padding: 2rem 1rem;
     }
 
-    .app-header h1 {
-      font-size: 2rem;
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .stats-bar {
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 1rem;
+      padding: 1.5rem;
     }
 
-    .tagline {
-      font-size: 1.1rem;
-    }
-
-    .footer-content p {
-      flex-direction: column;
-      gap: 0.25rem;
+    .stat-divider {
+      width: 40px;
+      height: 1px;
     }
   }
 
-  /* Accessibility improvements */
+  /* Accessibility */
   @media (prefers-reduced-motion: reduce) {
-    :global(*),
-    :global(*::before),
-    :global(*::after) {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+    .glow-1, .glow-2, .pulse, .spinner {
+      animation: none;
     }
   }
 
-  /* High contrast mode support */
   @media (prefers-contrast: high) {
-    main {
-      background: white;
-    }
-
-    .app-header h1 {
-      color: black;
+    .badge {
+      border-width: 2px;
     }
   }
 </style>

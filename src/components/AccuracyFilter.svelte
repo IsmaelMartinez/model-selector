@@ -2,19 +2,13 @@
   import { onMount } from 'svelte';
   import { getAccuracyThreshold, saveAccuracyThreshold } from '../lib/storage/preferences.js';
 
-  // Props
-  export let threshold = 0; // Current threshold value (0-95)
-  export let onChange = null; // Callback when threshold changes
+  export let threshold = 0;
+  export let onChange = null;
 
-  // Internal state
-  let showTooltip = false;
-
-  // Constants
   const MIN_THRESHOLD = 50;
   const MAX_THRESHOLD = 95;
   const STEP = 5;
 
-  // Load saved threshold on mount
   onMount(() => {
     const savedThreshold = getAccuracyThreshold();
     if (savedThreshold !== threshold) {
@@ -23,444 +17,238 @@
     }
   });
 
-  /**
-   * Handle slider value change
-   */
   function handleChange(event) {
     const newValue = parseInt(event.target.value, 10);
     threshold = newValue;
-
-    // Save to localStorage
     saveAccuracyThreshold(newValue);
-
-    // Notify parent component
     notifyChange();
   }
 
-  /**
-   * Handle reset button click
-   */
   function handleReset() {
     threshold = 0;
     saveAccuracyThreshold(0);
     notifyChange();
   }
 
-  /**
-   * Notify parent component of change
-   */
+  function handleEnable() {
+    threshold = 75;
+    saveAccuracyThreshold(75);
+    notifyChange();
+  }
+
   function notifyChange() {
     if (onChange && typeof onChange === 'function') {
       onChange(threshold);
     }
   }
 
-  /**
-   * Handle keyboard shortcuts
-   */
-  function handleKeydown(event) {
-    // Home key: set to 0%
-    if (event.key === 'Home') {
-      event.preventDefault();
-      handleReset();
-    }
-    // End key: set to max (95%)
-    else if (event.key === 'End' && threshold > 0) {
-      event.preventDefault();
-      threshold = MAX_THRESHOLD;
-      saveAccuracyThreshold(MAX_THRESHOLD);
-      notifyChange();
-    }
-  }
-
-  // Reactive computed values
   $: isFiltering = threshold > 0;
-  $: formattedThreshold = threshold === 0 ? 'All models' : `≥${threshold}%`;
+  $: displayValue = threshold === 0 ? 'All' : `≥${threshold}%`;
 </script>
 
-<div class="accuracy-filter">
+<div class="filter-card">
   <div class="filter-header">
-    <label for="accuracy-threshold">
-      Minimum Accuracy
-      <button
-        type="button"
-        class="info-button"
-        on:mouseenter={() => showTooltip = true}
-        on:mouseleave={() => showTooltip = false}
-        on:focus={() => showTooltip = true}
-        on:blur={() => showTooltip = false}
-        aria-label="Information about accuracy filtering"
-      >
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM6.5 5h3v1.5h-1V11H10v1.5H6V11h1.5V6.5H6.5V5zm1-2.5a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"/>
-        </svg>
-      </button>
-    </label>
-
-    {#if showTooltip}
-      <div class="tooltip" role="tooltip">
-        Filter models by their accuracy on standard benchmarks.
-        Higher accuracy means better performance, but may come with larger model sizes.
-      </div>
-    {/if}
+    <div class="filter-title">
+      <span class="filter-icon">📊</span>
+      <span>Accuracy Filter</span>
+    </div>
+    <span class="filter-value" class:active={isFiltering}>
+      {displayValue}
+    </span>
   </div>
 
-  <div class="filter-controls">
-    <div class="slider-container">
-      {#if isFiltering}
+  <div class="filter-body">
+    {#if isFiltering}
+      <div class="slider-container">
         <input
           type="range"
-          id="accuracy-threshold"
           min={MIN_THRESHOLD}
           max={MAX_THRESHOLD}
           step={STEP}
           bind:value={threshold}
           on:input={handleChange}
-          on:keydown={handleKeydown}
+          class="slider"
           aria-label="Minimum accuracy threshold"
-          aria-valuemin={MIN_THRESHOLD}
-          aria-valuemax={MAX_THRESHOLD}
-          aria-valuenow={threshold}
-          aria-valuetext="{threshold} percent minimum accuracy"
-          class="slider active"
         />
-      {:else}
-        <input
-          type="range"
-          id="accuracy-threshold"
-          min={0}
-          max={MAX_THRESHOLD}
-          step={STEP}
-          value={0}
-          on:input={handleChange}
-          on:keydown={handleKeydown}
-          aria-label="Minimum accuracy threshold"
-          aria-valuemin={0}
-          aria-valuemax={MAX_THRESHOLD}
-          aria-valuenow={0}
-          aria-valuetext="Show all models, no filtering"
-          class="slider inactive"
-          disabled
-        />
-      {/if}
-
-      <div class="threshold-display" aria-live="polite" aria-atomic="true">
-        <span class="threshold-value" class:active={isFiltering}>
-          {formattedThreshold}
-        </span>
+        <div class="slider-labels">
+          <span>{MIN_THRESHOLD}%</span>
+          <span>{MAX_THRESHOLD}%</span>
+        </div>
       </div>
-    </div>
-
-    <div class="button-group">
-      {#if !isFiltering}
-        <button
-          type="button"
-          class="filter-button"
-          on:click={() => {
-            threshold = 75;
-            saveAccuracyThreshold(75);
-            notifyChange();
-          }}
-        >
-          Enable Filter
-        </button>
-      {:else}
-        <button
-          type="button"
-          class="reset-button"
-          on:click={handleReset}
-          aria-label="Reset filter to show all models"
-        >
-          Reset
-        </button>
-      {/if}
-    </div>
+      <button class="action-button reset" on:click={handleReset}>
+        Reset Filter
+      </button>
+    {:else}
+      <p class="filter-description">
+        Filter models by minimum accuracy to find higher-quality options.
+      </p>
+      <button class="action-button enable" on:click={handleEnable}>
+        Enable Filter
+      </button>
+    {/if}
   </div>
-
-  {#if isFiltering}
-    <div class="filter-help" id="filter-help">
-      <span class="help-icon" aria-hidden="true">🔍</span>
-      Only showing models with ≥{threshold}% accuracy
-    </div>
-  {/if}
 </div>
 
 <style>
-  .accuracy-filter {
-    max-width: 600px;
-    margin: 0 auto 1.5rem;
-    padding: 1rem;
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
+  .filter-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .filter-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .filter-header {
-    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .filter-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    color: #2d3748;
-    margin: 0;
+    color: #e8f5e9;
+    font-size: 0.9rem;
   }
 
-  .info-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem;
-    background: transparent;
-    border: none;
-    color: #4299e1;
-    cursor: help;
-    border-radius: 4px;
-    transition: color 0.2s ease;
+  .filter-icon {
+    font-size: 1rem;
   }
 
-  .info-button:hover,
-  .info-button:focus {
-    color: #2b6cb0;
-    outline: none;
-  }
-
-  .info-button:focus-visible {
-    outline: 2px solid #4299e1;
-    outline-offset: 2px;
-  }
-
-  .tooltip {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 0.5rem;
-    padding: 0.75rem;
-    background: #2d3748;
-    color: white;
-    border-radius: 6px;
+  .filter-value {
     font-size: 0.875rem;
-    line-height: 1.4;
-    max-width: 300px;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    color: #64748b;
+    padding: 0.25rem 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
   }
 
-  .tooltip::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 1rem;
-    border: 6px solid transparent;
-    border-bottom-color: #2d3748;
+  .filter-value.active {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
   }
 
-  .filter-controls {
+  .filter-body {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .filter-description {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
   }
 
   .slider-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    width: 100%;
   }
 
   .slider {
-    flex: 1;
-    height: 8px;
-    border-radius: 4px;
-    background: #e2e8f0;
-    outline: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #ef4444 0%, #f59e0b 30%, #10b981 100%);
     -webkit-appearance: none;
     appearance: none;
     cursor: pointer;
-    transition: background 0.2s ease;
   }
 
-  .slider.active {
-    background: linear-gradient(to right, #fc8181 0%, #f6ad55 25%, #f6e05e 50%, #68d391 75%, #48bb78 100%);
-  }
-
-  .slider.inactive {
-    background: #e2e8f0;
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .slider:focus-visible {
-    outline: 2px solid #4299e1;
-    outline-offset: 2px;
-  }
-
-  /* Slider thumb - Webkit */
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: white;
-    border: 3px solid #4299e1;
+    background: #e8f5e9;
+    border: 3px solid #10b981;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   .slider::-webkit-slider-thumb:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
   }
 
-  .slider.inactive::-webkit-slider-thumb {
-    background: #cbd5e0;
-    border-color: #a0aec0;
-    cursor: not-allowed;
-  }
-
-  /* Slider thumb - Firefox */
   .slider::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: white;
-    border: 3px solid #4299e1;
+    background: #e8f5e9;
+    border: 3px solid #10b981;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
-  .slider::-moz-range-thumb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+  .slider:focus {
+    outline: none;
   }
 
-  .slider.inactive::-moz-range-thumb {
-    background: #cbd5e0;
-    border-color: #a0aec0;
-    cursor: not-allowed;
+  .slider:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
   }
 
-  .threshold-display {
-    min-width: 100px;
-    text-align: right;
-  }
-
-  .threshold-value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #718096;
-    transition: color 0.2s ease;
-  }
-
-  .threshold-value.active {
-    color: #2d3748;
-  }
-
-  .button-group {
+  .slider-labels {
     display: flex;
-    gap: 0.5rem;
+    justify-content: space-between;
+    margin-top: 0.35rem;
+    font-size: 0.65rem;
+    color: #4b5563;
   }
 
-  .filter-button,
-  .reset-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+  .action-button {
+    width: 100%;
+    padding: 0.6rem 1rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
-    white-space: nowrap;
   }
 
-  .filter-button {
-    background: #4299e1;
-    color: white;
+  .action-button.enable {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
   }
 
-  .filter-button:hover {
-    background: #3182ce;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+  .action-button.enable:hover {
+    background: rgba(16, 185, 129, 0.25);
   }
 
-  .reset-button {
-    background: #e2e8f0;
-    color: #2d3748;
+  .action-button.reset {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .reset-button:hover {
-    background: #cbd5e0;
+  .action-button.reset:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e8f5e9;
   }
 
-  .filter-button:focus-visible,
-  .reset-button:focus-visible {
-    outline: 2px solid #4299e1;
-    outline-offset: 2px;
+  .action-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
   }
 
-  .filter-button:active,
-  .reset-button:active {
-    transform: translateY(0);
-  }
-
-  .filter-help {
-    margin-top: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    background: #bee3f8;
-    border: 1px solid #90cdf4;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    color: #2c5282;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .help-icon {
-    font-size: 1rem;
-  }
-
-  /* Touch-friendly sizing for mobile */
-  @media (max-width: 640px) {
-    .slider::-webkit-slider-thumb,
-    .slider::-moz-range-thumb {
-      width: 28px;
-      height: 28px;
-    }
-
-    .filter-button,
-    .reset-button {
-      padding: 0.75rem 1rem;
-      min-height: 44px;
-    }
-  }
-
-  /* High contrast mode */
-  @media (prefers-contrast: high) {
-    .slider {
-      border: 2px solid currentColor;
-    }
-  }
-
-  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .slider,
     .slider::-webkit-slider-thumb,
     .slider::-moz-range-thumb,
-    .filter-button,
-    .reset-button,
-    .info-button {
+    .action-button {
       transition: none;
     }
   }

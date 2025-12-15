@@ -3,496 +3,616 @@
   export let taskCategory = '';
   export let taskSubcategory = '';
   export let isLoading = false;
-  export let totalHidden = 0; // Number of models hidden by accuracy filter
-  export let accuracyThreshold = 0; // Current accuracy threshold
-  export let ensembleInfo = null; // Ensemble voting information (votes, total, confidence)
+  export let totalHidden = 0;
+  export let accuracyThreshold = 0;
+  export let ensembleInfo = null;
   
   function getEnvironmentalBadge(score) {
     switch (score) {
-      case 1: return { label: 'Low Impact', class: 'env-low', icon: '🌱' };
-      case 2: return { label: 'Medium Impact', class: 'env-medium', icon: '⚡' };
-      case 3: return { label: 'High Impact', class: 'env-high', icon: '🔥' };
-      default: return { label: 'Unknown', class: 'env-unknown', icon: '❓' };
+      case 1: return { label: 'Low Impact', class: 'env-low', icon: '🌱', color: '#10b981' };
+      case 2: return { label: 'Medium', class: 'env-medium', icon: '⚡', color: '#f59e0b' };
+      case 3: return { label: 'High Impact', class: 'env-high', icon: '🔥', color: '#ef4444' };
+      default: return { label: 'Unknown', class: 'env-unknown', icon: '❓', color: '#6b7280' };
     }
   }
   
-  function getTierBadge(tier) {
+  function getTierInfo(tier) {
     switch (tier) {
-      case 'lightweight': return { label: 'Lightweight', class: 'tier-light', icon: '🪶' };
-      case 'standard': return { label: 'Standard', class: 'tier-standard', icon: '⚖️' };
-      case 'advanced': return { label: 'Advanced', class: 'tier-advanced', icon: '🚀' };
-      default: return { label: tier, class: 'tier-unknown', icon: '📦' };
+      case 'lightweight': return { label: 'Lightweight', icon: '🪶', desc: 'Minimal resources' };
+      case 'standard': return { label: 'Standard', icon: '⚖️', desc: 'Balanced performance' };
+      case 'advanced': return { label: 'Advanced', icon: '🚀', desc: 'Maximum capability' };
+      default: return { label: tier, icon: '📦', desc: '' };
     }
   }
   
   function formatSize(sizeMB) {
     if (sizeMB < 1) return `${(sizeMB * 1000).toFixed(0)}KB`;
-    if (sizeMB < 1000) return `${sizeMB.toFixed(1)}MB`;
+    if (sizeMB < 1000) return `${sizeMB.toFixed(0)}MB`;
     return `${(sizeMB / 1000).toFixed(1)}GB`;
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return 'N/A';
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-GB', { 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric' 
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  function formatCategory(cat) {
+    return cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 </script>
 
-<div class="recommendations-container">
+<section class="recommendations" aria-label="Model Recommendations">
   {#if isLoading}
-    <div class="loading-state" aria-live="polite">
-      <div class="spinner-large"></div>
-      <h2>Analyzing your task...</h2>
-      <p>Finding the most efficient AI models for your needs</p>
+    <div class="loading-state">
+      <div class="loading-animation">
+        <div class="leaf leaf-1">🍃</div>
+        <div class="leaf leaf-2">🌿</div>
+        <div class="leaf leaf-3">🍃</div>
+      </div>
+      <h2>Finding eco-friendly models...</h2>
+      <p>Analyzing your task and ranking by environmental efficiency</p>
     </div>
   {:else if recommendations.length > 0}
-    <div class="recommendations-header">
-      <h2>Recommended Models</h2>
-      <p class="task-info">
-        <strong>Task:</strong> {taskCategory} → {taskSubcategory}
-        <span class="recommendations-count">({recommendations.length} models found)</span>
-      </p>
-      <p class="efficiency-note">
-        <span class="icon">🌍</span>
-        Ranked by environmental efficiency - smaller, more efficient models first
-      </p>
+    <div class="results-header">
+      <div class="results-title">
+        <h2>
+          <span class="count">{recommendations.length}</span>
+          Model{recommendations.length !== 1 ? 's' : ''} Found
+        </h2>
+        <p class="task-badge">
+          <span class="task-icon">🎯</span>
+          {formatCategory(taskCategory)}
+          {#if taskSubcategory}
+            <span class="arrow">→</span>
+            {formatCategory(taskSubcategory)}
+          {/if}
+        </p>
+      </div>
 
-      {#if ensembleInfo}
-        <div class="ensemble-status" aria-live="polite">
-          <span class="icon">🎯</span>
-          <strong>Ensemble Mode:</strong> {ensembleInfo.votes}/{ensembleInfo.total} agents agree
-          ({(ensembleInfo.confidence * 100).toFixed(0)}% confidence)
-        </div>
-      {/if}
+      <div class="results-meta">
+        {#if ensembleInfo}
+          <div class="meta-badge ensemble">
+            <span class="meta-icon">🎲</span>
+            <span>Ensemble: {ensembleInfo.votes}/{ensembleInfo.total} agree ({(ensembleInfo.confidence * 100).toFixed(0)}%)</span>
+          </div>
+        {/if}
 
-      {#if totalHidden > 0}
-        <div class="filter-status" aria-live="polite">
-          <span class="icon">🔍</span>
-          Showing {recommendations.length} {recommendations.length === 1 ? 'model' : 'models'}
-          ({totalHidden} hidden by {accuracyThreshold}% accuracy filter)
-        </div>
-      {/if}
+        {#if totalHidden > 0}
+          <div class="meta-badge filtered">
+            <span class="meta-icon">🔍</span>
+            <span>{totalHidden} hidden by {accuracyThreshold}% filter</span>
+          </div>
+        {/if}
+      </div>
+    </div>
+
+    <div class="efficiency-banner">
+      <span class="banner-icon">🌍</span>
+      <span>Ranked by environmental efficiency — smaller, greener models first</span>
     </div>
     
-    <div class="recommendations-grid" role="list">
+    <div class="models-grid">
       {#each recommendations as model, index}
-        {@const tierBadge = getTierBadge(model.tier)}
         {@const envBadge = getEnvironmentalBadge(model.environmentalScore)}
-        <article class="model-card" role="listitem">
-          <div class="model-header">
-            <div class="model-title">
-              <h3>{model.name}</h3>
-              <div class="badges">
-                
-                <span class="badge tier {tierBadge.class}" title="{tierBadge.label} tier">
-                  <span aria-hidden="true">{tierBadge.icon}</span>
-                  {tierBadge.label}
-                </span>
-                
-                <span class="badge env {envBadge.class}" title="{envBadge.label}">
-                  <span aria-hidden="true">{envBadge.icon}</span>
-                  {envBadge.label}
-                </span>
-              </div>
+        {@const tierInfo = getTierInfo(model.tier)}
+        <article 
+          class="model-card" 
+          class:top-pick={index === 0}
+          style="animation-delay: {index * 50}ms"
+        >
+          {#if index === 0}
+            <div class="top-pick-ribbon">
+              <span>⭐ Top Pick</span>
             </div>
-            
-            {#if index === 0}
-              <div class="recommended-badge" title="Most environmentally efficient option">
-                <span aria-hidden="true">⭐</span>
-                <span class="visually-hidden">Most recommended</span>
-                Top Pick
-              </div>
-            {/if}
+          {/if}
+
+          <div class="card-header">
+            <h3 class="model-name">{model.name}</h3>
+            <div class="badges">
+              <span class="badge tier-badge" title={tierInfo.desc}>
+                {tierInfo.icon} {tierInfo.label}
+              </span>
+              <span 
+                class="badge env-badge {envBadge.class}" 
+                title="{envBadge.label}"
+                style="--env-color: {envBadge.color}"
+              >
+                {envBadge.icon} {envBadge.label}
+              </span>
+            </div>
           </div>
           
           <p class="model-description">{model.description}</p>
           
-          <div class="model-stats">
+          <div class="stats-grid">
             <div class="stat">
-              <span class="stat-label">Size:</span>
-              <span class="stat-value">{formatSize(model.sizeMB)}</span>
+              <span class="stat-icon">📦</span>
+              <div class="stat-content">
+                <span class="stat-value">{formatSize(model.sizeMB)}</span>
+                <span class="stat-label">Size</span>
+              </div>
             </div>
-            
             <div class="stat">
-              <span class="stat-label">Accuracy:</span>
-              <span class="stat-value">
-                <span aria-hidden="true">📊 </span>{model.accuracy ? (model.accuracy * 100).toFixed(1) : 'N/A'}{model.accuracy ? '%' : ''}
-              </span>
+              <span class="stat-icon">📊</span>
+              <div class="stat-content">
+                <span class="stat-value">{model.accuracy ? (model.accuracy * 100).toFixed(0) + '%' : 'N/A'}</span>
+                <span class="stat-label">Accuracy</span>
+              </div>
             </div>
-            
             <div class="stat">
-              <span class="stat-label">Updated:</span>
-              <span class="stat-value">{model.lastUpdated}</span>
+              <span class="stat-icon">📅</span>
+              <div class="stat-content">
+                <span class="stat-value">{formatDate(model.lastUpdated)}</span>
+                <span class="stat-label">Updated</span>
+              </div>
             </div>
           </div>
           
-          <div class="deployment-options">
-            <span class="deployment-label">Deploy on:</span>
-            <div class="deployment-tags">
-              {#each model.deploymentOptions as option}
-                <span class="deployment-tag">{option}</span>
-              {/each}
+          <div class="tags-section">
+            <div class="tag-group">
+              <span class="tag-label">Deploy:</span>
+              <div class="tags">
+                {#each model.deploymentOptions as option}
+                  <span class="tag">{option}</span>
+                {/each}
+              </div>
+            </div>
+            <div class="tag-group">
+              <span class="tag-label">Frameworks:</span>
+              <div class="tags">
+                {#each model.frameworks as framework}
+                  <span class="tag framework">{framework}</span>
+                {/each}
+              </div>
             </div>
           </div>
           
-          <div class="frameworks">
-            <span class="frameworks-label">Frameworks:</span>
-            <div class="framework-tags">
-              {#each model.frameworks as framework}
-                <span class="framework-tag">{framework}</span>
-              {/each}
-            </div>
-          </div>
-          
-          <div class="model-actions">
+          <div class="card-footer">
             {#if model.huggingFaceId && !model.huggingFaceId.startsWith('placeholder/')}
               <a 
                 href="https://huggingface.co/{model.huggingFaceId}" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                class="action-link"
-                aria-describedby="external-link-desc"
+                class="hf-link"
               >
-                View on Hugging Face
-                <span aria-hidden="true">↗</span>
+                <span>View on 🤗 Hugging Face</span>
+                <span class="link-arrow">↗</span>
               </a>
             {:else}
-              <span class="placeholder-link">
-                <span aria-hidden="true">📖</span>
-                Reference Implementation
+              <span class="reference-label">
+                📖 Reference Implementation
               </span>
             {/if}
           </div>
         </article>
       {/each}
     </div>
-    
-    <div id="external-link-desc" class="visually-hidden">
-      Opens in a new tab
-    </div>
-  {:else}
-    <div class="no-results">
+  {:else if taskCategory}
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
       <h2>No models found</h2>
       {#if accuracyThreshold > 0}
         <p>No models meet your {accuracyThreshold}% accuracy threshold.</p>
-        <p class="suggestion">
-          <span aria-hidden="true">💡</span>
-          Try lowering the accuracy filter to see more options.
+        <p class="empty-hint">
+          💡 Try lowering the accuracy filter to see more options.
         </p>
       {:else}
-        <p>We couldn't find models for this task. Try describing your task differently.</p>
+        <p>We couldn't find models for this task type.</p>
+        <p class="empty-hint">
+          💡 Try describing your task differently.
+        </p>
       {/if}
     </div>
   {/if}
-</div>
+</section>
 
 <style>
-  .recommendations-container {
-    max-width: 900px;
-    margin: 2rem auto 0;
+  .recommendations {
+    margin-top: 2rem;
   }
-  
+
+  /* Loading State */
   .loading-state {
     text-align: center;
-    padding: 3rem 1rem;
+    padding: 4rem 2rem;
   }
-  
-  .spinner-large {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #e2e8f0;
-    border-top: 4px solid #48bb78;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
-  }
-  
-  .recommendations-header {
-    margin-bottom: 2rem;
-  }
-  
-  .recommendations-header h2 {
-    margin: 0 0 0.5rem 0;
-    color: #2d3748;
-    font-size: 1.5rem;
-  }
-  
-  .task-info {
-    color: #4a5568;
-    margin: 0 0 0.5rem 0;
-  }
-  
-  .recommendations-count {
-    color: #718096;
-    font-weight: normal;
-  }
-  
-  .efficiency-note {
+
+  .loading-animation {
     display: flex;
-    align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    color: #38a169;
-    font-size: 0.9rem;
-    background: #f0fff4;
-    padding: 0.75rem;
-    border-radius: 6px;
-    border-left: 4px solid #38a169;
+    margin-bottom: 1.5rem;
   }
 
-  .ensemble-status {
+  .leaf {
+    font-size: 2rem;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  .leaf-1 { animation-delay: 0s; }
+  .leaf-2 { animation-delay: 0.3s; }
+  .leaf-3 { animation-delay: 0.6s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(10deg); }
+  }
+
+  .loading-state h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: #e8f5e9;
+  }
+
+  .loading-state p {
+    margin: 0;
+    color: #64748b;
+  }
+
+  /* Results Header */
+  .results-header {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #5a4a8d;
-    font-size: 0.9rem;
-    background: #e9d8fd;
-    padding: 0.75rem;
-    border-radius: 6px;
-    border-left: 4px solid #9f7aea;
-    margin-top: 0.75rem;
-  }
-
-  .ensemble-status .icon {
-    font-size: 1rem;
-  }
-
-  .filter-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #2c5282;
-    font-size: 0.9rem;
-    background: #bee3f8;
-    padding: 0.75rem;
-    border-radius: 6px;
-    border-left: 4px solid #4299e1;
-    margin-top: 0.75rem;
-  }
-
-  .filter-status .icon {
-    font-size: 1rem;
-  }
-  
-  .recommendations-grid {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  }
-  
-  .model-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-    position: relative;
-  }
-  
-  .model-card:hover,
-  .model-card:focus {
-    outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-  }
-  
-  .model-header {
-    display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 1rem;
     margin-bottom: 1rem;
   }
-  
-  .model-title h3 {
-    margin: 0 0 0.5rem 0;
-    color: #2d3748;
-    font-size: 1.2rem;
+
+  .results-title h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    color: #e8f5e9;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
   }
-  
+
+  .count {
+    color: #10b981;
+  }
+
+  .task-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .task-icon {
+    font-size: 0.9rem;
+  }
+
+  .task-badge .arrow {
+    opacity: 0.5;
+  }
+
+  .results-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+  }
+
+  .meta-badge.ensemble {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+  }
+
+  .meta-badge.filtered {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+  }
+
+  .efficiency-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #34d399;
+  }
+
+  .banner-icon {
+    font-size: 1rem;
+  }
+
+  /* Models Grid */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .model-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    animation: cardFadeIn 0.4s ease-out backwards;
+  }
+
+  @keyframes cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .model-card:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .model-card.top-pick {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+  }
+
+  .top-pick-ribbon {
+    position: absolute;
+    top: -1px;
+    right: 1.5rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 0.35rem 0.75rem 0.45rem;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-header {
+    margin-bottom: 1rem;
+  }
+
+  .model-name {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #e8f5e9;
+    padding-right: 4rem;
+  }
+
   .badges {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
-  
+
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 16px;
-    font-size: 0.75rem;
+    gap: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
     font-weight: 500;
-  }
-  
-  .badge.tier.tier-light { background: #c6f6d5; color: #22543d; }
-  .badge.tier.tier-standard { background: #fed7c3; color: #9c4221; }
-  .badge.tier.tier-advanced { background: #fbb6ce; color: #97266d; }
-  
-  .badge.env.env-low { background: #c6f6d5; color: #22543d; }
-  .badge.env.env-medium { background: #fef5e7; color: #744210; }
-  .badge.env.env-high { background: #fed7d7; color: #742a2a; }
-  
-  .recommended-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: linear-gradient(135deg, #ffd700, #ffb347);
-    color: #744210;
-    padding: 0.25rem 0.5rem;
-    border-radius: 16px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-  
-  .model-description {
-    color: #4a5568;
-    margin: 0 0 1rem 0;
-    line-height: 1.5;
-  }
-  
-  .model-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: #f7fafc;
-    border-radius: 8px;
-  }
-  
-  .stat {
-    text-align: center;
-  }
-  
-  .stat-label {
-    display: block;
-    font-size: 0.75rem;
-    color: #718096;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
-  }
-  
-  .stat-value {
-    display: block;
-    font-weight: 600;
-    color: #2d3748;
-  }
-  
-  .deployment-options,
-  .frameworks {
-    margin-bottom: 1rem;
-  }
-  
-  .deployment-label,
-  .frameworks-label {
-    display: block;
-    font-size: 0.875rem;
-    color: #4a5568;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-  
-  .deployment-tags,
-  .framework-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-  }
-  
-  .deployment-tag,
-  .framework-tag {
-    background: #edf2f7;
-    color: #4a5568;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-  }
-  
-  .model-actions {
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-  }
-  
-  .action-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #4299e1;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-  
-  .action-link:hover {
-    color: #2b6cb0;
-    text-decoration: underline;
-  }
-  
-  .placeholder-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #718096;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: default;
-  }
-  
-  .no-results {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #718096;
-  }
-  
-  .no-results h2 {
-    color: #4a5568;
-    margin-bottom: 0.5rem;
   }
 
-  .no-results .suggestion {
+  .tier-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+  }
+
+  .env-badge {
+    background: color-mix(in srgb, var(--env-color) 15%, transparent);
+    color: var(--env-color);
+  }
+
+  .model-description {
+    margin: 0 0 1.25rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stat-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e8f5e9;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tag-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .tag-label {
+    font-size: 0.7rem;
+    color: #4b5563;
+    min-width: 70px;
+    padding-top: 0.2rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: #94a3b8;
+  }
+
+  .tag.framework {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+  }
+
+  .card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .hf-link {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #fef5e7;
-    color: #744210;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    margin-top: 1rem;
+    color: #10b981;
+    text-decoration: none;
+    font-size: 0.875rem;
     font-weight: 500;
+    transition: all 0.2s ease;
   }
-  
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+
+  .hf-link:hover {
+    color: #34d399;
   }
-  
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+
+  .hf-link .link-arrow {
+    transition: transform 0.2s ease;
   }
-  
+
+  .hf-link:hover .link-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .reference-label {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .empty-state h2 {
+    margin: 0 0 0.5rem;
+    color: #e8f5e9;
+  }
+
+  .empty-state p {
+    margin: 0;
+    color: #64748b;
+  }
+
+  .empty-hint {
+    margin-top: 1rem !important;
+    padding: 0.75rem 1rem;
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 8px;
+    display: inline-block;
+    color: #fbbf24 !important;
+  }
+
+  /* Responsive */
   @media (max-width: 768px) {
-    .recommendations-grid {
+    .models-grid {
       grid-template-columns: 1fr;
     }
-    
-    .model-header {
+
+    .results-header {
       flex-direction: column;
-      gap: 0.5rem;
     }
-    
-    .model-stats {
-      grid-template-columns: repeat(2, 1fr);
+
+    .stats-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .stat {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.25rem;
     }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     .model-card,
-    .spinner-large {
+    .leaf,
+    .hf-link .link-arrow {
       transition: none;
       animation: none;
     }
