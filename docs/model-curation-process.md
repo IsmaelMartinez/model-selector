@@ -94,7 +94,7 @@ git push
 ```
 
 **For Complete Documentation:**
-See [`docs/AUTO_UPDATE_STRATEGY.md`](./AUTO_UPDATE_STRATEGY.md) for:
+See [`docs/auto-update-strategy.md`](./auto-update-strategy.md) for:
 - Detailed automation strategy (3 phases)
 - Setup and configuration
 - Monitoring and troubleshooting

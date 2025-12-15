@@ -69,6 +69,9 @@ export class LLMTaskClassifier {
       avgInferenceTime: 0
     };
 
+    // Callback for progress updates
+    this.onProgress = options.onProgress || (() => { });
+
     // Pre-initialize if requested
     if (options.preload) {
       this.initialize();
@@ -107,8 +110,10 @@ export class LLMTaskClassifier {
             if (progress.status === 'downloading') {
               const percent = progress.progress ? Math.round(progress.progress) : 0;
               console.log(`📥 Downloading: ${progress.file} (${percent}%)`);
+              this.onProgress({ status: 'downloading', file: progress.file, progress: percent });
             } else if (progress.status === 'loading') {
               console.log('📦 Loading model into memory...');
+              this.onProgress({ status: 'loading', file: progress.file });
             }
           }
         });
@@ -137,6 +142,9 @@ export class LLMTaskClassifier {
               if (progress.status === 'downloading') {
                 const percent = progress.progress ? Math.round(progress.progress) : 0;
                 console.log(`📥 Downloading: ${progress.file} (${percent}%)`);
+                this.onProgress({ status: 'downloading', file: progress.file, progress: percent });
+              } else if (progress.status === 'loading') {
+                this.onProgress({ status: 'loading', file: progress.file });
               }
             }
           });
@@ -362,11 +370,11 @@ Category:`;
     let confidence = 0.5;
 
     if (output.includes('computer-vision') || output.includes('computer vision') ||
-        output.includes('vision') || output.includes('image') || output.includes('visual')) {
+      output.includes('vision') || output.includes('image') || output.includes('visual')) {
       category = 'computer_vision';
       confidence = 0.95;
     } else if (output.includes('nlp') || output.includes('natural language') ||
-              output.includes('text') || output.includes('language')) {
+      output.includes('text') || output.includes('language')) {
       category = 'natural_language_processing';
       confidence = 0.95;
     }
