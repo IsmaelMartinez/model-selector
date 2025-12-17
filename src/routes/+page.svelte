@@ -222,7 +222,9 @@
 
           if (!usingFallback && classifierReady) {
             // Use embedding classifier (98.3% accuracy)
-            classificationResult = await taskClassifier.classify(description);
+            // Fast mode: top-1 match, Ensemble mode: top-5 with voting
+            const topK = classificationMode === 'fast' ? 1 : 5;
+            classificationResult = await taskClassifier.classify(description, { topK });
             
             // Set ensemble/voting info for display
             // Shows how many of the top-K examples agree on the category
@@ -235,7 +237,9 @@
             };
             
             // If confidence is below threshold AND not forced by clarification, ask for more details
-            const lowVoteAgreement = classificationResult.votesForWinner < 3; // Less than 3/5 agree
+            // For voting mode (5 votes): need at least 3/5 to agree
+            // For fast mode (1 vote): just check confidence threshold
+            const lowVoteAgreement = classificationResult.totalVotes > 1 && classificationResult.votesForWinner < 3;
             const lowConfidence = classificationResult.confidence < 0.70;
             
             if ((lowConfidence || lowVoteAgreement) && !forcedCategory && !skipClarification) {
