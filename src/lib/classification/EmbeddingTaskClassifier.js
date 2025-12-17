@@ -284,6 +284,10 @@ export class EmbeddingTaskClassifier {
     const confidence = predictions[0]?.score || 0;
     const confidenceLevel = this.getConfidenceLevel(confidence);
     
+    // Count how many of the top-K examples voted for the winning category
+    const winningCategory = predictions[0]?.category;
+    const votesForWinner = topMatches.filter(m => m.category === winningCategory).length;
+    
     this.metrics.classificationCount++;
     
     // Return in format compatible with BrowserTaskClassifier
@@ -296,8 +300,12 @@ export class EmbeddingTaskClassifier {
       confidenceLevel,
       timestamp: new Date().toISOString(),
       processingTime: Date.now() - startTime,
+      // Voting info for ensemble display
+      votesForWinner,
+      totalVotes: topK,
       similarExamples: topMatches.slice(0, 3).map(m => ({
         text: m.text,
+        category: m.category,
         similarity: Math.round(m.similarity * 100) + '%'
       }))
     };

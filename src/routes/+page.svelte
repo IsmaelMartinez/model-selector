@@ -214,9 +214,12 @@
             // Use embedding classifier (98.3% accuracy)
             classificationResult = await taskClassifier.classify(description);
             
-            // Set classification info for display
+            // Set ensemble/voting info for display
+            // Shows how many of the top-K examples agree on the category
             ensembleInfo = {
               method: 'embedding_similarity',
+              votes: classificationResult.votesForWinner,
+              total: classificationResult.totalVotes,
               confidence: classificationResult.confidence,
               similarExamples: classificationResult.similarExamples || []
             };
