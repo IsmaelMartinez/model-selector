@@ -787,5 +787,32 @@ This aligns with the project's core principle: **"Smaller is better"**.
 
 **Date**: 2025-12-15  
 **Author**: Development Team  
-**Status**: Research Complete - Ready for Implementation Decision
+**Status**: ✅ IMPLEMENTED
+
+## Implementation Notes
+
+This research has been fully implemented. See [ADR-0008: Embedding Similarity Classification](../adrs/adr-0008-embedding-similarity-classification.md) for the formal decision record.
+
+### What Was Implemented
+
+1. **Embedding Model**: MiniLM (`Xenova/all-MiniLM-L6-v2`) - 23MB
+2. **k-NN Voting**: Top-5 examples vote for category
+3. **70% Confidence Threshold**: Low confidence triggers clarification flow
+4. **Hybrid Approach**: Keyword fallback for clear-cut cases
+5. **Classification Modes**: Fast (k=1) and Voting (k=5)
+
+### Results Achieved
+
+| Metric | Target | Achieved |
+|--------|--------|----------|
+| Model Size | <35MB | 23MB ✅ |
+| Accuracy | >85% | 98.3% ✅ |
+| Load Time | <5s | ~3s ✅ |
+| Inference | <100ms | ~2ms ✅ |
+
+### Key Files
+
+- `src/lib/classification/EmbeddingTaskClassifier.js` - Main classifier
+- `src/lib/classification/classifierConfig.js` - Configuration
+- `src/routes/+page.svelte` - Integration with clarification flow
 

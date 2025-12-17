@@ -12,14 +12,8 @@
     "preview:vanilla": "vite preview --config vite.config.vanilla.js",
     "test": "vitest",
     "test:llm": "RUN_LLM_TESTS=true vitest --run tests/llm-classification.test.js tests/ensemble-validation.test.js",
-    "test:spikes": "vitest --run tests/spike-validation.test.js",
     "update-models": "node src/lib/aggregation/cli.js",
-    "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run",
-    "spike:all": "node src/lib/validation/run-spikes.js all",
-    "spike:benchmark": "node src/lib/validation/run-spikes.js benchmark",
-    "spike:threshold": "node src/lib/validation/run-spikes.js threshold",
-    "spike:coverage": "node src/lib/validation/run-spikes.js coverage",
-    "spike:performance": "node src/lib/validation/run-spikes.js performance"
+    "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.7.5"
