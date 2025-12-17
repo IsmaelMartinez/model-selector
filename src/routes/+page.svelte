@@ -213,11 +213,13 @@
           if (!usingFallback && classifierReady) {
             // Use embedding classifier (98.3% accuracy)
             classificationResult = await taskClassifier.classify(description);
-            ensembleInfo = classificationResult.similarExamples ? {
+            
+            // Set classification info for display
+            ensembleInfo = {
               method: 'embedding_similarity',
               confidence: classificationResult.confidence,
-              similarExamples: classificationResult.similarExamples
-            } : null;
+              similarExamples: classificationResult.similarExamples || []
+            };
             
             // If confidence is below threshold, fall back to keyword classifier
             if (!classificationResult.meetsThreshold) {

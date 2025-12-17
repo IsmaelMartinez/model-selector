@@ -81,8 +81,13 @@
       <div class="results-meta">
         {#if ensembleInfo}
           <div class="meta-badge ensemble">
-            <span class="meta-icon">🎲</span>
-            <span>Ensemble: {ensembleInfo.votes}/{ensembleInfo.total} agree ({(ensembleInfo.confidence * 100).toFixed(0)}%)</span>
+            {#if ensembleInfo.method === 'embedding_similarity'}
+              <span class="meta-icon">🎯</span>
+              <span>Similarity: {(ensembleInfo.confidence * 100).toFixed(0)}% match</span>
+            {:else}
+              <span class="meta-icon">🎲</span>
+              <span>Ensemble: {ensembleInfo.votes}/{ensembleInfo.total} agree ({(ensembleInfo.confidence * 100).toFixed(0)}%)</span>
+            {/if}
           </div>
         {/if}
 
