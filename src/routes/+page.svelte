@@ -146,6 +146,15 @@
         { label: "🎤 Audio Analysis", desc: "Speech recognition, sound classification", category: "speech_processing" },
         { label: "📈 Trend Analysis", desc: "Time series forecasting, patterns", category: "time_series" },
       ],
+      low_confidence: [
+        { label: "📝 Text & Language", desc: "Summarization, generation, translation, analysis", category: "natural_language_processing" },
+        { label: "🖼️ Images & Vision", desc: "Classification, detection, segmentation", category: "computer_vision" },
+        { label: "🎤 Speech & Audio", desc: "Transcription, synthesis, audio analysis", category: "speech_processing" },
+        { label: "📈 Time Series", desc: "Forecasting, anomaly detection, trends", category: "time_series" },
+        { label: "🎯 Recommendations", desc: "Content, product, or user suggestions", category: "recommendation_systems" },
+        { label: "🎮 Reinforcement Learning", desc: "Game AI, robotics, decision making", category: "reinforcement_learning" },
+        { label: "🔧 Data Processing", desc: "Cleaning, preprocessing, feature extraction", category: "data_preprocessing" },
+      ],
     };
 
     return options[reason] || options.general;
@@ -181,10 +190,11 @@
 
   function handleClarificationSkip() {
     showClarification = false;
-    processTask(pendingTaskDescription);
+    // Pass skipClarification=true to prevent infinite loop
+    processTask(pendingTaskDescription, null, true);
   }
 
-  async function processTask(description, forcedCategory = null) {
+  async function processTask(description, forcedCategory = null, skipClarification = false) {
     isLoading = true;
     error = null;
     recommendations = [];
@@ -224,17 +234,19 @@
               similarExamples: classificationResult.similarExamples || []
             };
             
-            // If confidence is below threshold, fall back to keyword classifier
-            if (!classificationResult.meetsThreshold) {
-              console.log(`⚠️ Low confidence (${(classificationResult.confidence * 100).toFixed(1)}%), using keyword fallback`);
-              const keywordResult = await fallbackClassifier.classify(description);
-              // Merge results, preferring embedding if it has reasonable confidence
-              if (classificationResult.confidence > 0.5) {
-                // Keep embedding result but note low confidence
-                classificationResult.lowConfidence = true;
-              } else {
-                classificationResult = keywordResult;
-              }
+            // If confidence is below threshold AND not forced by clarification, ask for more details
+            const lowVoteAgreement = classificationResult.votesForWinner < 3; // Less than 3/5 agree
+            const lowConfidence = classificationResult.confidence < 0.70;
+            
+            if ((lowConfidence || lowVoteAgreement) && !forcedCategory && !skipClarification) {
+              console.log(`⚠️ Low confidence (${(classificationResult.confidence * 100).toFixed(1)}%, ${classificationResult.votesForWinner}/${classificationResult.totalVotes} agree) - asking for clarification`);
+              
+              // Trigger clarification flow instead of silently using fallback
+              pendingTaskDescription = description;
+              clarificationOptions = generateClarificationOptions(description, "low_confidence");
+              showClarification = true;
+              isLoading = false;
+              return; // Stop processing, show clarification UI
             }
           } else if (usingFallback) {
             // Use keyword fallback
