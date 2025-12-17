@@ -4,8 +4,9 @@
   import AccuracyFilter from "../components/AccuracyFilter.svelte";
   import ClassificationMode from "../components/ClassificationMode.svelte";
   import ClarificationFlow from "../components/ClarificationFlow.svelte";
-  import { LLMTaskClassifier } from "../lib/classification/LLMTaskClassifier.js";
+  import { EmbeddingTaskClassifier } from "../lib/classification/EmbeddingTaskClassifier.js";
   import { BrowserTaskClassifier } from "../lib/classification/BrowserTaskClassifier.js";
+  import { CLASSIFIER_CONFIG } from "../lib/classification/classifierConfig.js";
   import { ModelSelector } from "../lib/recommendation/ModelSelector.js";
 
   // Import data
@@ -17,6 +18,7 @@
   let fallbackClassifier;
   let modelSelector;
   let usingFallback = false;
+  let classifierReady = false;
 
   // Component state
   let taskDescription = "";
@@ -44,20 +46,44 @@
   onMount(async () => {
     try {
       modelSelector = new ModelSelector(modelsData);
-      fallbackClassifier = new BrowserTaskClassifier(tasksData);
+      fallbackClassifier = new BrowserTaskClassifier(); // Uses tasks.json internally
 
-      taskClassifier = new LLMTaskClassifier({
+      // Use new MiniLM embedding classifier (23MB vs 500MB Llama)
+      taskClassifier = new EmbeddingTaskClassifier({
         onProgress: (progress) => {
           if (progress.status === "downloading") {
-            modelLoadProgress = `Downloading model: ${progress.progress}%`;
+            modelLoadProgress = progress.message;
             downloadPercentage = progress.progress;
-          } else if (progress.status === "loading") {
-            modelLoadProgress = "Loading model into memory...";
+            isModelLoading = true;
+          } else if (progress.status === "loading" || progress.status === "computing") {
+            modelLoadProgress = progress.message;
+            downloadPercentage = progress.progress;
+            isModelLoading = true;
+          } else if (progress.status === "ready") {
+            modelLoadProgress = "";
             downloadPercentage = 100;
+            isModelLoading = false;
+            classifierReady = true;
+          } else if (progress.status === "error") {
+            modelLoadProgress = "";
+            isModelLoading = false;
+            console.warn("⚠️ Embedding classifier failed, using keyword fallback");
+            usingFallback = true;
           }
         },
       });
-      usingFallback = false;
+
+      // Initialize the embedding classifier with task data
+      // This triggers model download on first visit, cached after
+      const initResult = await taskClassifier.initialize(tasksData);
+      if (initResult.success) {
+        classifierReady = true;
+        usingFallback = false;
+        console.log("✅ Embedding classifier ready (98.3% accuracy, 23MB)");
+      } else {
+        console.warn("⚠️ Embedding classifier failed, using keyword fallback");
+        usingFallback = true;
+      }
 
       console.log("✅ Data pipeline initialized successfully");
     } catch (err) {
@@ -120,6 +146,15 @@
         { label: "🎤 Audio Analysis", desc: "Speech recognition, sound classification", category: "speech_processing" },
         { label: "📈 Trend Analysis", desc: "Time series forecasting, patterns", category: "time_series" },
       ],
+      low_confidence: [
+        { label: "📝 Text & Language", desc: "Summarization, generation, translation, analysis", category: "natural_language_processing" },
+        { label: "🖼️ Images & Vision", desc: "Classification, detection, segmentation", category: "computer_vision" },
+        { label: "🎤 Speech & Audio", desc: "Transcription, synthesis, audio analysis", category: "speech_processing" },
+        { label: "📈 Time Series", desc: "Forecasting, anomaly detection, trends", category: "time_series" },
+        { label: "🎯 Recommendations", desc: "Content, product, or user suggestions", category: "recommendation_systems" },
+        { label: "🎮 Reinforcement Learning", desc: "Game AI, robotics, decision making", category: "reinforcement_learning" },
+        { label: "🔧 Data Processing", desc: "Cleaning, preprocessing, feature extraction", category: "data_preprocessing" },
+      ],
     };
 
     return options[reason] || options.general;
@@ -155,10 +190,11 @@
 
   function handleClarificationSkip() {
     showClarification = false;
-    processTask(pendingTaskDescription);
+    // Pass skipClarification=true to prevent infinite loop
+    processTask(pendingTaskDescription, null, true);
   }
 
-  async function processTask(description, forcedCategory = null) {
+  async function processTask(description, forcedCategory = null, skipClarification = false) {
     isLoading = true;
     error = null;
     recommendations = [];
@@ -179,32 +215,55 @@
         ensembleInfo = null;
       } else {
         try {
-          if (!taskClassifier.isReady && !taskClassifier.isLoading && !usingFallback) {
-            modelLoadProgress = "Loading AI model (first time only, ~700MB)...";
+          if (!classifierReady && !usingFallback) {
+            modelLoadProgress = "Loading AI model (first time only, ~23MB)...";
             isModelLoading = true;
           }
 
-          if (!usingFallback) {
-            if (classificationMode === "ensemble") {
-              classificationResult = await taskClassifier.classifyEnsemble(description);
-              ensembleInfo = {
-                votes: classificationResult.ensembleVotes,
-                total: classificationResult.ensembleTotal,
-                confidence: classificationResult.ensembleConfidence,
-                allVotes: classificationResult.allVotes,
-              };
-            } else {
-              classificationResult = await taskClassifier.classify(description);
-              ensembleInfo = null;
+          if (!usingFallback && classifierReady) {
+            // Use embedding classifier (98.3% accuracy)
+            // Fast mode: top-1 match, Ensemble mode: top-5 with voting
+            const topK = classificationMode === 'fast' ? 1 : 5;
+            classificationResult = await taskClassifier.classify(description, { topK });
+            
+            // Set ensemble/voting info for display
+            // Shows how many of the top-K examples agree on the category
+            ensembleInfo = {
+              method: 'embedding_similarity',
+              votes: classificationResult.votesForWinner,
+              total: classificationResult.totalVotes,
+              confidence: classificationResult.confidence,
+              similarExamples: classificationResult.similarExamples || []
+            };
+            
+            // If confidence is below threshold AND not forced by clarification, ask for more details
+            // For voting mode (5 votes): need at least 3/5 to agree
+            // For fast mode (1 vote): just check confidence threshold
+            const lowVoteAgreement = classificationResult.totalVotes > 1 && classificationResult.votesForWinner < 3;
+            const lowConfidence = classificationResult.confidence < 0.70;
+            
+            if ((lowConfidence || lowVoteAgreement) && !forcedCategory && !skipClarification) {
+              console.log(`⚠️ Low confidence (${(classificationResult.confidence * 100).toFixed(1)}%, ${classificationResult.votesForWinner}/${classificationResult.totalVotes} agree) - asking for clarification`);
+              
+              // Trigger clarification flow instead of silently using fallback
+              pendingTaskDescription = description;
+              clarificationOptions = generateClarificationOptions(description, "low_confidence");
+              showClarification = true;
+              isLoading = false;
+              return; // Stop processing, show clarification UI
             }
+          } else if (usingFallback) {
+            // Use keyword fallback
+            classificationResult = await fallbackClassifier.classify(description);
+            ensembleInfo = null;
           } else {
-            throw new Error("Using fallback classifier");
+            throw new Error("Classifier not ready");
           }
 
           isModelLoading = false;
           modelLoadProgress = "";
-        } catch (llmError) {
-          console.warn("⚠️ LLM classifier failed, using semantic fallback:", llmError);
+        } catch (classifierError) {
+          console.warn("⚠️ Embedding classifier failed, using keyword fallback:", classifierError);
           classificationResult = await fallbackClassifier.classify(description);
           usingFallback = true;
           isModelLoading = false;
@@ -369,14 +428,14 @@
           </svg>
         </div>
         <div class="loading-content">
-          <h3>Loading Llama 3.2 1B</h3>
-          <p>{modelLoadProgress || "Preparing AI model..."}</p>
+          <h3>Loading MiniLM Classifier</h3>
+          <p>{modelLoadProgress || "Preparing AI model (~23MB)..."}</p>
           {#if downloadPercentage > 0}
             <div class="progress-track">
               <div class="progress-fill" style="width: {downloadPercentage}%"></div>
             </div>
           {/if}
-          <span class="loading-note">One-time download • Cached for future visits</span>
+          <span class="loading-note">One-time download • Cached in browser for instant future loads</span>
         </div>
       </div>
     {/if}

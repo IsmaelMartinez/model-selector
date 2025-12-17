@@ -190,6 +190,11 @@ export class ModelAggregator {
           continue;
         }
 
+        // Skip test/mock/internal models
+        if (this.isExcludedModel(rawModel.id)) {
+          continue;
+        }
+
         // Get detailed model info
         const modelInfo = await this.getDetailedModelInfo(rawModel.id);
         
@@ -530,6 +535,64 @@ export class ModelAggregator {
   validateModelData(model) {
     const required = ['id', 'name', 'huggingFaceId', 'sizeMB', 'environmentalScore'];
     return required.every(field => model[field] !== undefined && model[field] !== null);
+  }
+
+  /**
+   * Check if a model should be excluded (test, mock, internal, etc.)
+   */
+  isExcludedModel(modelId) {
+    const lowerModelId = modelId.toLowerCase();
+    
+    // Patterns that indicate test/mock/internal models
+    const excludePatterns = [
+      // Test and internal namespaces
+      /^trl-internal-testing\//,
+      /^hf-internal-testing\//,
+      /^test-/,
+      /^testing-/,
+      /-test$/,
+      /-testing$/,
+      /^dummy[-_]/,
+      /[-_]dummy$/,
+      /^mock[-_]/,
+      /[-_]mock$/,
+      /^fake[-_]/,
+      /[-_]fake$/,
+      /^placeholder/,
+      /^example[-_]/,
+      /^sample[-_]/,
+      /^demo[-_]/,
+      
+      // Internal testing patterns
+      /internal[-_]test/,
+      /test[-_]model/,
+      /tiny[-_]random/,
+      /random[-_]tiny/,
+      
+      // Debug/dev models
+      /^debug[-_]/,
+      /[-_]debug$/,
+      /^dev[-_]/,
+      
+      // CI/CD test models
+      /[-_]ci[-_]test/,
+      /[-_]unittest/,
+      
+      // Specific known test orgs/patterns
+      /^sshleifer\/tiny/,
+      /^patrickvonplaten\/tiny/,
+      /^fxmarty\/tiny/,
+      /^hf-tiny/,
+    ];
+    
+    for (const pattern of excludePatterns) {
+      if (pattern.test(lowerModelId)) {
+        console.log(`   ⏭️  Skipping test/mock model: ${modelId}`);
+        return true;
+      }
+    }
+    
+    return false;
   }
 
   /**

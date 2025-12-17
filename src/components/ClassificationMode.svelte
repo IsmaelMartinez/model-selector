@@ -37,9 +37,9 @@
         <span class="option-name">Fast</span>
       </div>
       <div class="option-stats">
-        <span class="stat">~0.4s</span>
+        <span class="stat">~2ms</span>
         <span class="dot">•</span>
-        <span class="stat">95.2%</span>
+        <span class="stat">1 match</span>
       </div>
     </button>
 
@@ -51,21 +51,21 @@
     >
       <div class="option-header">
         <span class="option-icon">🎯</span>
-        <span class="option-name">Ensemble</span>
+        <span class="option-name">Voting</span>
       </div>
       <div class="option-stats">
-        <span class="stat">~2s</span>
+        <span class="stat">~2ms</span>
         <span class="dot">•</span>
-        <span class="stat">98%+</span>
+        <span class="stat">5 votes</span>
       </div>
     </button>
   </div>
 
   <p class="mode-description">
     {#if mode === 'fast'}
-      Single AI classification for quick results.
+      Uses closest match only for quick results.
     {:else}
-      3x parallel classifications with voting for higher accuracy.
+      5 similar examples vote for higher accuracy.
     {/if}
   </p>
 </div>

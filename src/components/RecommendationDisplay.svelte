@@ -79,10 +79,10 @@
       </div>
 
       <div class="results-meta">
-        {#if ensembleInfo}
+        {#if ensembleInfo && ensembleInfo.votes !== undefined}
           <div class="meta-badge ensemble">
-            <span class="meta-icon">🎲</span>
-            <span>Ensemble: {ensembleInfo.votes}/{ensembleInfo.total} agree ({(ensembleInfo.confidence * 100).toFixed(0)}%)</span>
+            <span class="meta-icon">🎯</span>
+            <span>{ensembleInfo.votes}/{ensembleInfo.total} examples agree ({(ensembleInfo.confidence * 100).toFixed(0)}%)</span>
           </div>
         {/if}
 

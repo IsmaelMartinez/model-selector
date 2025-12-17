@@ -970,27 +970,6 @@
       "text_generation": {
         "lightweight": [
           {
-            "id": "trl-internal-testing_tiny-qwen2forcausallm-2.5",
-            "name": "Tiny Qwen2ForCausalLM 2.5",
-            "huggingFaceId": "trl-internal-testing/tiny-Qwen2ForCausalLM-2.5",
-            "description": "Tiny Qwen2ForCausalLM 2.5 model for text generation",
-            "sizeMB": 8,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
             "id": "tinyllama_tinyllama-1.1b-chat-v1.0",
             "name": "TinyLlama 1.1B Chat V1.0",
             "huggingFaceId": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
@@ -1192,27 +1171,6 @@
       },
       "code_assistant": {
         "lightweight": [
-          {
-            "id": "trl-internal-testing_tiny-qwen2forcausallm-2.5",
-            "name": "Tiny Qwen2ForCausalLM 2.5",
-            "huggingFaceId": "trl-internal-testing/tiny-Qwen2ForCausalLM-2.5",
-            "description": "Tiny Qwen2ForCausalLM 2.5 model for text generation",
-            "sizeMB": 8,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-11-27"
-          },
           {
             "id": "qwen_qwen2.5-coder-0.5b-instruct",
             "name": "Qwen2.5 Coder 0.5B Instruct",

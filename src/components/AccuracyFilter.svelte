@@ -5,7 +5,7 @@
   export let threshold = 0;
   export let onChange = null;
 
-  const MIN_THRESHOLD = 50;
+  const MIN_THRESHOLD = 75;
   const MAX_THRESHOLD = 95;
   const STEP = 5;
 

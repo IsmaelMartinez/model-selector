@@ -1,8 +1,8 @@
-name: Update Model Dataset v2
+name: Daily Models Updater
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # Daily at 3 AM UTC (offset from v1)
+    - cron: '0 3 * * *'  # Daily at 3 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -130,3 +130,4 @@ jobs:
               fi
             fi
           done
+
