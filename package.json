@@ -13,12 +13,14 @@
     "test": "vitest",
     "test:llm": "RUN_LLM_TESTS=true vitest --run tests/llm-classification.test.js tests/ensemble-validation.test.js",
     "update-models": "node src/lib/aggregation/cli.js",
-    "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run"
+    "update-models:dry-run": "node src/lib/aggregation/cli.js --dry-run",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.7.5"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@sveltejs/adapter-static": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",

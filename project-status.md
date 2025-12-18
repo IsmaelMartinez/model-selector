@@ -1,9 +1,9 @@
 # AI Model Advisor - Current Project Status
 
-**Date**: November 16, 2025
-**Status**: MVP Complete & Deployed ✅ + Ensemble Mode ✅
+**Date**: December 18, 2025
+**Status**: MVP Complete & Deployed ✅ + PWA Support ✅ + Mobile Ready ✅
 **Live URL**: https://ismaelmartinez.github.io/ai-model-advisor
-**Last Commit**: 6269a5c - feat: implement 3-agent ensemble classification mode (PRD 4)  
+**Classifier**: MiniLM embeddings (23MB, 98.3% accuracy)
 
 ## 📊 Overall Progress: 100% Complete
 
@@ -12,15 +12,15 @@ All MVP tasks have been completed successfully. See [ADR documentation](docs/adr
 ## 🎯 MVP Accomplishments
 
 ### ✅ Core Features Working
-- **Task Classification**: Browser-based LLM (Llama 3.2 1B) with semantic fallback
-  - **Fast Mode** (default): Single LLM call, ~0.4s, 95.2% accuracy
-  - **Ensemble Mode** (optional): 3x parallel LLM with voting, ~2s, 98%+ accuracy target
+- **Task Classification**: MiniLM sentence embeddings with semantic fallback
+  - **Embedding Mode** (default): Similarity-based matching, ~0.3s, 98.3% accuracy
+  - **Model Size**: ~23MB (vs previous 700MB), mobile-friendly
 - **Model Accuracy Filtering**: User-controlled threshold (50-95%) with localStorage persistence
 - **Model Recommendations**: 3-tiered system (Lightweight/Standard/Advanced)
 - **Environmental Focus**: "Smaller is better" algorithm prioritizing efficient models
 - **Accessibility**: Full keyboard navigation, ARIA labels, screen reader support
-- **Responsive Design**: Works on desktop devices (mobile not recommended due to ~700 MB model size)
-- **Offline Capability**: Fully static PWA with no external API calls
+- **Responsive Design**: Works on desktop and mobile devices
+- **PWA Support**: Installable, offline-capable after first visit
 
 ### ✅ Technical Implementation
 - **Framework**: SvelteKit with static site generation
@@ -46,7 +46,7 @@ src/
 │   │   ├── models.json ✅ (Comprehensive dataset)
 │   │   └── tasks.json ✅ (Task taxonomy with keywords)
 │   ├── classification/
-│   │   ├── LLMTaskClassifier.js ✅ (Llama 3.2 1B + Ensemble mode)
+│   │   ├── EmbeddingTaskClassifier.js ✅ (MiniLM 23MB, 98.3% accuracy)
 │   │   └── BrowserTaskClassifier.js ✅ (Semantic fallback)
 │   ├── recommendation/
 │   │   └── ModelSelector.js ✅ ("Smaller is better" + accuracy filtering)
@@ -54,10 +54,14 @@ src/
 │       └── preferences.js ✅ (localStorage for mode & filters)
 ├── components/
 │   ├── TaskInput.svelte ✅ (Accessible input)
-│   ├── ClassificationMode.svelte ✅ (Fast/Ensemble toggle)
 │   ├── AccuracyFilter.svelte ✅ (Accuracy threshold slider)
-│   └── RecommendationDisplay.svelte ✅ (Tiered display + ensemble info)
+│   └── RecommendationDisplay.svelte ✅ (Tiered display)
+├── static/
+│   ├── sw.js ✅ (Service worker for PWA)
+│   ├── manifest.webmanifest ✅ (PWA manifest)
+│   └── icon-*.png ✅ (PWA icons)
 └── routes/
+    ├── +layout.svelte ✅ (SW registration)
     └── +page.svelte ✅ (Main application)
 ```
 
@@ -67,35 +71,37 @@ src/
 - ✅ Automated testing with Vitest
 - ✅ Documentation in `docs/` directory
 
-## ⚠️ Known Issues & Limitations
+## ✅ Platform Compatibility
 
-### Platform Compatibility
-- **Mobile Device Support**: ❌ Not recommended
-  - Application requires downloading ~700 MB language model for classification
-  - Model size exceeds typical mobile device memory and bandwidth constraints
-  - Desktop or laptop computers recommended for optimal performance
-  - Future optimization may include lighter models or progressive loading for mobile
+### Mobile & Desktop Support
+- **Mobile Device Support**: ✅ Fully supported
+  - Lightweight MiniLM model (~23MB) works well on mobile
+  - Cached in IndexedDB for offline use
+  - PWA installable on iOS and Android
+- **Desktop Support**: ✅ Fully supported
+  - All major browsers (Chrome, Firefox, Safari, Edge)
+  - PWA installable
 
 ### Test Status (All Passing ✅)
 - **Fast Tests (CI/CD)**: 23/23 passing (acceptance + integration, ~2s)
-- **LLM Tests (Local Only)**: 25 tests available via `npm run test:llm`
-- **Note**: LLM tests intentionally separated for local-only execution
-  - Requires 1.2GB model download
+- **Embedding Tests (Local Only)**: Tests available via `npm run test:llm`
+- **Note**: Embedding tests separated for local-only execution
+  - Downloads ~23MB model
   - Takes ~3 minutes vs 2 seconds for fast tests
   - Not suitable for CI/CD pipelines
-  - Validates 95.2% classification accuracy
+  - Validates 98.3% classification accuracy
 
 ### Classification Accuracy
-- **Production**: 95.2% accuracy with Llama 3.2 1B-Instruct (20/21 test cases)
+- **Production**: 98.3% accuracy with MiniLM sentence embeddings
 - **Strengths**: Excellent performance across all 7 categories
-- **Known Edge Case**: Time series category (66.7% accuracy, 2/3 tests)
-- **Overall**: Significantly improved from keyword-based approach
+- **Model**: Xenova/all-MiniLM-L6-v2 (23MB, cached in IndexedDB)
+- **Improvement**: Upgraded from Llama 3.2 1B (700MB) to MiniLM (23MB)
 
 ### Future Improvements Identified
-1. **Browser SLM Integration**: Replace keyword matching with small language model
-2. **Classification Accuracy**: Fine-tune task taxonomy and keywords
-3. **Model Data**: Expand dataset with more specialized models
-4. **Cross-browser Testing**: Extend beyond Chrome support
+1. **Additional Categories**: Expand task taxonomy
+2. **Model Data**: Expand dataset with more specialized models
+3. **Cross-browser Testing**: Extend test coverage to Firefox, Safari
+4. **Comparison Features**: Side-by-side model comparison
 
 ## 🚀 Deployment Status
 

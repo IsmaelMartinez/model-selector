@@ -5,9 +5,9 @@
 **Mission:** Build sustainable AI by helping users choose environmentally efficient models ("smaller is better" philosophy)
 
 **Live:** https://ismaelmartinez.github.io/ai-model-advisor
-**Status:** MVP Complete ✅ + Ensemble Mode (95.2% Fast / 98%+ Ensemble accuracy)
-**Tech:** SvelteKit 2 + Vite 5 + Transformers.js (Browser-based Llama 3.2 1B)
-**Platform:** Desktop only (mobile not recommended - requires ~700 MB model download)
+**Status:** MVP Complete ✅ + PWA Support (98.3% accuracy, installable)
+**Tech:** SvelteKit 2 + Vite 5 + Transformers.js (MiniLM embedding classifier, 23MB)
+**Platform:** Desktop & Mobile (PWA installable, ~23MB model download)
 **Details:** See `project-status.md`, `project-vision.md`, `README.md`
 
 ---
@@ -37,7 +37,7 @@ npm run update-models:dry-run  # Preview updates
 **Application Core:**
 - `src/routes/+page.svelte` - Main UI and application logic
 - `src/lib/recommendation/ModelSelector.js` - "Smaller is better" ranking algorithm
-- `src/lib/classification/LLMTaskClassifier.js` - Browser LLM (Llama 3.2 1B, 95.2% accuracy)
+- `src/lib/classification/EmbeddingTaskClassifier.js` - MiniLM embeddings (23MB, 98.3% accuracy)
 - `src/lib/environmental/EnvironmentalImpactCalculator.js` - Environmental scoring (1-3 scale)
 
 **Data:**
@@ -51,17 +51,16 @@ npm run update-models:dry-run  # Preview updates
 
 ### Classification Pipeline
 
-**Fast Mode** (default, ~0.4s):
-1. **LLM** (Primary) → Llama 3.2 1B via transformers.js (95.2% accuracy)
+**Embedding Mode** (default, ~0.3s):
+1. **MiniLM Embeddings** (Primary) → Sentence similarity matching (98.3% accuracy)
 2. **Semantic** (Fallback 1) → N-gram matching with keywords
 3. **Keyword** (Fallback 2) → Direct lookup
 4. **Default** (Final) → Returns natural_language_processing
 
-**Ensemble Mode** (optional, ~2s):
-1. **3x Parallel LLM** → Same model, different temperatures (0.0, 0.2, 0.4)
-2. **Majority Voting** → 2/3 or 3/3 consensus determines result
-3. **Higher Accuracy** → Target 98%+ by reducing "lazy" LLM responses
-4. **Confidence Display** → Shows vote count and confidence percentage
+**Model Download:**
+- ~23MB on first visit (cached in IndexedDB)
+- Instant on subsequent visits
+- Works on mobile devices
 
 ### Environmental Scoring
 
@@ -116,7 +115,7 @@ Ranking: lightweight tier > standard tier > advanced tier (within tier, smaller 
 - No backend/API calls during runtime
 - All ML runs in browser (transformers.js)
 - Target: <50KB bundle, <1s load time
-- **Platform Requirement:** Desktop/laptop only - ~700 MB LLM model too large for mobile devices
+- **PWA Enabled:** Installable on desktop & mobile, works offline after first visit
 
 ### 4. Accessibility Required
 - Full keyboard navigation (Tab, Enter, Ctrl+Enter)
@@ -199,12 +198,12 @@ describe('Module', () => {
 ## Key Principles for AI Assistants
 
 1. **Environmental Focus** - Prioritize smaller, efficient models always
-2. **Maintain 95.2% Accuracy** - Test against LLM suite before committing classification changes
+2. **Maintain 98.3% Accuracy** - Test against LLM suite before committing classification changes
 3. **Accessibility First** - Keyboard navigation and screen readers are required
 4. **Static & Fast** - No APIs, <50KB bundle, client-side processing only
 5. **Test Smart** - Run `npm test` (fast) before commits; `npm run test:llm` (slow) only locally
 6. **Document Decisions** - Create ADRs in `docs/adrs/` for architectural changes
-7. **Progressive Enhancement** - Support multiple browsers with graceful fallbacks
+7. **Progressive Enhancement** - PWA support, multiple browsers with graceful fallbacks
 
 ---
 
@@ -222,5 +221,5 @@ describe('Module', () => {
 
 ---
 
-**Last Updated:** 2025-01-15
+**Last Updated:** 2025-12-18
 **License:** MIT

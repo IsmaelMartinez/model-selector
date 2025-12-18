@@ -13,13 +13,13 @@ An open source assistant to help you choose the most environmentally efficient A
 
 ### ✅ MVP Complete
 - ✅ SvelteKit project structure with static site generation
-- ✅ Browser-based LLM classification (Llama 3.2 1B, 95.2% accuracy)
+- ✅ Browser-based embedding classification (MiniLM, 98.3% accuracy)
 - ✅ Tiered recommendation engine (Lightweight/Standard/Advanced)
 - ✅ Environmental impact scoring (1-3 scale)
 - ✅ Model accuracy filtering (50-95% threshold)
-- ✅ Ensemble classification mode (98%+ accuracy target)
+- ✅ Lightweight model (~23MB) enables mobile support
 - ✅ Automated model dataset updates (daily via GitHub Actions)
-- ✅ PWA with offline capability
+- ✅ PWA with offline capability (installable on desktop & mobile)
 - ✅ Full accessibility support
 
 **Live**: https://ismaelmartinez.github.io/ai-model-advisor
@@ -27,38 +27,40 @@ An open source assistant to help you choose the most environmentally efficient A
 ## Roadmap
 
 ### Phase 1: MVP ✅ Complete
-**Goals**: Chrome-optimized PWA with tiered recommendations and environmental scoring
+**Goals**: PWA with tiered recommendations and environmental scoring
 
-**Achieved**: 
+**Achieved**:
 - <1 second to recommendations (target was <30s)
-- 7 AI task categories with 95.2% classification accuracy
+- 7 AI task categories with 98.3% classification accuracy
 - ~40KB bundle size (target was <2MB)
 - Full accessibility support
+- Mobile & desktop PWA support
 
 ### Phase 2: v1.1 (In Progress)
 **Goals**: Enhanced data quality and expanded features
 
-- 📋 Phase 2 Auto-Updates: Gemini-based validation for model card parsing
+- 📋 Additional task categories
 - 📋 Improved accuracy data: Extract real metrics from model cards
 - 📋 Cross-browser support: Firefox, Safari testing
 - 📋 Community features: User feedback mechanisms
 
 ### Future Phases
 - **v2.0**: Advanced filtering and comparison features
-- **v3.0**: API integrations for real-time data (2026+)
+- **v3.0**: API integrations for real-time data
 
 ## Technical Architecture
 
 ```
-User Input → LLM Classification (Llama 3.2 1B) → Model Selection → Environmental Scoring → Recommendations
+User Input → Embedding Classification (MiniLM) → Model Selection → Environmental Scoring → Recommendations
 ```
 
-**Fallback Chain**: LLM → Semantic Matching → Keyword Matching → Default Category
+**Fallback Chain**: Embedding Similarity → Semantic Matching → Keyword Matching → Default Category
 
 ## Success Metrics
 - **Speed**: <1 second query to recommendation ✅
-- **Accuracy**: 95.2% classification accuracy ✅
+- **Accuracy**: 98.3% classification accuracy ✅
 - **Performance**: ~40KB bundle, <1s load time ✅
+- **Mobile Ready**: ~23MB model, PWA installable ✅
 - **Adoption**: Target 1000+ monthly users by end 2025
 
 ## Contributing
