@@ -2969,21 +2969,22 @@
     "scoringCriteria": {
       "1": {
         "label": "Low Impact",
-        "description": "Mobile/edge friendly, minimal carbon footprint",
-        "dailyKWh": "< 0.1"
+        "description": "Lightweight models (≤500MB), suitable for edge/mobile",
+        "sizeThreshold": "≤ 500 MB"
       },
       "2": {
         "label": "Medium Impact",
-        "description": "Cloud deployment with reasonable usage",
-        "dailyKWh": "0.1 - 1.0"
+        "description": "Standard models (≤4GB), suitable for cloud deployment",
+        "sizeThreshold": "≤ 4 GB"
       },
       "3": {
         "label": "High Impact",
-        "description": "Specialized applications, significant footprint",
-        "dailyKWh": "> 1.0"
+        "description": "Large models (>4GB), require significant compute resources",
+        "sizeThreshold": "> 4 GB"
       }
     },
-    "methodology": "Order-of-magnitude comparisons based on estimated kWh/day usage. See /docs/environmental-methodology.md for details."
+    "methodology": "Simple size-based heuristic: larger models require more compute. See /docs/environmental-methodology.md for details.",
+    "caveat": "This is a rough approximation for comparison only, not a scientific measurement."
   },
   "selectionRules": {
     "defaultTierPriority": [
