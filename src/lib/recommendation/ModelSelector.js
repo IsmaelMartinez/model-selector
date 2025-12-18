@@ -3,6 +3,8 @@
  * Prioritizes lightweight models and smaller sizes within each tier
  */
 
+const TIERS = ['lightweight', 'standard', 'advanced', 'xlarge'];
+
 export class ModelSelector {
   constructor(modelsData) {
     this.modelsData = modelsData;
@@ -30,8 +32,7 @@ export class ModelSelector {
     const taskData = this.modelsData.models[category]?.[subcategory];
     if (!taskData) return [];
     
-    const tiers = ['lightweight', 'standard', 'advanced'];
-    return tiers.flatMap((tier, index) => 
+    return TIERS.flatMap((tier, index) => 
       (taskData[tier] || []).map(model => ({
         ...model, 
         tier, 
@@ -44,7 +45,7 @@ export class ModelSelector {
 
   /**
    * Rank models by "smaller is better" logic:
-   * 1. Tier priority (lightweight > standard > advanced)
+   * 1. Tier priority (lightweight > standard > advanced > xlarge)
    * 2. Size within tier (smaller > larger)
    * @param {Array} models - Models to rank
    * @returns {Array} Models ranked by efficiency (best first)
@@ -63,7 +64,6 @@ export class ModelSelector {
    * @returns {Object} Object with filtered models and metadata
    */
   filterByAccuracy(models, threshold = 0) {
-    // If threshold is 0, return all models
     if (threshold === 0) {
       return {
         filtered: models,
@@ -72,12 +72,8 @@ export class ModelSelector {
       };
     }
 
-    // Convert threshold from percentage to decimal (75 -> 0.75)
     const thresholdDecimal = threshold / 100;
-
-    // Filter models
     const filtered = models.filter(model => {
-      // Treat missing accuracy as 0
       const accuracy = model.accuracy ?? 0;
       return accuracy >= thresholdDecimal;
     });
@@ -103,18 +99,18 @@ export class ModelSelector {
         lightweight: { models: [], hidden: 0 },
         standard: { models: [], hidden: 0 },
         advanced: { models: [], hidden: 0 },
+        xlarge: { models: [], hidden: 0 },
         totalHidden: 0,
         totalShown: 0
       };
     }
 
-    const tiers = ['lightweight', 'standard', 'advanced'];
     const result = {
       totalHidden: 0,
       totalShown: 0
     };
 
-    tiers.forEach(tier => {
+    TIERS.forEach(tier => {
       const tierModels = (taskData[tier] || []).map(model => ({
         ...model,
         tier,
