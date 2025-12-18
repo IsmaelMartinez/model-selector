@@ -4,6 +4,8 @@
 
 Open source assistant that helps discover AI models prioritizing environmental sustainability with a "smaller is better" approach.
 
+> 💡 **This is a starting point, not a final answer.** We point you toward models that might fit your task, but you decide what works best for your use case, data, and constraints. Smaller models are often highly specialized and can match or outperform larger ones for specific tasks while using far fewer resources.
+
 ## Features
 
 - **Environmental Focus**: Prioritizes models with lower energy consumption

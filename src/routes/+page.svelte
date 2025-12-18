@@ -433,7 +433,7 @@
       <div class="disclaimer-content">
         <p>
           <strong>This is a starting point, not a final answer.</strong> 
-          We point you toward models that might fit your task—but you decide what works best for your use case, 
+          We point you toward models that might fit your task, but you decide what works best for your use case, 
           data, and constraints. Smaller models are often highly specialized and can match or outperform 
           larger ones for specific tasks while using far fewer resources.
         </p>
