@@ -1,7 +1,7 @@
 # Browser Small Language Models: Technical Evaluation and Learnings
 
 ## Overview
-This document captures our comprehensive evaluation of browser-based Small Language Models (SLMs) for the Model Selector project. While we ultimately decided not to implement SLM classification, this research provides valuable insights for future browser AI projects.
+This document captures our comprehensive evaluation of browser-based Small Language Models (SLMs) for the AI Model Advisor project. While we ultimately decided not to implement SLM classification, this research provides valuable insights for future browser AI projects.
 
 ## Technical Implementation Details
 

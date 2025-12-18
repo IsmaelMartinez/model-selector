@@ -88,7 +88,7 @@
       console.log("✅ Data pipeline initialized successfully");
     } catch (err) {
       console.error("❌ Failed to initialize data pipeline:", err);
-      error = "Failed to initialize the model selector. Please refresh the page.";
+      error = "Failed to initialize the AI model advisor. Please refresh the page.";
     }
   });
 
@@ -365,7 +365,7 @@
 </script>
 
 <svelte:head>
-  <title>Model Selector — Eco-Friendly AI Models</title>
+  <title>AI Model Advisor — Eco-Friendly AI Models</title>
   <meta name="description" content="Find the most environmentally efficient AI models for your task. We prioritize smaller, greener models." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -387,7 +387,7 @@
       </div>
       
       <h1>
-        <span class="gradient-text">Model Selector</span>
+        <span class="gradient-text">AI Model Advisor</span>
       </h1>
       
       <p class="hero-subtitle">

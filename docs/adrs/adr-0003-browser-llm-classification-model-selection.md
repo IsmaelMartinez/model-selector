@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The Model Selector application requires intelligent task classification to recommend appropriate AI models to users. After implementing keyword-based classification (ADR-0002), we evaluated browser-based LLMs to provide more sophisticated, context-aware task categorization.
+The AI Model Advisor application requires intelligent task classification to recommend appropriate AI models to users. After implementing keyword-based classification (ADR-0002), we evaluated browser-based LLMs to provide more sophisticated, context-aware task categorization.
 
 ### Requirements
 

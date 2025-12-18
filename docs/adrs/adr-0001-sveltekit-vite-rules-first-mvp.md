@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-For the initial MVP of the Model Selector, we need to choose a technology stack that enables:
+For the initial MVP of the AI Model Advisor, we need to choose a technology stack that enables:
 - Fast development and iteration
 - Static site generation for PWA deployment
 - Offline capability

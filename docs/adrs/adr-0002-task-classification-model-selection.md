@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-The Model Selector MVP requires a task classification system to categorize user-provided task descriptions into appropriate ML/AI categories (computer vision, NLP, etc.). This classification drives the model recommendation engine.
+The AI Model Advisor MVP requires a task classification system to categorize user-provided task descriptions into appropriate ML/AI categories (computer vision, NLP, etc.). This classification drives the model recommendation engine.
 
 Key requirements:
 - Classify text descriptions into 8-12 ML task categories

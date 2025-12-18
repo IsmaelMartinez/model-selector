@@ -1,7 +1,7 @@
 {
-  "name": "Model Selector",
-  "short_name": "ModelSelector",
-  "description": "Choose, adapt, and deploy the best AI model for your task",
+  "name": "AI Model Advisor",
+  "short_name": "AIModelAdvisor",
+  "description": "Find the most environmentally efficient AI models for your task",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -1,7 +1,7 @@
 # ADR-001: Browser SLM Classification Evaluation
 
 ## Status
-**REJECTED** - Do not proceed with browser-based SLM classification for Model Selector
+**REJECTED** - Do not proceed with browser-based SLM classification for AI Model Advisor
 
 ## Context
 We conducted a comprehensive evaluation of browser-based Small Language Models (SLMs) for task classification to potentially improve upon our existing keyword-based classifier. The goal was to achieve 100% classification accuracy with ≤10s inference time for our 7-category task taxonomy.

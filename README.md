@@ -1,4 +1,4 @@
-# AI Model Selector
+# AI Model Advisor
 
 **Find the most environmentally efficient AI models for your task**
 
@@ -20,7 +20,7 @@ Open source assistant that helps discover AI models prioritizing environmental s
 
 ## Live Demo
 
-[AI Model Selector](https://ismaelmartinez.github.io/model-selector)
+[AI Model Advisor](https://ismaelmartinez.github.io/ai-model-advisor)
 
 ## Supported Tasks
 

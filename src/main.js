@@ -1,5 +1,5 @@
 /**
- * AI Model Selector - Vanilla JS Version
+ * AI Model Advisor - Vanilla JS Version
  * Uses Llama 3.2 1B with enhanced pre-prompting for 95.2% accurate 7-category classification
  */
 
@@ -21,7 +21,7 @@ const recommendationsContainer = document.getElementById('recommendations');
 const recommendationsList = document.getElementById('recommendationsList');
 
 // Initialize
-console.log('🤖 AI Model Selector initialized');
+console.log('🤖 AI Model Advisor initialized');
 console.log('📊 Models available:', Object.keys(modelsData.models).length);
 console.log('📋 Task categories:', Object.keys(tasksData.taskTaxonomy).length);
 

@@ -1,9 +1,9 @@
 /**
- * Service Worker for AI Model Selector PWA
+ * Service Worker for AI Model Advisor PWA
  * Caches static assets for offline access
  */
 
-const CACHE_NAME = 'model-selector-v1';
+const CACHE_NAME = 'ai-model-advisor-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

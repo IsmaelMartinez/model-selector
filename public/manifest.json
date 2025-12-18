@@ -1,6 +1,6 @@
 {
-  "name": "AI Model Selector",
-  "short_name": "Model Selector",
+  "name": "AI Model Advisor",
+  "short_name": "AIModelAdvisor",
   "description": "Find the most environmentally efficient AI models for your task",
   "start_url": "/",
   "display": "standalone",
