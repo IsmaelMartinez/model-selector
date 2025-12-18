@@ -6,6 +6,9 @@
   
   const dispatch = createEventDispatcher();
   
+  let showTextInput = false;
+  let additionalDetails = '';
+  
   function handleSelect(option) {
     dispatch('select', {
       category: option.category,
@@ -15,6 +18,25 @@
   
   function handleSkip() {
     dispatch('skip');
+  }
+  
+  function toggleTextInput() {
+    showTextInput = !showTextInput;
+  }
+  
+  function handleTextClarification() {
+    if (additionalDetails.trim()) {
+      dispatch('clarify', {
+        originalDescription: originalDescription,
+        additionalDetails: additionalDetails.trim()
+      });
+    }
+  }
+  
+  function handleKeydown(event) {
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      handleTextClarification();
+    }
   }
 </script>
 
@@ -48,6 +70,38 @@
           <span class="option-arrow">→</span>
         </button>
       {/each}
+    </div>
+    
+    <div class="text-clarification-section">
+      <button 
+        class="toggle-text-input" 
+        on:click={toggleTextInput}
+        aria-expanded={showTextInput}
+      >
+        <span class="toggle-icon" class:expanded={showTextInput}>▶</span>
+        <span>Prefer to add more details?</span>
+      </button>
+      
+      {#if showTextInput}
+        <div class="text-input-container">
+          <textarea
+            bind:value={additionalDetails}
+            on:keydown={handleKeydown}
+            placeholder="Describe your task in more detail. For example: 'I'm working with customer reviews in Spanish and need to detect sentiment and extract key topics...'"
+            rows="3"
+          ></textarea>
+          <div class="text-input-actions">
+            <span class="keyboard-hint">⌘/Ctrl + Enter to submit</span>
+            <button 
+              class="submit-clarification"
+              on:click={handleTextClarification}
+              disabled={!additionalDetails.trim()}
+            >
+              Refine search
+            </button>
+          </div>
+        </div>
+      {/if}
     </div>
     
     <div class="clarification-footer">
@@ -231,6 +285,117 @@
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
   }
 
+  /* Text Clarification Section */
+  .text-clarification-section {
+    margin-bottom: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1rem;
+  }
+
+  .toggle-text-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+    width: 100%;
+    text-align: left;
+  }
+
+  .toggle-text-input:hover {
+    color: #10b981;
+  }
+
+  .toggle-icon {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+    color: #64748b;
+  }
+
+  .toggle-icon.expanded {
+    transform: rotate(90deg);
+  }
+
+  .text-input-container {
+    margin-top: 0.75rem;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .text-input-container textarea {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #e8f5e9;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .text-input-container textarea::placeholder {
+    color: #64748b;
+  }
+
+  .text-input-container textarea:focus {
+    outline: none;
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+
+  .text-input-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.75rem;
+  }
+
+  .keyboard-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  .submit-clarification {
+    padding: 0.6rem 1.25rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .submit-clarification:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+
+  .submit-clarification:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   @media (max-width: 640px) {
     .clarification-card {
       padding: 1.5rem;
@@ -238,6 +403,20 @@
 
     .options-grid {
       grid-template-columns: 1fr;
+    }
+
+    .text-input-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+
+    .keyboard-hint {
+      text-align: center;
+    }
+
+    .submit-clarification {
+      width: 100%;
     }
   }
 </style>
