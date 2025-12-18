@@ -56,6 +56,24 @@
             "lastUpdated": "2025-12-18"
           },
           {
+            "id": "timm_tf_mobilenetv3_large_minimal_100.in1k",
+            "name": "Tf Mobilenetv3 Large Minimal 100.In1k",
+            "huggingFaceId": "timm/tf_mobilenetv3_large_minimal_100.in1k",
+            "description": "Tf Mobilenetv3 Large Minimal 100.In1k model for image classification",
+            "sizeMB": 150,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-01-21T18:21:25.000Z"
+          },
+          {
             "id": "efficientnet_b0",
             "name": "EfficientNet B0",
             "huggingFaceId": "google/efficientnet-b0",
@@ -76,49 +94,12 @@
             "lastUpdated": "2023-09-20"
           },
           {
-            "id": "google_vit-base-patch16-224",
-            "name": "Vit Base Patch16 224",
-            "huggingFaceId": "google/vit-base-patch16-224",
-            "description": "Vit Base Patch16 224 model for image classification",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "mobilenet_v3_small",
-            "name": "MobileNetV3 Small",
-            "huggingFaceId": "google/mobilenet_v3_small_1.0_224",
-            "description": "Lightweight image classification optimized for mobile devices",
-            "sizeMB": 9.2,
-            "accuracy": 0.672,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile"
-            ],
-            "frameworks": [
-              "TensorFlow.js",
-              "ONNX"
-            ],
-            "lastUpdated": "2023-08-15"
-          },
-          {
-            "id": "timm_mobilenetv3_small_100.lamb_in1k",
-            "name": "Mobilenetv3 Small 100.Lamb In1k",
-            "huggingFaceId": "timm/mobilenetv3_small_100.lamb_in1k",
-            "description": "Mobilenetv3 Small 100.Lamb In1k model for image classification",
-            "sizeMB": 25,
-            "accuracy": 0.72,
+            "id": "iitolstykh_mivolo_v2",
+            "name": "Mivolo V2",
+            "huggingFaceId": "iitolstykh/mivolo_v2",
+            "description": "Mivolo V2 model for image classification",
+            "sizeMB": 27,
+            "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
               "browser",
@@ -128,47 +109,34 @@
               "server"
             ],
             "frameworks": [
-              "PyTorch"
+              "PyTorch",
+              "TensorFlow"
             ],
-            "lastUpdated": "2025-10-12"
-          }
-        ],
-        "standard": [
+            "lastUpdated": "2025-07-08T08:11:59.000Z"
+          },
           {
-            "id": "vit_base_patch16_224",
-            "name": "Vision Transformer Base",
-            "huggingFaceId": "google/vit-base-patch16-224",
-            "description": "Transformer architecture applied to image classification",
-            "sizeMB": 330,
-            "accuracy": 0.841,
-            "environmentalScore": 2,
+            "id": "microsoft_resnet-50",
+            "name": "Resnet 50",
+            "huggingFaceId": "microsoft/resnet-50",
+            "description": "Resnet 50 model for image classification",
+            "sizeMB": 24,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
             "deploymentOptions": [
-              "cloud"
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
             ],
             "frameworks": [
               "PyTorch",
               "TensorFlow"
             ],
-            "lastUpdated": "2023-06-05"
-          },
-          {
-            "id": "resnet50",
-            "name": "ResNet-50",
-            "huggingFaceId": "microsoft/resnet-50",
-            "description": "Popular deep residual network for image classification",
-            "sizeMB": 98,
-            "accuracy": 0.761,
-            "environmentalScore": 2,
-            "deploymentOptions": [
-              "cloud"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow",
-              "ONNX"
-            ],
-            "lastUpdated": "2023-07-10"
-          },
+            "lastUpdated": "2024-02-13T21:24:05.000Z"
+          }
+        ],
+        "standard": [
           {
             "id": "falconsai_nsfw_image_detection",
             "name": "Nsfw Image Detection",
@@ -231,6 +199,41 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
+          },
+          {
+            "id": "vit_base_patch16_224",
+            "name": "Vision Transformer Base",
+            "huggingFaceId": "google/vit-base-patch16-224",
+            "description": "Transformer architecture applied to image classification",
+            "sizeMB": 330,
+            "accuracy": 0.841,
+            "environmentalScore": 2,
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2023-06-05"
+          },
+          {
+            "id": "resnet50",
+            "name": "ResNet-50",
+            "huggingFaceId": "microsoft/resnet-50",
+            "description": "Popular deep residual network for image classification",
+            "sizeMB": 98,
+            "accuracy": 0.761,
+            "environmentalScore": 2,
+            "deploymentOptions": [
+              "cloud"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow",
+              "ONNX"
+            ],
+            "lastUpdated": "2023-07-10"
           }
         ],
         "advanced": [
@@ -273,6 +276,48 @@
       },
       "object_detection": {
         "lightweight": [
+          {
+            "id": "ustc-community_dfine-xlarge-coco",
+            "name": "Dfine Xlarge Coco",
+            "huggingFaceId": "ustc-community/dfine-xlarge-coco",
+            "description": "Dfine Xlarge Coco model for object detection",
+            "sizeMB": 60,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-05-05T11:36:11.000Z"
+          },
+          {
+            "id": "ustc-community_dfine-xlarge-obj2coco",
+            "name": "Dfine Xlarge Obj2coco",
+            "huggingFaceId": "ustc-community/dfine-xlarge-obj2coco",
+            "description": "Dfine Xlarge Obj2coco model for object detection",
+            "sizeMB": 60,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-05-05T11:38:46.000Z"
+          },
           {
             "id": "hustvl_yolos-small",
             "name": "Yolos Small",
@@ -335,48 +380,6 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "microsoft_table-transformer-detection",
-            "name": "Table Transformer Detection",
-            "huggingFaceId": "microsoft/table-transformer-detection",
-            "description": "Table Transformer Detection model for object detection",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "facebook_detr-resnet-50",
-            "name": "Detr Resnet 50",
-            "huggingFaceId": "facebook/detr-resnet-50",
-            "description": "Detr Resnet 50 model for object detection",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-12-18"
           }
         ],
         "standard": [
@@ -503,6 +506,22 @@
             "lastUpdated": "2025-11-13"
           },
           {
+            "id": "omlab_vlm-fo1_qwen2.5-vl-3b-v01",
+            "name": "VLM FO1 Qwen2.5 VL 3B V01",
+            "huggingFaceId": "omlab/VLM-FO1_Qwen2.5-VL-3B-v01",
+            "description": "VLM FO1 Qwen2.5 VL 3B V01 model for object detection",
+            "sizeMB": 4254,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-11-28T03:15:38.000Z"
+          },
+          {
             "id": "yolo_v8x",
             "name": "YOLOv8 Extra Large",
             "huggingFaceId": "ultralytics/yolov8x",
@@ -621,6 +640,25 @@
             "lastUpdated": "2023-04-12"
           },
           {
+            "id": "facebookai_roberta-large-mnli",
+            "name": "Roberta Large Mnli",
+            "huggingFaceId": "FacebookAI/roberta-large-mnli",
+            "description": "Roberta Large Mnli model for text classification",
+            "sizeMB": 340,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T12:47:11.000Z"
+          },
+          {
             "id": "harsha901_tinybert-imdb-sentiment-analysis-model",
             "name": "Tinybert Imdb Sentiment Analysis Model",
             "huggingFaceId": "Harsha901/tinybert-imdb-sentiment-analysis-model",
@@ -642,14 +680,16 @@
             "lastUpdated": "2025-12-18"
           },
           {
-            "id": "distilbert_distilbert-base-uncased-finetuned-sst-2-english",
-            "name": "Distilbert Base Uncased Finetuned Sst 2 English",
-            "huggingFaceId": "distilbert/distilbert-base-uncased-finetuned-sst-2-english",
-            "description": "Distilbert Base Uncased Finetuned Sst 2 English model for text classification",
-            "sizeMB": 150,
-            "accuracy": 0.78,
+            "id": "kmack_malicious-url-detection",
+            "name": "Malicious Url Detection",
+            "huggingFaceId": "kmack/malicious-url-detection",
+            "description": "Malicious Url Detection model for text classification",
+            "sizeMB": 64,
+            "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
+              "browser",
+              "mobile",
               "edge",
               "cloud",
               "server"
@@ -658,26 +698,7 @@
               "PyTorch",
               "TensorFlow"
             ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "cardiffnlp_twitter-roberta-base-sentiment-latest",
-            "name": "Twitter Roberta Base Sentiment Latest",
-            "huggingFaceId": "cardiffnlp/twitter-roberta-base-sentiment-latest",
-            "description": "Twitter Roberta Base Sentiment Latest model for text classification",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2024-04-26T06:33:48.000Z"
           }
         ],
         "standard": [
@@ -869,6 +890,25 @@
       "sentiment_analysis": {
         "lightweight": [
           {
+            "id": "facebookai_roberta-large-mnli",
+            "name": "Roberta Large Mnli",
+            "huggingFaceId": "FacebookAI/roberta-large-mnli",
+            "description": "Roberta Large Mnli model for text classification",
+            "sizeMB": 340,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T12:47:11.000Z"
+          },
+          {
             "id": "cardiffnlp_twitter_roberta_base_sentiment",
             "name": "Twitter RoBERTa Sentiment",
             "huggingFaceId": "cardiffnlp/twitter-roberta-base-sentiment-latest",
@@ -906,14 +946,16 @@
             "lastUpdated": "2025-12-18"
           },
           {
-            "id": "distilbert_distilbert-base-uncased-finetuned-sst-2-english",
-            "name": "Distilbert Base Uncased Finetuned Sst 2 English",
-            "huggingFaceId": "distilbert/distilbert-base-uncased-finetuned-sst-2-english",
-            "description": "Distilbert Base Uncased Finetuned Sst 2 English model for text classification",
-            "sizeMB": 150,
-            "accuracy": 0.78,
+            "id": "kmack_malicious-url-detection",
+            "name": "Malicious Url Detection",
+            "huggingFaceId": "kmack/malicious-url-detection",
+            "description": "Malicious Url Detection model for text classification",
+            "sizeMB": 64,
+            "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
+              "browser",
+              "mobile",
               "edge",
               "cloud",
               "server"
@@ -922,39 +964,17 @@
               "PyTorch",
               "TensorFlow"
             ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2024-04-26T06:33:48.000Z"
           },
           {
-            "id": "baai_bge-reranker-v2-m3",
-            "name": "Bge Reranker V2 M3",
-            "huggingFaceId": "BAAI/bge-reranker-v2-m3",
-            "description": "Bge Reranker V2 M3 model for text classification",
-            "sizeMB": 100,
-            "accuracy": 0.75,
+            "id": "distilbert_distilbert-base-uncased-finetuned-sst-2-english",
+            "name": "Distilbert Base Uncased Finetuned Sst 2 English",
+            "huggingFaceId": "distilbert/distilbert-base-uncased-finetuned-sst-2-english",
+            "description": "Distilbert Base Uncased Finetuned Sst 2 English model for text classification",
+            "sizeMB": 150,
+            "accuracy": 0.78,
             "environmentalScore": 1,
             "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "prosusai_finbert",
-            "name": "Finbert",
-            "huggingFaceId": "ProsusAI/finbert",
-            "description": "Finbert model for text classification",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
               "edge",
               "cloud",
               "server"
@@ -1252,6 +1272,24 @@
         ],
         "standard": [
           {
+            "id": "openai-community_gpt2-large",
+            "name": "Gpt2 Large",
+            "huggingFaceId": "openai-community/gpt2-large",
+            "description": "Gpt2 Large model for text generation",
+            "sizeMB": 774,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T11:11:02.000Z"
+          },
+          {
             "id": "gpt2_medium",
             "name": "GPT-2 Medium",
             "huggingFaceId": "gpt2-medium",
@@ -1327,26 +1365,6 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "meta-llama_llama-3.1-8b-instruct",
-            "name": "Llama 3.1 8B Instruct",
-            "huggingFaceId": "meta-llama/Llama-3.1-8B-Instruct",
-            "description": "Llama 3.1 8B Instruct model for text generation",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
           }
         ],
         "advanced": [
@@ -1366,6 +1384,161 @@
               "TensorFlow"
             ],
             "lastUpdated": "2023-02-10"
+          },
+          {
+            "id": "mistralai_mistral-7b-instruct-v0.2",
+            "name": "Mistral 7B Instruct V0.2",
+            "huggingFaceId": "mistralai/Mistral-7B-Instruct-v0.2",
+            "description": "Mistral 7B Instruct V0.2 model for text generation",
+            "sizeMB": 6906,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-24T16:57:21.000Z"
+          },
+          {
+            "id": "qwen_qwen2.5-7b-instruct",
+            "name": "Qwen2.5 7B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-7B-Instruct",
+            "description": "Qwen2.5 7B Instruct model for text generation",
+            "sizeMB": 7263,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-01-12T02:10:10.000Z"
+          },
+          {
+            "id": "deepseek-ai_deepseek-r1-distill-qwen-7b",
+            "name": "DeepSeek R1 Distill Qwen 7B",
+            "huggingFaceId": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+            "description": "DeepSeek R1 Distill Qwen 7B model for text generation",
+            "sizeMB": 7263,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-02-24T03:32:20.000Z"
+          },
+          {
+            "id": "qwen_qwen2.5-7b",
+            "name": "Qwen2.5 7B",
+            "huggingFaceId": "Qwen/Qwen2.5-7B",
+            "description": "Qwen2.5 7B model for text generation",
+            "sizeMB": 7263,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-09-25T12:32:32.000Z"
+          }
+        ],
+        "xlarge": [
+          {
+            "id": "openai_gpt-oss-20b",
+            "name": "Gpt Oss 20b",
+            "huggingFaceId": "openai/gpt-oss-20b",
+            "description": "Gpt Oss 20b model for text generation",
+            "sizeMB": 20515,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-08-26T17:25:47.000Z"
+          },
+          {
+            "id": "qwen_qwen3-coder-30b-a3b-instruct",
+            "name": "Qwen3 Coder 30B A3B Instruct",
+            "huggingFaceId": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+            "description": "Qwen3 Coder 30B A3B Instruct model for text generation",
+            "sizeMB": 29118,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-12-03T08:05:17.000Z"
+          },
+          {
+            "id": "qwen_qwen3-32b",
+            "name": "Qwen3 32B",
+            "huggingFaceId": "Qwen/Qwen3-32B",
+            "description": "Qwen3 32B model for text generation",
+            "sizeMB": 31244,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-26T03:45:22.000Z"
+          },
+          {
+            "id": "deepseek-ai_deepseek-r1-distill-qwen-32b",
+            "name": "DeepSeek R1 Distill Qwen 32B",
+            "huggingFaceId": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+            "description": "DeepSeek R1 Distill Qwen 32B model for text generation",
+            "sizeMB": 31246,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-02-24T03:31:29.000Z"
+          },
+          {
+            "id": "qwen_qwen3-32b-fp8",
+            "name": "Qwen3 32B FP8",
+            "huggingFaceId": "Qwen/Qwen3-32B-FP8",
+            "description": "Qwen3 32B FP8 model for text generation",
+            "sizeMB": 31246,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-26T03:46:13.000Z"
           }
         ]
       },
@@ -1412,26 +1585,6 @@
       "code_assistant": {
         "lightweight": [
           {
-            "id": "qwen_qwen2.5-coder-0.5b-instruct",
-            "name": "Qwen2.5 Coder 0.5B Instruct",
-            "huggingFaceId": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
-            "description": "Lightweight code generation model for edge deployment",
-            "sizeMB": 500,
-            "accuracy": 0.72,
-            "environmentalScore": 1,
-            "specialization": "domain:code",
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "Transformers"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
             "id": "bigcode_starcoder2-3b",
             "name": "StarCoder2 3B",
             "huggingFaceId": "bigcode/starcoder2-3b",
@@ -1470,9 +1623,87 @@
               "Transformers"
             ],
             "lastUpdated": "2025-12-18"
+          },
+          {
+            "id": "qwen_qwen2.5-coder-0.5b-instruct",
+            "name": "Qwen2.5 Coder 0.5B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+            "description": "Lightweight code generation model for edge deployment",
+            "sizeMB": 500,
+            "accuracy": 0.72,
+            "environmentalScore": 1,
+            "specialization": "domain:code",
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "Transformers"
+            ],
+            "lastUpdated": "2025-12-18"
+          },
+          {
+            "id": "openai-community_gpt2",
+            "name": "Gpt2",
+            "huggingFaceId": "openai-community/gpt2",
+            "description": "Gpt2 model for text generation",
+            "sizeMB": 131,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T10:57:45.000Z"
+          },
+          {
+            "id": "distilbert_distilgpt2",
+            "name": "Distilgpt2",
+            "huggingFaceId": "distilbert/distilgpt2",
+            "description": "Distilgpt2 model for text generation",
+            "sizeMB": 84,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T11:09:53.000Z"
           }
         ],
         "standard": [
+          {
+            "id": "openai-community_gpt2-large",
+            "name": "Gpt2 Large",
+            "huggingFaceId": "openai-community/gpt2-large",
+            "description": "Gpt2 Large model for text generation",
+            "sizeMB": 774,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-02-19T11:11:02.000Z"
+          },
           {
             "id": "qwen_qwen2.5-coder-3b-instruct",
             "name": "Qwen2.5 Coder 3B Instruct",
@@ -1548,26 +1779,6 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-11-27"
-          },
-          {
-            "id": "qwen_qwen3-0.6b",
-            "name": "Qwen3 0.6B",
-            "huggingFaceId": "Qwen/Qwen3-0.6B",
-            "description": "Qwen3 0.6B model for text generation",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-11-27"
           }
         ],
         "advanced": [
@@ -1624,6 +1835,127 @@
               "Transformers"
             ],
             "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "mistralai_mistral-7b-instruct-v0.2",
+            "name": "Mistral 7B Instruct V0.2",
+            "huggingFaceId": "mistralai/Mistral-7B-Instruct-v0.2",
+            "description": "Mistral 7B Instruct V0.2 model for text generation",
+            "sizeMB": 6906,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-24T16:57:21.000Z"
+          },
+          {
+            "id": "qwen_qwen2.5-7b-instruct",
+            "name": "Qwen2.5 7B Instruct",
+            "huggingFaceId": "Qwen/Qwen2.5-7B-Instruct",
+            "description": "Qwen2.5 7B Instruct model for text generation",
+            "sizeMB": 7263,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-01-12T02:10:10.000Z"
+          }
+        ],
+        "xlarge": [
+          {
+            "id": "openai_gpt-oss-20b",
+            "name": "Gpt Oss 20b",
+            "huggingFaceId": "openai/gpt-oss-20b",
+            "description": "Gpt Oss 20b model for text generation",
+            "sizeMB": 20515,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-08-26T17:25:47.000Z"
+          },
+          {
+            "id": "qwen_qwen3-coder-30b-a3b-instruct",
+            "name": "Qwen3 Coder 30B A3B Instruct",
+            "huggingFaceId": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+            "description": "Qwen3 Coder 30B A3B Instruct model for text generation",
+            "sizeMB": 29118,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-12-03T08:05:17.000Z"
+          },
+          {
+            "id": "qwen_qwen3-32b",
+            "name": "Qwen3 32B",
+            "huggingFaceId": "Qwen/Qwen3-32B",
+            "description": "Qwen3 32B model for text generation",
+            "sizeMB": 31244,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-26T03:45:22.000Z"
+          },
+          {
+            "id": "deepseek-ai_deepseek-r1-distill-qwen-32b",
+            "name": "DeepSeek R1 Distill Qwen 32B",
+            "huggingFaceId": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+            "description": "DeepSeek R1 Distill Qwen 32B model for text generation",
+            "sizeMB": 31246,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-02-24T03:31:29.000Z"
+          },
+          {
+            "id": "qwen_qwen3-32b-fp8",
+            "name": "Qwen3 32B FP8",
+            "huggingFaceId": "Qwen/Qwen3-32B-FP8",
+            "description": "Qwen3 32B FP8 model for text generation",
+            "sizeMB": 31246,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-07-26T03:46:13.000Z"
           }
         ]
       }
@@ -1671,6 +2003,44 @@
             "lastUpdated": "2023-09-12"
           },
           {
+            "id": "kresnik_wav2vec2-large-xlsr-korean",
+            "name": "Wav2vec2 Large Xlsr Korean",
+            "huggingFaceId": "kresnik/wav2vec2-large-xlsr-korean",
+            "description": "Wav2vec2 Large Xlsr Korean model for automatic speech recognition",
+            "sizeMB": 302,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2023-07-03T14:55:40.000Z"
+          },
+          {
+            "id": "stefan-it_wav2vec2-large-xlsr-53-basque",
+            "name": "Wav2vec2 Large Xlsr 53 Basque",
+            "huggingFaceId": "stefan-it/wav2vec2-large-xlsr-53-basque",
+            "description": "Wav2vec2 Large Xlsr 53 Basque model for automatic speech recognition",
+            "sizeMB": 301,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2024-11-09T18:21:01.000Z"
+          },
+          {
             "id": "openai_whisper-small",
             "name": "Whisper Small",
             "huggingFaceId": "openai/whisper-small",
@@ -1690,47 +2060,6 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "openai_whisper-tiny",
-            "name": "Whisper Tiny",
-            "huggingFaceId": "openai/whisper-tiny",
-            "description": "Whisper Tiny model for automatic speech recognition",
-            "sizeMB": 8,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "pyannote_speaker-diarization-3.1",
-            "name": "Speaker Diarization 3.1",
-            "huggingFaceId": "pyannote/speaker-diarization-3.1",
-            "description": "Speaker Diarization 3.1 model for automatic speech recognition",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
           }
         ],
         "standard": [
@@ -1830,42 +2159,6 @@
         ],
         "advanced": [
           {
-            "id": "openai_whisper-large-v3-turbo",
-            "name": "Whisper Large V3 Turbo",
-            "huggingFaceId": "openai/whisper-large-v3-turbo",
-            "description": "Whisper Large V3 Turbo model for automatic speech recognition",
-            "sizeMB": 800,
-            "accuracy": 0.85,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "openai_whisper-large-v3",
-            "name": "Whisper Large V3",
-            "huggingFaceId": "openai/whisper-large-v3",
-            "description": "Whisper Large V3 model for automatic speech recognition",
-            "sizeMB": 800,
-            "accuracy": 0.85,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
             "id": "jonatasgrosman_wav2vec2-large-xlsr-53-russian",
             "name": "Wav2vec2 Large Xlsr 53 Russian",
             "huggingFaceId": "jonatasgrosman/wav2vec2-large-xlsr-53-russian",
@@ -1921,6 +2214,42 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
+          },
+          {
+            "id": "openai_whisper-large-v3-turbo",
+            "name": "Whisper Large V3 Turbo",
+            "huggingFaceId": "openai/whisper-large-v3-turbo",
+            "description": "Whisper Large V3 Turbo model for automatic speech recognition",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-10-12"
+          },
+          {
+            "id": "openai_whisper-large-v3",
+            "name": "Whisper Large V3",
+            "huggingFaceId": "openai/whisper-large-v3",
+            "description": "Whisper Large V3 model for automatic speech recognition",
+            "sizeMB": 800,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-10-12"
           }
         ]
       },
@@ -1964,50 +2293,52 @@
             "lastUpdated": "2025-11-13"
           },
           {
+            "id": "facebook_mms-tts-fin",
+            "name": "Mms Tts Fin",
+            "huggingFaceId": "facebook/mms-tts-fin",
+            "description": "Mms Tts Fin model for text to speech",
+            "sizeMB": 35,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2023-09-01T11:17:57.000Z"
+          },
+          {
+            "id": "facebook_mms-tts-eng",
+            "name": "Mms Tts Eng",
+            "huggingFaceId": "facebook/mms-tts-eng",
+            "description": "Mms Tts Eng model for text to speech",
+            "sizeMB": 35,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2023-09-06T13:32:25.000Z"
+          },
+          {
             "id": "coqui_xtts-v2",
             "name": "XTTS V2",
             "huggingFaceId": "coqui/XTTS-v2",
             "description": "XTTS V2 model for text to speech",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "hexgrad_kokoro-82m",
-            "name": "Kokoro 82M",
-            "huggingFaceId": "hexgrad/Kokoro-82M",
-            "description": "Kokoro 82M model for text to speech",
-            "sizeMB": 100,
-            "accuracy": 0.75,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "browser",
-              "mobile",
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "swivid_f5-tts",
-            "name": "F5 TTS",
-            "huggingFaceId": "SWivid/F5-TTS",
-            "description": "F5 TTS model for text to speech",
             "sizeMB": 100,
             "accuracy": 0.75,
             "environmentalScore": 1,
@@ -2138,6 +2469,54 @@
               "TensorFlow"
             ],
             "lastUpdated": "2025-10-12"
+          },
+          {
+            "id": "aoi-ot_vibevoice-large",
+            "name": "VibeVoice Large",
+            "huggingFaceId": "aoi-ot/VibeVoice-Large",
+            "description": "VibeVoice Large model for text to speech",
+            "sizeMB": 8911,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-09-25T00:32:21.000Z"
+          },
+          {
+            "id": "bosonai_higgs-audio-v2-generation-3b-base",
+            "name": "Higgs Audio V2 Generation 3B Base",
+            "huggingFaceId": "bosonai/higgs-audio-v2-generation-3B-base",
+            "description": "Higgs Audio V2 Generation 3B Base model for text to speech",
+            "sizeMB": 5504,
+            "accuracy": 0.78,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-07-28T20:17:03.000Z"
+          },
+          {
+            "id": "vibevoice_vibevoice-7b",
+            "name": "VibeVoice 7B",
+            "huggingFaceId": "vibevoice/VibeVoice-7B",
+            "description": "VibeVoice 7B model for text to speech",
+            "sizeMB": 8911,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-09-05T16:32:04.000Z"
           }
         ]
       }
@@ -2146,48 +2525,12 @@
       "forecasting": {
         "lightweight": [
           {
-            "id": "autogluon_chronos-bolt-base",
-            "name": "Chronos Bolt Base",
-            "huggingFaceId": "autogluon/chronos-bolt-base",
-            "description": "Chronos Bolt Base model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "amazon_chronos-bolt-base",
-            "name": "Chronos Bolt Base",
-            "huggingFaceId": "amazon/chronos-bolt-base",
-            "description": "Chronos Bolt Base model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-12-18"
-          },
-          {
-            "id": "datadog_toto-open-base-1.0",
-            "name": "Toto Open Base 1.0",
-            "huggingFaceId": "Datadog/Toto-Open-Base-1.0",
-            "description": "Toto Open Base 1.0 model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
+            "id": "autonlab_moment-1-large",
+            "name": "MOMENT 1 Large",
+            "huggingFaceId": "AutonLab/MOMENT-1-large",
+            "description": "MOMENT 1 Large model for time series forecasting",
+            "sizeMB": 330,
+            "accuracy": 0.85,
             "environmentalScore": 1,
             "deploymentOptions": [
               "edge",
@@ -2198,17 +2541,19 @@
               "PyTorch",
               "TensorFlow"
             ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2025-03-26T01:44:19.000Z"
           },
           {
-            "id": "amazon_chronos-t5-base",
-            "name": "Chronos T5 Base",
-            "huggingFaceId": "amazon/chronos-t5-base",
-            "description": "Chronos T5 Base model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
+            "id": "ibm-granite_granite-timeseries-ttm-r1",
+            "name": "Granite Timeseries Ttm R1",
+            "huggingFaceId": "ibm-granite/granite-timeseries-ttm-r1",
+            "description": "Granite Timeseries Ttm R1 model for time series forecasting",
+            "sizeMB": 1,
+            "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
+              "browser",
+              "mobile",
               "edge",
               "cloud",
               "server"
@@ -2216,17 +2561,19 @@
             "frameworks": [
               "PyTorch"
             ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2025-01-30T14:38:28.000Z"
           },
           {
-            "id": "neoquasar_kronos-tokenizer-base",
-            "name": "Kronos Tokenizer Base",
-            "huggingFaceId": "NeoQuasar/Kronos-Tokenizer-base",
-            "description": "Kronos Tokenizer Base model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
+            "id": "amazon_chronos-bolt-tiny",
+            "name": "Chronos Bolt Tiny",
+            "huggingFaceId": "amazon/chronos-bolt-tiny",
+            "description": "Chronos Bolt Tiny model for time series forecasting",
+            "sizeMB": 8,
+            "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
+              "browser",
+              "mobile",
               "edge",
               "cloud",
               "server"
@@ -2234,10 +2581,68 @@
             "frameworks": [
               "PyTorch"
             ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2025-11-21T12:54:42.000Z"
+          },
+          {
+            "id": "amazon_chronos-t5-tiny",
+            "name": "Chronos T5 Tiny",
+            "huggingFaceId": "amazon/chronos-t5-tiny",
+            "description": "Chronos T5 Tiny model for time series forecasting",
+            "sizeMB": 8,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-11-21T12:55:21.000Z"
+          },
+          {
+            "id": "autogluon_chronos-bolt-tiny",
+            "name": "Chronos Bolt Tiny",
+            "huggingFaceId": "autogluon/chronos-bolt-tiny",
+            "description": "Chronos Bolt Tiny model for time series forecasting",
+            "sizeMB": 8,
+            "accuracy": 0.75,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "browser",
+              "mobile",
+              "edge",
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch"
+            ],
+            "lastUpdated": "2025-10-30T09:20:02.000Z"
           }
         ],
         "standard": [
+          {
+            "id": "autogluon_chronos-t5-large",
+            "name": "Chronos T5 Large",
+            "huggingFaceId": "autogluon/chronos-t5-large",
+            "description": "Chronos T5 Large model for time series forecasting",
+            "sizeMB": 676,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-10-30T09:18:38.000Z"
+          },
           {
             "id": "amazon_chronos-t5-large",
             "name": "Chronos T5 Large",
@@ -2256,6 +2661,42 @@
             "lastUpdated": "2025-12-18"
           },
           {
+            "id": "salesforce_moirai-1.0-r-large",
+            "name": "Moirai 1.0 R Large",
+            "huggingFaceId": "Salesforce/moirai-1.0-R-large",
+            "description": "Moirai 1.0 R Large model for time series forecasting",
+            "sizeMB": 1500,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-01-21T09:07:59.000Z"
+          },
+          {
+            "id": "salesforce_moirai-1.1-r-large",
+            "name": "Moirai 1.1 R Large",
+            "huggingFaceId": "Salesforce/moirai-1.1-R-large",
+            "description": "Moirai 1.1 R Large model for time series forecasting",
+            "sizeMB": 1500,
+            "accuracy": 0.85,
+            "environmentalScore": 1,
+            "deploymentOptions": [
+              "cloud",
+              "server"
+            ],
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ],
+            "lastUpdated": "2025-01-21T09:21:06.000Z"
+          },
+          {
             "id": "chronos_t5_small",
             "name": "Chronos T5 Small",
             "huggingFaceId": "amazon/chronos-t5-small",
@@ -2270,64 +2711,6 @@
               "PyTorch"
             ],
             "lastUpdated": "2024-01-20"
-          },
-          {
-            "id": "datadog_toto-open-base-1.0",
-            "name": "Toto Open Base 1.0",
-            "huggingFaceId": "Datadog/Toto-Open-Base-1.0",
-            "description": "Toto Open Base 1.0 model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch",
-              "TensorFlow"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "autogluon_chronos-bolt-base",
-            "name": "Chronos Bolt Base",
-            "huggingFaceId": "autogluon/chronos-bolt-base",
-            "description": "Chronos Bolt Base model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-10-12"
-          },
-          {
-            "id": "thuml_sundial-base-128m",
-            "name": "Sundial Base 128m",
-            "huggingFaceId": "thuml/sundial-base-128m",
-            "description": "Sundial Base 128m model for time series forecasting",
-            "sizeMB": 150,
-            "accuracy": 0.78,
-            "environmentalScore": 1,
-            "deploymentOptions": [
-              "edge",
-              "cloud",
-              "cloud",
-              "server"
-            ],
-            "frameworks": [
-              "PyTorch"
-            ],
-            "lastUpdated": "2025-10-12"
           }
         ],
         "advanced": [

@@ -137,7 +137,8 @@ export class ModelAggregator {
         url.searchParams.set('pipeline_tag', category.task);
         url.searchParams.set('sort', 'downloads');
         url.searchParams.set('direction', '-1'); // Descending
-        url.searchParams.set('limit', '20'); // Reduced from 50 to avoid rate limits
+        url.searchParams.set('limit', '50'); // Fetch more to get diverse model sizes
+        url.searchParams.set('full', 'true'); // Get full model info including safetensors
 
         const headers = {};
         if (this.huggingFaceToken) {
@@ -387,29 +388,38 @@ export class ModelAggregator {
   // === Utility Methods ===
 
   /**
-   * Estimate model size in MB (simplified heuristic)
+   * Estimate model size in MB based on safetensors metadata or parameter count
    */
   estimateModelSize(rawModel, detailedInfo) {
-    // Try to get actual size from model info
-    if (detailedInfo && detailedInfo.safetensors) {
-      const totalSize = Object.values(detailedInfo.safetensors.metadata || {})
-        .reduce((sum, file) => sum + (file.size || 0), 0);
-      if (totalSize > 0) {
-        return Math.round(totalSize / (1024 * 1024)); // Convert to MB
-      }
+    // 1. Try safetensors total size (most accurate)
+    if (detailedInfo?.safetensors?.total) {
+      return Math.round(detailedInfo.safetensors.total / (1024 * 1024));
     }
 
-    // Fallback: estimate based on model name/type
+    // 2. Try safetensors parameters (estimate ~2 bytes per param for fp16)
+    if (detailedInfo?.safetensors?.parameters?.total) {
+      const params = detailedInfo.safetensors.parameters.total;
+      return Math.round((params * 2) / (1024 * 1024)); // fp16: 2 bytes per param
+    }
+
+    // 3. Try to extract parameter count from model name (e.g., "7b", "70b", "1.3b")
     const modelName = rawModel.id.toLowerCase();
+    const paramMatch = modelName.match(/(\d+\.?\d*)b(?:-|_|$)/);
+    if (paramMatch) {
+      const billions = parseFloat(paramMatch[1]);
+      // Estimate: ~2GB per billion params (fp16)
+      return Math.round(billions * 2000);
+    }
+
+    // 4. Fallback heuristics for non-LLM models
+    if (modelName.includes('nano') || modelName.includes('tiny')) return 50;
+    if (modelName.includes('small') || modelName.includes('mobile')) return 150;
+    if (modelName.includes('base') && !modelName.includes('large')) return 400;
+    if (modelName.includes('medium')) return 800;
+    if (modelName.includes('large') || modelName.includes('xl')) return 1500;
+    if (modelName.includes('xxl') || modelName.includes('huge')) return 5000;
     
-    if (modelName.includes('nano') || modelName.includes('tiny')) return 8;
-    if (modelName.includes('small') || modelName.includes('mobile')) return 25;
-    if (modelName.includes('base') && !modelName.includes('large')) return 150;
-    if (modelName.includes('medium')) return 400;
-    if (modelName.includes('large')) return 800;
-    if (modelName.includes('xl') || modelName.includes('xxl')) return 1500;
-    
-    return 100; // Default estimate
+    return 200; // Default estimate for unknown models
   }
 
   /**
