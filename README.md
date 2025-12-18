@@ -7,16 +7,13 @@ Open source assistant that helps discover AI models prioritizing environmental s
 ## Features
 
 - **Environmental Focus**: Prioritizes models with lower energy consumption
-- **Intelligent Classification**: Browser-based LLM with 95.2% accuracy across 7 categories
+- **Intelligent Classification**: MiniLM embedding classifier with 98.3% accuracy across 7 categories
 - **Accuracy Filtering**: Filter recommendations by minimum accuracy threshold (50-95%)
 - **Tiered Recommendations**: Lightweight → standard → advanced models
-- **Instant Results**: Client-side processing with fast response
+- **Instant Results**: Client-side processing with fast response (~0.3s)
 - **Accessible Interface**: Keyboard navigation and screen reader support
-- **Offline-Capable**: PWA with browser-based AI (no backend required)
-
-### ⚠️ Platform Limitations
-
-**Mobile Devices**: The application requires downloading a ~700 MB language model for classification, which may be too large for most mobile devices. Desktop or laptop computers with sufficient memory and bandwidth are recommended for optimal performance.
+- **PWA Installable**: Works on desktop & mobile, offline-capable after first visit
+- **Lightweight**: Only ~23MB model download (cached automatically)
 
 ## Live Demo
 
@@ -43,9 +40,9 @@ npm run test:llm  # Run LLM accuracy tests (~3min, local-only)
 
 **Test Commands:**
 - `npm test`: Fast unit and integration tests (23 tests, ~2s)
-- `npm run test:llm`: Full LLM classification tests (48 tests, ~3min)
-  - Downloads Llama 3.2 1B model (1.2GB) on first run
-  - Validates 95.2% classification accuracy
+- `npm run test:llm`: Full embedding classification tests (48 tests, ~3min)
+  - Downloads MiniLM model (~23MB) on first run
+  - Validates 98.3% classification accuracy
   - Local-only, NOT for CI/CD pipelines
 
 ## Environmental Impact
@@ -67,9 +64,9 @@ npm run build
 # Deploy contents of `dist/` directory to hosting provider
 ```
 
-**Requirements**: Node.js 18+, modern browsers (desktop recommended), ~40KB bundle
+**Requirements**: Node.js 18+, modern browsers (desktop & mobile), ~40KB bundle
 
-**Note**: Runtime requires downloading ~700 MB classification model - not recommended for mobile devices.
+**Runtime**: Downloads ~23MB classification model on first visit (cached in IndexedDB for offline use)
 
 ## Contributing
 
@@ -77,19 +74,20 @@ Help with model data, task categories, classification accuracy, UI/UX, performan
 
 ## Technical Details
 
-- **Classification**: Llama 3.2 1B-Instruct with enhanced pre-prompting (95.2% accuracy)
-- **Testing**: Comprehensive test suite with acceptance, integration, and LLM tests
-- **Interactive Testing**: `test-multi-category-sequential.html` for model evaluation
+- **Classification**: MiniLM sentence embeddings via transformers.js (98.3% accuracy)
+- **Model**: Xenova/all-MiniLM-L6-v2 (~23MB, cached in IndexedDB)
+- **Testing**: Comprehensive test suite with acceptance, integration, and embedding tests
+- **PWA**: Service worker with cache-first strategy, installable on all platforms
 
-See [ADR-0003](docs/adrs/adr-0003-browser-llm-classification-model-selection.md) for detailed model selection rationale and evaluation results.
+See [ADR-0003](docs/adrs/adr-0003-browser-llm-classification-model-selection.md) for detailed model selection rationale.
 
 ## Roadmap
 
 - ✅ MVP: Complete working application
-- ✅ Browser-based LLM classification: 95.2% accuracy across 7 categories
-- 🔄 v1.1: Accuracy filtering and quality control features
-- 🎯 v1.2: Ensemble classification and smart clarifications
-- 🚀 v2.0: Additional categories and advanced features
+- ✅ Browser-based embedding classification: 98.3% accuracy across 7 categories
+- ✅ PWA Support: Installable on desktop & mobile
+- 🔄 v1.1: Additional categories and enhanced filtering
+- 🚀 v2.0: Advanced comparison features
 
 ## License
 

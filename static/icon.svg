@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50"/>
+      <stop offset="100%" style="stop-color:#2E7D32"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="url(#bg)"/>
+  <!-- Leaf/Environmental Symbol -->
+  <path d="M256 96c-88 0-160 72-160 160s72 160 160 160 160-72 160-160S344 96 256 96zm0 280c-66 0-120-54-120-120s54-120 120-120 120 54 120 120-54 120-120 120z" fill="white" opacity="0.3"/>
+  <!-- AI Brain/Circuit Pattern -->
+  <circle cx="256" cy="256" r="80" fill="white"/>
+  <circle cx="256" cy="256" r="60" fill="url(#bg)"/>
+  <!-- Connection nodes -->
+  <circle cx="256" cy="176" r="16" fill="white"/>
+  <circle cx="176" cy="256" r="16" fill="white"/>
+  <circle cx="336" cy="256" r="16" fill="white"/>
+  <circle cx="256" cy="336" r="16" fill="white"/>
+  <!-- Connection lines -->
+  <line x1="256" y1="196" x2="256" y2="236" stroke="white" stroke-width="6"/>
+  <line x1="196" y1="256" x2="236" y2="256" stroke="white" stroke-width="6"/>
+  <line x1="276" y1="256" x2="316" y2="256" stroke="white" stroke-width="6"/>
+  <line x1="256" y1="276" x2="256" y2="316" stroke="white" stroke-width="6"/>
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="20" fill="white"/>
+</svg>

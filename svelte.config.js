@@ -9,7 +9,11 @@ const config = {
 			fallback: null,
 			precompress: false,
 			strict: true
-		})
+		}),
+		paths: {
+			// Base path for GitHub Pages deployment
+			base: process.env.NODE_ENV === 'production' ? '/ai-model-advisor' : ''
+		}
 	}
 };
 
