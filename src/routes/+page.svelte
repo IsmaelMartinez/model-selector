@@ -199,7 +199,9 @@
     showClarification = false;
     
     // Combine original description with additional details
-    const enhancedDescription = `${originalDescription}. ${additionalDetails}`;
+    // Normalize: remove trailing punctuation from original before adding separator
+    const normalizedOriginal = originalDescription.replace(/[.!?,;:]+$/, '').trim();
+    const enhancedDescription = `${normalizedOriginal}. ${additionalDetails}`;
     
     // Update the task description in the input field
     taskDescription = enhancedDescription;
@@ -435,7 +437,8 @@
           <strong>This is a starting point, not a final answer.</strong> 
           We point you toward models that might fit your task, but you decide what works best for your use case, 
           data, and constraints. Smaller models are often highly specialized and can match or outperform 
-          larger ones for specific tasks while using far fewer resources.
+          larger ones for specific tasks while using far fewer resources. When you refine your task description, 
+          we re-run the classifier, so recommendations may change as we better understand your needs.
         </p>
       </div>
     </div>
