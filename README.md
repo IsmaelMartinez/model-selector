@@ -1,100 +1,51 @@
 # AI Model Advisor
 
-**Find the most environmentally efficient AI models for your task**
+Helps you find AI models for your task, prioritizing smaller and more efficient options.
 
-Open source assistant that helps discover AI models prioritizing environmental sustainability with a "smaller is better" approach.
+**[Try it →](https://ismaelmartinez.github.io/ai-model-advisor)**
 
-> 💡 **This is a starting point, not a final answer.** We point you toward models that might fit your task, but you decide what works best for your use case, data, and constraints. Smaller models are often highly specialized and can match or outperform larger ones for specific tasks while using far fewer resources.
+## What it does
 
-## Features
+1. Describe your AI task in plain language
+2. Get model recommendations ranked by efficiency (smaller first)
+3. See environmental impact estimates
 
-- **Environmental Focus**: Prioritizes models with lower energy consumption
-- **Intelligent Classification**: MiniLM embedding classifier with 98.3% accuracy across 7 categories
-- **Accuracy Filtering**: Filter recommendations by minimum accuracy threshold (50-95%)
-- **Tiered Recommendations**: Lightweight → standard → advanced models
-- **Instant Results**: Client-side processing with fast response (~0.3s)
-- **Accessible Interface**: Keyboard navigation and screen reader support
-- **PWA Installable**: Works on desktop & mobile, offline-capable after first visit
-- **Lightweight**: Only ~23MB model download (cached automatically)
-
-## Live Demo
-
-[AI Model Advisor](https://ismaelmartinez.github.io/ai-model-advisor)
-
-## Supported Tasks
-
-Computer Vision, Natural Language Processing, Speech Processing, Time Series, Recommendation Systems, Reinforcement Learning, Data Preprocessing
+Supports: Computer Vision, NLP, Speech, Time Series, Recommendations, Reinforcement Learning, Data Preprocessing
 
 ## Development
 
 ```bash
-npm install     # Install dependencies
-npm run dev     # Start development server
-npm run build   # Build for production
+npm install
+npm run dev     # Start dev server
+npm run build   # Production build
+npm test        # Run tests
 ```
 
-### Testing
+## How it works
 
-```bash
-npm test          # Run fast tests (~2s, CI-friendly)
-npm run test:llm  # Run LLM accuracy tests (~3min, local-only)
-```
+- Runs entirely in the browser (no backend)
+- Uses MiniLM embeddings (~23MB, downloaded on first use) to classify your task
+- Falls back to keyword matching if embeddings aren't available
+- PWA - installable and works offline after first visit
 
-**Test Commands:**
-- `npm test`: Fast unit and integration tests (23 tests, ~2s)
-- `npm run test:llm`: Full embedding classification tests (48 tests, ~3min)
-  - Downloads MiniLM model (~23MB) on first run
-  - Validates 98.3% classification accuracy
-  - Local-only, NOT for CI/CD pipelines
+## Environmental scoring
 
-## Environmental Impact
-
-- **Low Impact**: <0.1 kWh/day
-- **Medium Impact**: 0.1-1.0 kWh/day  
-- **High Impact**: >1.0 kWh/day
-
-Performance: ~40KB gzipped, <1s load time
+| Score | Size | Typical use |
+|-------|------|-------------|
+| Low | ≤500MB | Edge/mobile/browser |
+| Medium | ≤4GB | Cloud, quantized models |
+| High | >4GB | Dedicated GPU |
 
 ## Deployment
 
-### Automated
-GitHub Pages auto-deploys from main branch via GitHub Actions.
+Automatically deploys to GitHub Pages on push to main.
 
-### Manual
-```bash
-npm run build
-# Deploy contents of `dist/` directory to hosting provider
-```
+Manual: `npm run build` and deploy the `dist/` folder.
 
-**Requirements**: Node.js 18+, modern browsers (desktop & mobile), ~40KB bundle
+## Documentation
 
-**Runtime**: Downloads ~23MB classification model on first visit (cached in IndexedDB for offline use)
-
-## Contributing
-
-Help with model data, task categories, classification accuracy, UI/UX, performance, or documentation.
-
-## Technical Details
-
-- **Classification**: MiniLM sentence embeddings via transformers.js (98.3% accuracy)
-- **Model**: Xenova/all-MiniLM-L6-v2 (~23MB, cached in IndexedDB)
-- **Testing**: Comprehensive test suite with acceptance, integration, and embedding tests
-- **PWA**: Service worker with cache-first strategy, installable on all platforms
-
-See [ADR-0003](docs/adrs/adr-0003-browser-llm-classification-model-selection.md) for detailed model selection rationale.
-
-## Roadmap
-
-- ✅ MVP: Complete working application
-- ✅ Browser-based embedding classification: 98.3% accuracy across 7 categories
-- ✅ PWA Support: Installable on desktop & mobile
-- 🔄 v1.1: Additional categories and enhanced filtering
-- 🚀 v2.0: Advanced comparison features
+See [`docs/`](docs/) for technical details.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details
-
----
-
-**Building sustainable AI, one model at a time**
+MIT

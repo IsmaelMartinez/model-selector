@@ -1,66 +1,51 @@
-# Model Curation Process
+# Model Curation
 
-The model dataset (`src/lib/data/models.json`) contains 200+ curated AI models organized by task and tier. Models are automatically aggregated from Hugging Face Hub daily (2 AM UTC).
+Models in `src/lib/data/models.json` are curated from Hugging Face and organized by task and size tier.
 
 ## Tier System
 
 | Tier | Size | Use Cases |
 |------|------|-----------|
-| **Lightweight** | ≤500MB | Edge, mobile, browser |
-| **Standard** | ≤4GB | Cloud APIs, quantized LLMs |
-| **Advanced** | ≤20GB | Full-precision 7B+ models |
-| **Extra Large** | No limit | 70B+ models, research |
-
-## Specialization
-
-Smaller models tend to be highly specialized. The `specialization` field tracks this:
-
-| Type | Example |
-|------|---------|
-| Task-Specific | `task:tables`, `task:signatures` |
-| Domain-Specific | `domain:finance`, `domain:medical` |
-| Language-Specific | `language:english` |
-
-See [model-specialization-curation.md](./model-specialization-curation.md) for the curation guide.
+| Lightweight | ≤500MB | Edge, mobile, browser |
+| Standard | ≤4GB | Cloud APIs, quantized LLMs |
+| Advanced | ≤20GB | Full-precision 7B+ models |
+| Extra Large | No limit | 70B+ models |
 
 ## Automated Updates
 
-Daily workflow (`.github/workflows/models-updater.yml`):
+Daily at 2 AM UTC via GitHub Actions. See [auto-updates.md](./auto-updates.md).
 
-1. Fetches models from Hugging Face API (sorted by downloads)
-2. Organizes by task category and tier
-3. Calculates environmental scores
-4. **Preserves curated `specialization` tags**
-5. Creates PR for human review
+## Specialization Tags
 
-### Manual Commands
+Smaller models are often specialized. Tag them during review:
 
-```bash
-npm run update-models          # Actual update
-npm run update-models:dry-run  # Preview only
-```
+| Type | Example |
+|------|---------|
+| Task-specific | `task:tables`, `task:signatures` |
+| Domain-specific | `domain:finance`, `domain:medical` |
+| Language-specific | `language:english` |
 
-## Review Checklist
+### How to Tag
 
 When reviewing automated PRs:
 
-- [ ] New models are relevant and high-quality
-- [ ] **Add specialization tags** to new specialized models
-- [ ] No critical models removed
-- [ ] Bundle size <2MB
+1. Check model card on Hugging Face
+2. Determine if model is specialized or general
+3. Add `"specialization": "type:value"` if specialized
+
+### Examples
+
+| Model | Tag |
+|-------|-----|
+| `microsoft/table-transformer-detection` | `task:tables` |
+| `ProsusAI/finbert` | `domain:finance` |
+| `openai/whisper-small.en` | `language:english` |
+| `google/vit-base-patch16-224` | `general` |
 
 ## Environmental Scoring
 
-- **Score 1**: ≤500MB, edge-friendly
-- **Score 2**: ≤4GB, cloud deployment
-- **Score 3**: >4GB, specialized hardware
+- **Score 1**: ≤500MB
+- **Score 2**: ≤4GB
+- **Score 3**: >4GB
 
-## Related Docs
-
-- [Auto-Update Strategy](./auto-update-strategy.md)
-- [Specialization Curation](./model-specialization-curation.md)
-- [Data Structure](./data-structure.md)
-- [Environmental Methodology](./environmental-methodology.md)
-
----
-*Last Updated: December 2025 | Automation: Daily at 2 AM UTC*
+See [environmental-methodology.md](./environmental-methodology.md) for details.

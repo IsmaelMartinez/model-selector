@@ -252,13 +252,8 @@ export class ModelAggregator {
     // Extract accuracy if available (simplified)
     const accuracy = this.extractAccuracy(rawModel, detailedInfo);
     
-    // Calculate environmental score using comprehensive system
-    const environmentalScore = await this.calculateEnvironmentalScore(sizeMB, {
-      sizeMB,
-      name: this.extractModelName(rawModel),
-      description: this.extractDescription(rawModel, detailedInfo),
-      deploymentOptions: this.determineDeploymentOptions(sizeMB, rawModel)
-    });
+    // Calculate environmental score based on size
+    const environmentalScore = this.calculateEnvironmentalScore(sizeMB);
     
     // Determine deployment options based on size and model type
     const deploymentOptions = this.determineDeploymentOptions(sizeMB, rawModel);
@@ -434,27 +429,16 @@ export class ModelAggregator {
   }
 
   /**
-   * Calculate environmental impact score using comprehensive calculator
+   * Calculate environmental impact score based on model size
+   * Simple heuristic: smaller models = lower environmental impact
+   * 
+   * @param {number} sizeMB - Model size in megabytes
+   * @returns {number} Environmental score (1-3)
    */
-  async calculateEnvironmentalScore(sizeMB, model = null) {
-    // Use the comprehensive environmental calculator if available
-    try {
-      // Import dynamically to avoid circular dependencies
-      const { environmentalCalculator } = await import('../environmental/EnvironmentalImpactCalculator.js');
-
-      const testModel = model || {
-        sizeMB,
-        deploymentOptions: sizeMB < 100 ? ['browser', 'edge'] : sizeMB < 500 ? ['cloud'] : ['server']
-      };
-
-      const impact = environmentalCalculator.calculateImpact(testModel);
-      return impact.environmentalScore;
-    } catch (error) {
-      // Fallback to simple size-based calculation
-      if (sizeMB <= 500) return 1; // Low impact (lightweight)
-      if (sizeMB <= 4000) return 2; // Medium impact (standard)
-      return 3; // High impact (advanced)
-    }
+  calculateEnvironmentalScore(sizeMB) {
+    if (sizeMB <= 500) return 1;   // Low impact (lightweight)
+    if (sizeMB <= 4000) return 2;  // Medium impact (standard)
+    return 3;                       // High impact (advanced/xlarge)
   }
 
   /**

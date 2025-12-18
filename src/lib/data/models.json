@@ -207,7 +207,7 @@
             "description": "Transformer architecture applied to image classification",
             "sizeMB": 330,
             "accuracy": 0.841,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -224,7 +224,7 @@
             "description": "Popular deep residual network for image classification",
             "sizeMB": 98,
             "accuracy": 0.761,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -244,7 +244,7 @@
             "description": "Large, high-accuracy CNN for demanding applications",
             "sizeMB": 256,
             "accuracy": 0.843,
-            "environmentalScore": 3,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -261,7 +261,7 @@
             "description": "Vit Large Patch16 384 model for image classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -494,7 +494,7 @@
             "description": "Dfine Xlarge Obj365 model for object detection",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -512,7 +512,7 @@
             "description": "VLM FO1 Qwen2.5 VL 3B V01 model for object detection",
             "sizeMB": 4254,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -528,7 +528,7 @@
             "description": "High-accuracy object detection for production use",
             "sizeMB": 136.7,
             "accuracy": 0.537,
-            "environmentalScore": 3,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -568,7 +568,7 @@
             "description": "Semantic segmentation with atrous convolution",
             "sizeMB": 158,
             "accuracy": 0.867,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -587,7 +587,7 @@
             "description": "High-accuracy semantic segmentation",
             "sizeMB": 233,
             "accuracy": 0.892,
-            "environmentalScore": 3,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -730,7 +730,7 @@
             "description": "Original BERT model for general text understanding",
             "sizeMB": 420,
             "accuracy": 0.84,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -747,7 +747,7 @@
             "description": "Robustly optimized BERT with improved training",
             "sizeMB": 478,
             "accuracy": 0.876,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -764,7 +764,7 @@
             "description": "Deberta Xlarge Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -782,7 +782,7 @@
             "description": "ToxDect Roberta Large model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -802,7 +802,7 @@
             "description": "Deberta Large Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -820,7 +820,7 @@
             "description": "ToxDect Roberta Large model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "specialization": "task:toxicity",
             "deploymentOptions": [
               "cloud",
@@ -839,7 +839,7 @@
             "description": "Deberta Xlarge Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -857,7 +857,7 @@
             "description": "Roberta Large Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -875,7 +875,7 @@
             "description": "Large BERT model for highest accuracy requirements",
             "sizeMB": 1340,
             "accuracy": 0.864,
-            "environmentalScore": 3,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud"
             ],
@@ -1056,7 +1056,7 @@
             "description": "Deberta Xlarge Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1074,7 +1074,7 @@
             "description": "ToxDect Roberta Large model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1094,7 +1094,7 @@
             "description": "Deberta Large Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1112,7 +1112,7 @@
             "description": "ToxDect Roberta Large model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "specialization": "task:toxicity",
             "deploymentOptions": [
               "cloud",
@@ -1131,7 +1131,7 @@
             "description": "Deberta Xlarge Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1149,7 +1149,7 @@
             "description": "Roberta Large Mnli model for text classification",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1278,7 +1278,7 @@
             "description": "Gpt2 Large model for text generation",
             "sizeMB": 774,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1375,7 +1375,7 @@
             "description": "Large GPT-2 for high-quality text generation",
             "sizeMB": 3160,
             "accuracy": 0.87,
-            "environmentalScore": 3,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud"
             ],
@@ -1392,7 +1392,7 @@
             "description": "Mistral 7B Instruct V0.2 model for text generation",
             "sizeMB": 6906,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1409,7 +1409,7 @@
             "description": "Qwen2.5 7B Instruct model for text generation",
             "sizeMB": 7263,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1426,7 +1426,7 @@
             "description": "DeepSeek R1 Distill Qwen 7B model for text generation",
             "sizeMB": 7263,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1443,7 +1443,7 @@
             "description": "Qwen2.5 7B model for text generation",
             "sizeMB": 7263,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1462,7 +1462,7 @@
             "description": "Gpt Oss 20b model for text generation",
             "sizeMB": 20515,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1479,7 +1479,7 @@
             "description": "Qwen3 Coder 30B A3B Instruct model for text generation",
             "sizeMB": 29118,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1496,7 +1496,7 @@
             "description": "Qwen3 32B model for text generation",
             "sizeMB": 31244,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1513,7 +1513,7 @@
             "description": "DeepSeek R1 Distill Qwen 32B model for text generation",
             "sizeMB": 31246,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1530,7 +1530,7 @@
             "description": "Qwen3 32B FP8 model for text generation",
             "sizeMB": 31246,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1693,7 +1693,7 @@
             "description": "Gpt2 Large model for text generation",
             "sizeMB": 774,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1711,7 +1711,7 @@
             "description": "Balanced code generation model with good accuracy",
             "sizeMB": 6000,
             "accuracy": 0.78,
-            "environmentalScore": 2,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1729,7 +1729,7 @@
             "description": "Mid-size code model for complex code tasks",
             "sizeMB": 13400,
             "accuracy": 0.82,
-            "environmentalScore": 2,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -1843,7 +1843,7 @@
             "description": "Mistral 7B Instruct V0.2 model for text generation",
             "sizeMB": 6906,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1860,7 +1860,7 @@
             "description": "Qwen2.5 7B Instruct model for text generation",
             "sizeMB": 7263,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1879,7 +1879,7 @@
             "description": "Gpt Oss 20b model for text generation",
             "sizeMB": 20515,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1896,7 +1896,7 @@
             "description": "Qwen3 Coder 30B A3B Instruct model for text generation",
             "sizeMB": 29118,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1913,7 +1913,7 @@
             "description": "Qwen3 32B model for text generation",
             "sizeMB": 31244,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1930,7 +1930,7 @@
             "description": "DeepSeek R1 Distill Qwen 32B model for text generation",
             "sizeMB": 31246,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -1947,7 +1947,7 @@
             "description": "Qwen3 32B FP8 model for text generation",
             "sizeMB": 31246,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -2127,7 +2127,7 @@
             "description": "Wav2vec2 Large Xlsr 53 Chinese Zh Cn model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2145,7 +2145,7 @@
             "description": "Whisper Large V3 model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2165,7 +2165,7 @@
             "description": "Wav2vec2 Large Xlsr 53 Russian model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "specialization": "language:russian",
             "deploymentOptions": [
               "cloud",
@@ -2184,7 +2184,7 @@
             "description": "Wav2vec2 Large Xlsr 53 Portuguese model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "specialization": "language:portuguese",
             "deploymentOptions": [
               "cloud",
@@ -2203,7 +2203,7 @@
             "description": "Wav2vec2 Large Xlsr 53 Dutch model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "specialization": "language:dutch",
             "deploymentOptions": [
               "cloud",
@@ -2222,7 +2222,7 @@
             "description": "Whisper Large V3 Turbo model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2240,7 +2240,7 @@
             "description": "Whisper Large V3 model for automatic speech recognition",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2262,7 +2262,7 @@
             "description": "Unified speech and text pre-training for TTS",
             "sizeMB": 920,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2363,7 +2363,7 @@
             "description": "Parler Tts Large V1 model for text to speech",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2459,7 +2459,7 @@
             "description": "Parler Tts Large V1 model for text to speech",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2477,7 +2477,7 @@
             "description": "VibeVoice Large model for text to speech",
             "sizeMB": 8911,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -2493,7 +2493,7 @@
             "description": "Higgs Audio V2 Generation 3B Base model for text to speech",
             "sizeMB": 5504,
             "accuracy": 0.78,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -2509,7 +2509,7 @@
             "description": "VibeVoice 7B model for text to speech",
             "sizeMB": 8911,
             "accuracy": 0.75,
-            "environmentalScore": 1,
+            "environmentalScore": 3,
             "deploymentOptions": [
               "server"
             ],
@@ -2632,7 +2632,7 @@
             "description": "Chronos T5 Large model for time series forecasting",
             "sizeMB": 676,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2650,7 +2650,7 @@
             "description": "Chronos T5 Large model for time series forecasting",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2667,7 +2667,7 @@
             "description": "Moirai 1.0 R Large model for time series forecasting",
             "sizeMB": 1500,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2685,7 +2685,7 @@
             "description": "Moirai 1.1 R Large model for time series forecasting",
             "sizeMB": 1500,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2703,7 +2703,7 @@
             "description": "Balanced time series forecasting with good accuracy",
             "sizeMB": 42,
             "accuracy": 0.78,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2721,7 +2721,7 @@
             "description": "High-accuracy time series forecasting",
             "sizeMB": 200,
             "accuracy": 0.83,
-            "environmentalScore": 3,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2737,7 +2737,7 @@
             "description": "Chronos T5 Large model for time series forecasting",
             "sizeMB": 800,
             "accuracy": 0.85,
-            "environmentalScore": 1,
+            "environmentalScore": 2,
             "deploymentOptions": [
               "cloud",
               "server"
@@ -2778,7 +2778,7 @@
             "description": "Deep learning approach for anomaly detection",
             "sizeMB": 45.2,
             "accuracy": 0.84,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2821,7 +2821,7 @@
             "description": "Deep learning approach to collaborative filtering",
             "sizeMB": 152,
             "accuracy": 0.82,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2866,7 +2866,7 @@
             "description": "Deep reinforcement learning for Atari games",
             "sizeMB": 89.4,
             "accuracy": 0.85,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2885,7 +2885,7 @@
             "description": "Advanced game playing with Monte Carlo Tree Search",
             "sizeMB": 445,
             "accuracy": 0.95,
-            "environmentalScore": 3,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "cloud"
             ],
@@ -2905,7 +2905,7 @@
             "description": "Continuous control for robotic applications",
             "sizeMB": 67.8,
             "accuracy": 0.79,
-            "environmentalScore": 2,
+            "environmentalScore": 1,
             "deploymentOptions": [
               "browser",
               "cloud"

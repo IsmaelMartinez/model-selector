@@ -1,7 +1,9 @@
 # ADR-0007: Ensemble Classification Mode
 
 ## Status
-Accepted
+**SUPERSEDED** by [ADR-0008](adr-0008-embedding-similarity-classification.md)
+
+> ⚠️ **This ADR is no longer in use.** The 3-agent LLM ensemble has been replaced by MiniLM k-NN voting (top-5 reference examples vote for category). See ADR-0008 for the current implementation.
 
 ## Date
 2025-11-16
@@ -112,5 +114,27 @@ Test coverage in `tests/ensemble-validation.test.js`
 ---
 
 **Decision made**: 2025-11-16
-**Status**: Accepted - Implemented
+**Original Status**: Accepted - Implemented
+**Current Status**: ⚠️ SUPERSEDED by ADR-0008 (2025-12-17)
+
+---
+
+## Supersession Notice
+
+This ADR was superseded on 2025-12-17 by [ADR-0008: Embedding Similarity Classification](adr-0008-embedding-similarity-classification.md).
+
+**Reason for supersession:**
+- The LLM classifier (ADR-0003) this ensemble was built on has been replaced
+- k-NN voting with MiniLM achieves the same goal (higher accuracy via consensus) with:
+  - Single model call instead of 3 LLM calls
+  - ~23MB model vs ~500MB
+  - ~2ms inference vs ~2s ensemble
+
+**Key difference:**
+| Approach | How voting works |
+|----------|------------------|
+| **Old (This ADR)** | 3 LLM calls @ different temperatures → majority vote |
+| **New (ADR-0008)** | 1 embedding call → top-5 reference examples vote by category |
+
+The `LLMTaskClassifier.classifyEnsemble()` method is retained but unused.
 
