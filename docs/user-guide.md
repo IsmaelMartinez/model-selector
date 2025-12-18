@@ -1,8 +1,8 @@
-# AI Model Selector - User Guide
+# AI Model Advisor - User Guide
 
 ## Overview
 
-The AI Model Selector helps you find the most environmentally efficient AI models for your specific tasks. Our recommendations prioritize "smaller is better" - models that use less energy while maintaining good performance.
+The AI Model Advisor helps you find the most environmentally efficient AI models for your specific tasks. Our recommendations prioritize "smaller is better" - models that use less energy while maintaining good performance.
 
 ## How to Use
 
@@ -31,7 +31,7 @@ The system will show you up to 3 model recommendations, ranked by environmental 
 - **Size**: Model file size (smaller = more efficient)
 - **Accuracy**: Performance score (higher = better)
 - **Environmental Impact**: 🌱 Low, ⚡ Medium, 🔥 High
-- **Tier**: 🪶 Lightweight, ⚖️ Standard, 🚀 Advanced
+- **Tier**: 🪶 Lightweight (≤500MB), ⚖️ Standard (≤4GB), 🚀 Advanced (≤20GB), 🏢 Extra Large (>20GB)
 - **Top Pick**: ⭐ Most environmentally efficient option
 
 **Deployment Options**:
@@ -86,6 +86,38 @@ The system will show you up to 3 model recommendations, ranked by environmental 
 - **Data Cleaning**: Remove errors and inconsistencies
 - **Feature Engineering**: Create meaningful data features
 
+## Model Specialization Disclaimer
+
+### Important: Smaller Models Are Often Task-Specialized
+
+Our "eco-first" approach prioritizes lightweight models for their environmental efficiency. However, **smaller models are frequently specialized for narrow, specific tasks** rather than general-purpose use.
+
+### What This Means for You
+
+| Specialized Model | What It Does | What It Does NOT Do |
+|-------------------|--------------|---------------------|
+| Table Transformer | Detect tables in documents | Detect other objects |
+| FinBERT | Financial sentiment analysis | General sentiment analysis |
+| Whisper-small.en | English speech recognition | Multilingual ASR |
+| Signature Detector | Detect signatures | General object detection |
+| Face Expression | Classify facial expressions | Face identification or age |
+
+### Types of Specialization
+
+1. **Task-Specialized**: Models trained for one specific task (e.g., table detection only)
+2. **Domain-Specialized**: Models trained on specific industries (e.g., finance, medical)
+3. **Language-Specialized**: Models supporting only one language (e.g., English-only ASR)
+4. **Platform-Optimized**: Models designed for specific deployment (e.g., mobile-only)
+
+### Recommendations
+
+- **Verify model descriptions** match your exact use case before deploying
+- **Test on your data** — specialized models may fail on inputs outside their training domain
+- **Consider Standard/Advanced tiers** if you need general-purpose capabilities
+- **Check language support** for NLP and speech models
+
+For detailed analysis, see [Model Specialization Patterns Research](research/model-specialization-patterns.md).
+
 ## Environmental Impact
 
 ### Why It Matters
@@ -95,9 +127,9 @@ The system will show you up to 3 model recommendations, ranked by environmental 
 - **Accessibility**: Lighter models run on more devices
 
 ### Impact Levels
-- **🌱 Low Impact**: <0.1g CO2 per inference, <5W power
-- **⚡ Medium Impact**: 0.1-1.0g CO2 per inference, 5-50W power  
-- **🔥 High Impact**: >1.0g CO2 per inference, >50W power
+- **🌱 Low Impact** (Lightweight ≤500MB): Edge/mobile deployable, minimal power
+- **⚡ Medium Impact** (Standard ≤4GB): Cloud/server, includes quantized LLMs
+- **🔥 High Impact** (Advanced ≤20GB): Dedicated GPU, full-precision 7B+ models
 
 ### Our Approach
 We prioritize models that achieve good results with minimal environmental impact. This "smaller is better" philosophy helps you build sustainable AI applications.

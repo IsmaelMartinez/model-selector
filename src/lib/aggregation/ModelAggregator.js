@@ -292,21 +292,21 @@ export class ModelAggregator {
   organizeIntoTiers(processedModels) {
     const tiered = {
       computer_vision: {
-        image_classification: { lightweight: [], standard: [], advanced: [] },
-        object_detection: { lightweight: [], standard: [], advanced: [] }
+        image_classification: { lightweight: [], standard: [], advanced: [], xlarge: [] },
+        object_detection: { lightweight: [], standard: [], advanced: [], xlarge: [] }
       },
       natural_language_processing: {
-        text_classification: { lightweight: [], standard: [], advanced: [] },
-        sentiment_analysis: { lightweight: [], standard: [], advanced: [] },
-        text_generation: { lightweight: [], standard: [], advanced: [] },
-        code_assistant: { lightweight: [], standard: [], advanced: [] }
+        text_classification: { lightweight: [], standard: [], advanced: [], xlarge: [] },
+        sentiment_analysis: { lightweight: [], standard: [], advanced: [], xlarge: [] },
+        text_generation: { lightweight: [], standard: [], advanced: [], xlarge: [] },
+        code_assistant: { lightweight: [], standard: [], advanced: [], xlarge: [] }
       },
       speech_processing: {
-        speech_recognition: { lightweight: [], standard: [], advanced: [] },
-        text_to_speech: { lightweight: [], standard: [], advanced: [] }
+        speech_recognition: { lightweight: [], standard: [], advanced: [], xlarge: [] },
+        text_to_speech: { lightweight: [], standard: [], advanced: [], xlarge: [] }
       },
       time_series: {
-        forecasting: { lightweight: [], standard: [], advanced: [] }
+        forecasting: { lightweight: [], standard: [], advanced: [], xlarge: [] }
       }
     };
 
@@ -357,12 +357,16 @@ export class ModelAggregator {
           if (models.length > 0) {
             // Keep best models from existing + new (limit per tier)
             const existing = merged.models[category][subcategory][tier] || [];
-            const combined = [...existing, ...models];
             
-            // Remove duplicates based on huggingFaceId
+            // Preserve curated fields (specialization) on new models
+            const modelsWithCuratedFields = models.map(m => this.preserveCuratedFields(m, existing));
+            
+            const combined = [...existing, ...modelsWithCuratedFields];
+            
+            // Remove duplicates based on huggingFaceId (preserves curated fields)
             const deduped = this.deduplicateModels(combined);
             
-            // Sort and limit
+            // Sort and limit - prioritize models with curated specialization
             const sorted = this.sortModelsByRelevance(deduped);
             merged.models[category][subcategory][tier] = sorted.slice(0, 5); // Max 5 per tier
             
@@ -410,11 +414,13 @@ export class ModelAggregator {
 
   /**
    * Determine performance tier based on size
+   * Tiers: lightweight (≤500MB), standard (≤4GB), advanced (≤20GB), xlarge (>20GB)
    */
   determineTier(sizeMB) {
-    if (sizeMB < 100) return 'lightweight';
-    if (sizeMB < 500) return 'standard';
-    return 'advanced';
+    if (sizeMB <= 500) return 'lightweight';
+    if (sizeMB <= 4000) return 'standard';
+    if (sizeMB <= 20000) return 'advanced';
+    return 'xlarge';
   }
 
   /**
@@ -435,31 +441,32 @@ export class ModelAggregator {
       return impact.environmentalScore;
     } catch (error) {
       // Fallback to simple size-based calculation
-      if (sizeMB < 100) return 1; // Low impact
-      if (sizeMB < 500) return 2; // Medium impact
-      return 3; // High impact
+      if (sizeMB <= 500) return 1; // Low impact (lightweight)
+      if (sizeMB <= 4000) return 2; // Medium impact (standard)
+      return 3; // High impact (advanced)
     }
   }
 
   /**
    * Determine deployment options based on model characteristics
+   * Updated for new tier thresholds: lightweight (≤500MB), standard (≤4GB), advanced (≤20GB)
    */
   determineDeploymentOptions(sizeMB, rawModel) {
     const options = [];
     
-    if (sizeMB < 50) {
+    if (sizeMB <= 100) {
       options.push('browser', 'mobile', 'edge');
-    } else if (sizeMB < 200) {
+    } else if (sizeMB <= 500) {
       options.push('edge', 'cloud');
     }
     
-    if (sizeMB < 1000) {
+    if (sizeMB <= 4000) {
       options.push('cloud', 'server');
     } else {
       options.push('server');
     }
     
-    return options;
+    return [...new Set(options)]; // Remove duplicates
   }
 
   /**
@@ -597,30 +604,65 @@ export class ModelAggregator {
 
   /**
    * Remove duplicate models based on huggingFaceId
+   * Preserves curated fields (specialization) from existing models
    */
   deduplicateModels(models) {
-    const seen = new Set();
-    return models.filter(model => {
+    const seen = new Map(); // Map huggingFaceId -> model with curated fields
+    const result = [];
+    
+    for (const model of models) {
       if (seen.has(model.huggingFaceId)) {
-        return false;
+        // Model already exists - preserve curated fields from first occurrence
+        const existing = seen.get(model.huggingFaceId);
+        
+        // If the new model has updated data but existing has specialization, merge them
+        if (existing.specialization && !model.specialization) {
+          // Keep existing specialization on the model we already have
+          continue;
+        }
+      } else {
+        seen.set(model.huggingFaceId, model);
+        result.push(model);
       }
-      seen.add(model.huggingFaceId);
-      return true;
-    });
+    }
+    
+    return result;
   }
 
   /**
-   * Sort models by relevance (downloads, accuracy, size)
+   * Preserve curated fields when merging models
+   * Curated fields: specialization (manually assigned based on research)
+   */
+  preserveCuratedFields(newModel, existingModels) {
+    const existing = existingModels.find(m => m.huggingFaceId === newModel.huggingFaceId);
+    if (existing) {
+      // Preserve manually curated fields
+      if (existing.specialization && !newModel.specialization) {
+        newModel.specialization = existing.specialization;
+      }
+    }
+    return newModel;
+  }
+
+  /**
+   * Sort models by relevance (curated status, accuracy, size, downloads)
    */
   sortModelsByRelevance(models) {
     return models.sort((a, b) => {
-      // Prioritize accuracy, then smaller size, then downloads
+      // First: prioritize manually curated models (have specialization field)
+      const aCurated = a.specialization ? 1 : 0;
+      const bCurated = b.specialization ? 1 : 0;
+      if (aCurated !== bCurated) return bCurated - aCurated;
+      
+      // Then: prioritize accuracy
       const accuracyDiff = (b.accuracy || 0) - (a.accuracy || 0);
       if (Math.abs(accuracyDiff) > 0.05) return accuracyDiff;
       
-      const sizeDiff = a.sizeMB - b.sizeMB; // Smaller is better
+      // Then: smaller size is better
+      const sizeDiff = a.sizeMB - b.sizeMB;
       if (Math.abs(sizeDiff) > 50) return sizeDiff;
       
+      // Finally: more downloads
       return (b.downloads || 0) - (a.downloads || 0);
     });
   }
@@ -673,23 +715,30 @@ export class ModelAggregator {
       tiers: {
         lightweight: {
           label: "Lightweight Models",
-          description: "Small, efficient models optimized for minimal resource usage",
+          description: "Small, efficient models optimized for edge deployment and mobile devices",
           priority: 1,
-          maxSizeMB: 100,
+          maxSizeMB: 500,
           environmentalScore: 1
         },
         standard: {
           label: "Standard Models", 
-          description: "Balanced models offering good performance with reasonable resource usage",
+          description: "Production-ready models including quantized LLMs, suitable for most hardware",
           priority: 2,
-          maxSizeMB: 500,
+          maxSizeMB: 4000,
           environmentalScore: 2
         },
         advanced: {
           label: "Advanced Models",
-          description: "Large, high-performance models for complex tasks",
+          description: "Large models including full-precision 7B+ LLMs for maximum capability",
           priority: 3,
-          maxSizeMB: 2000,
+          maxSizeMB: 20000,
+          environmentalScore: 3
+        },
+        xlarge: {
+          label: "Extra Large Models",
+          description: "Very large models (13B+, 70B+) requiring significant infrastructure",
+          priority: 4,
+          maxSizeMB: null,
           environmentalScore: 3
         }
       },
@@ -736,12 +785,13 @@ export class ModelAggregator {
         const counts = {
           lightweight: tiers.lightweight.length,
           standard: tiers.standard.length,
-          advanced: tiers.advanced.length
+          advanced: tiers.advanced.length,
+          xlarge: tiers.xlarge.length
         };
-        const total = counts.lightweight + counts.standard + counts.advanced;
+        const total = counts.lightweight + counts.standard + counts.advanced + counts.xlarge;
         
         if (total > 0) {
-          console.log(`   ${category}/${subcategory}: L:${counts.lightweight} S:${counts.standard} A:${counts.advanced}`);
+          console.log(`   ${category}/${subcategory}: L:${counts.lightweight} S:${counts.standard} A:${counts.advanced} XL:${counts.xlarge}`);
         }
       }
     }

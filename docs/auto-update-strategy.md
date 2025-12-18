@@ -1,9 +1,14 @@
 # Automated Model Dataset Update Strategy
 
 **Status**: Phase 1 Implemented ✅
-**Last Updated**: 2025-11-11
+**Last Updated**: 2025-12-18
 **Schedule**: Daily at 2 AM UTC (Node.js 22)
 **Goal**: Keep model dataset fresh without manual intervention
+
+### Recent Updates (December 2025)
+- **Tier restructure**: Updated size thresholds to accommodate modern LLMs (up to 20GB)
+- **Specialization preservation**: Aggregator now preserves manually curated `specialization` tags
+- **Curated model priority**: Models with specialization tags are prioritized during sorting
 
 ---
 
@@ -22,7 +27,7 @@
 
 ## Overview
 
-The AI Model Selector needs **fresh model data** to remain valuable. This document outlines a 3-phase strategy to transform the project from a "one-shot" static dataset to a **continuously self-updating system**.
+The AI Model Advisor needs **fresh model data** to remain valuable. This document outlines a 3-phase strategy to transform the project from a "one-shot" static dataset to a **continuously self-updating system**.
 
 ### Key Principles
 
@@ -118,9 +123,14 @@ ModelAggregator queries HF API
 
 # 3. Process and organize
 - Categorize by task (7 main categories)
-- Tier by size (lightweight/standard/advanced)
+- Tier by size:
+  - Lightweight: ≤500MB (edge/mobile)
+  - Standard: ≤4GB (cloud/server, quantized LLMs)
+  - Advanced: ≤20GB (full-precision 7B+ models)
+  - Extra Large: >20GB (70B+ models, no limit)
 - Calculate environmental scores
-- Merge with existing data (deduplicate)
+- **Preserve curated fields** (specialization tags)
+- Merge with existing data (deduplicate, prioritize curated models)
 
 # 4. Create PR if changes detected
 - Commit updated models.json
@@ -130,6 +140,7 @@ ModelAggregator queries HF API
 # 5. Human review
 - Check new models quality
 - Verify metadata accuracy
+- **Add specialization tags** to new models (see model-specialization-curation.md)
 - Test locally if needed
 - Approve or reject
 ```
@@ -150,8 +161,19 @@ ModelAggregator queries HF API
 - Validate environmental claims
 - Detect breaking changes automatically
 - Generate changelogs
+- Auto-detect model specialization (requires manual curation)
 
 These are addressed in **Phase 2**.
+
+### Specialization Curation (Manual Step)
+
+New models added by automation won't have `specialization` tags. During PR review:
+
+1. Check if new model is task/domain/language-specialized
+2. Add appropriate tag: `task:tables`, `domain:finance`, `language:english`, etc.
+3. See [`model-specialization-curation.md`](./model-specialization-curation.md) for full guide
+
+The aggregator will **preserve** these tags in future updates.
 
 ---
 
@@ -427,8 +449,9 @@ on:
 ```markdown
 ✅ **Approve if**:
 - New models are relevant and high-quality
-- Metadata looks reasonable (sizes, accuracy)
+- Metadata looks reasonable (sizes within tier limits)
 - No unexpected model removals
+- Specialization tags added for new specialized models
 - Tests pass
 - Bundle size acceptable (<2MB)
 
@@ -443,6 +466,7 @@ on:
 **Review Checklist** (provided in each PR):
 - [ ] New models are relevant
 - [ ] Metadata quality is good
+- [ ] **Specialization tags added** for new specialized models
 - [ ] No breaking changes
 - [ ] Bundle size acceptable
 - [ ] Tests pass
@@ -740,6 +764,8 @@ npm test -- src/lib/data/__tests__/
 | 2025-11-09 | 1 | Initial implementation with GitHub Actions workflow | Claude |
 | 2025-11-09 | 1 | Documentation created | Claude |
 | 2025-11-11 | 1 | Updated to daily schedule + Node.js 22 | Claude |
+| 2025-12-18 | 1 | Restructured tiers: Lightweight ≤500MB, Standard ≤4GB, Advanced ≤20GB | Claude |
+| 2025-12-18 | 1 | Added specialization preservation and curated model priority | Claude |
 
 ---
 
