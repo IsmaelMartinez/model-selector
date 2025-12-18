@@ -1,7 +1,9 @@
 # ADR-0003: Browser-Based LLM Model Selection for Task Classification
 
 ## Status
-Accepted
+**SUPERSEDED** by [ADR-0008](adr-0008-embedding-similarity-classification.md)
+
+> ⚠️ **This ADR is no longer in use.** The Llama 3.2 1B LLM classifier has been replaced by MiniLM embedding-based classification (23MB vs 500MB, 98.3% vs 95.2% accuracy). See ADR-0008 for the current implementation.
 
 ## Date
 2025-10-12
@@ -272,5 +274,20 @@ We evaluated three models with comprehensive testing (21 test cases, 3 per categ
 ---
 
 **Decision made**: 2025-10-12
-**Status**: Accepted - Ready for production deployment
+**Original Status**: Accepted - Ready for production deployment
+**Current Status**: ⚠️ SUPERSEDED by ADR-0008 (2025-12-17)
 **Testing**: Complete (21 test cases, 95.2% accuracy)
+
+---
+
+## Supersession Notice
+
+This ADR was superseded on 2025-12-17 by [ADR-0008: Embedding Similarity Classification](adr-0008-embedding-similarity-classification.md).
+
+**Reason for supersession:**
+- Llama 3.2 1B requires ~500MB download vs MiniLM's 23MB
+- MiniLM achieves 98.3% accuracy vs 95.2%
+- Inference is ~200x faster (~2ms vs ~400ms)
+- Memory usage reduced from ~2GB to ~200MB
+
+The `LLMTaskClassifier.js` file and associated test files have been removed from the codebase.

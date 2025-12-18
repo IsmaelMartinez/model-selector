@@ -145,15 +145,7 @@ const result = await classifier.classify(taskDescription);
 
 ## Migration
 
-The old LLM classifier (`LLMTaskClassifier.js`) is retained but disabled by default:
-
-```javascript
-// classifierConfig.js
-llm: {
-  enabled: false,  // Disabled by default
-  modelName: 'Xenova/Llama-3.2-1B-Instruct'
-}
-```
+The old LLM classifier (`LLMTaskClassifier.js`) and associated test files have been removed from the codebase. The embedding classifier is now the sole classification mechanism.
 
 ## Related Decisions
 

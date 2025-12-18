@@ -2,14 +2,14 @@ import { describe, test, expect, beforeAll } from 'vitest';
 import { BrowserTaskClassifier } from '../src/lib/classification/BrowserTaskClassifier.js';
 import { ModelSelector } from '../src/lib/recommendation/ModelSelector.js';
 import modelsData from '../src/lib/data/models.json';
-import tasksData from '../src/lib/data/tasks.json';
+import tasksData from '../src/lib/data/tasks.json'; // Used for taxonomy validation
 
 describe('MVP Acceptance Tests', () => {
   let taskClassifier;
   let modelSelector;
 
   beforeAll(() => {
-    taskClassifier = new BrowserTaskClassifier(tasksData);
+    taskClassifier = new BrowserTaskClassifier();
     modelSelector = new ModelSelector(modelsData);
   });
 
@@ -84,7 +84,7 @@ describe('MVP Acceptance Tests', () => {
       models.forEach(model => {
         expect(model.environmentalScore).toBeGreaterThanOrEqual(1);
         expect(model.environmentalScore).toBeLessThanOrEqual(3);
-        expect(['lightweight', 'standard', 'advanced']).toContain(model.tier);
+        expect(['lightweight', 'standard', 'advanced', 'xlarge']).toContain(model.tier);
       });
     });
 
@@ -137,7 +137,7 @@ describe('MVP Acceptance Tests', () => {
       let totalModels = 0;
       Object.values(modelsData.models).forEach(category => {
         Object.values(category).forEach(subcategory => {
-          ['lightweight', 'standard', 'advanced'].forEach(tier => {
+          ['lightweight', 'standard', 'advanced', 'xlarge'].forEach(tier => {
             if (subcategory[tier]) {
               totalModels += subcategory[tier].length;
             }

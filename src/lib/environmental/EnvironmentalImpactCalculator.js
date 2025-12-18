@@ -1,118 +1,91 @@
 /**
  * Environmental Impact Scoring System
- * Provides reasonable estimates for AI model environmental impact
+ * 
+ * Simple size-based heuristic for comparing AI model environmental impact.
+ * 
+ * IMPORTANT CAVEAT: This is a rough approximation, not a scientific measurement.
+ * Larger models generally require more compute resources and thus more energy,
+ * but actual energy consumption depends on many factors not captured here
+ * (hardware, batch size, inference time, data center efficiency, etc.)
  */
 
 export class EnvironmentalImpactCalculator {
-  constructor() {
-    // Base power consumption estimates (watts) by deployment type
-    this.basePowerConsumption = {
-      mobile: 2,      // Mobile device inference
-      browser: 15,    // Laptop/desktop browser
-      cloud: 50,      // Cloud instance
-      gpu: 250        // GPU server
-    };
-
-    // Model complexity multipliers based on architecture
-    this.complexityMultipliers = {
-      cnn: 1.0,            // Baseline
-      transformer: 1.5,    // Attention overhead
-      diffusion: 2.0,      // Iterative process
-      quantized: 0.6       // Optimized
-    };
-  }
+  /**
+   * Size thresholds for environmental scoring (in MB)
+   * Aligned with model tier definitions
+   */
+  static THRESHOLDS = {
+    LIGHTWEIGHT: 500,   // ≤500MB = Score 1 (Low Impact)
+    STANDARD: 4000      // ≤4GB = Score 2 (Medium Impact)
+                        // >4GB = Score 3 (High Impact)
+  };
 
   /**
    * Calculate environmental impact score (1-3) for a model
+   * Based purely on model size as a proxy for compute requirements
+   * 
+   * @param {Object} model - Model with sizeMB property
+   * @returns {Object} Impact assessment with score and label
    */
-  calculateImpact(model, deploymentScenario = {}) {
-    const deployment = deploymentScenario.deployment || this.inferDeploymentType(model);
-    const dailyKWh = this.calculateDailyKWh(model, deployment);
-    const environmentalScore = this.calculateEnvironmentalScore(dailyKWh);
+  calculateImpact(model) {
+    const sizeMB = model.sizeMB || 0;
+    const environmentalScore = this.calculateScoreFromSize(sizeMB);
     
     return {
       environmentalScore,
-      dailyKWh,
-      deployment,
-      scoreLabel: this.getScoreLabel(environmentalScore)
+      sizeMB,
+      scoreLabel: this.getScoreLabel(environmentalScore),
+      tier: this.getTierFromSize(sizeMB)
     };
   }
 
   /**
-   * Calculate daily kWh usage for a model
+   * Calculate environmental score based purely on size
+   * @param {number} sizeMB - Model size in megabytes
+   * @returns {number} Score 1-3
    */
-  calculateDailyKWh(model, deployment) {
-    const basePower = this.basePowerConsumption[deployment] || this.basePowerConsumption.cloud;
-    const sizeMB = model.sizeMB || 100;
-    const modelType = this.inferModelType(model);
-    
-    // Simple power estimation: base power × size factor × architecture factor
-    const sizeMultiplier = Math.log10(sizeMB / 10) + 1; // Base 10MB = 1x
-    const typeMultiplier = this.complexityMultipliers[modelType] || 1.0;
-    const powerWatts = basePower * sizeMultiplier * typeMultiplier;
-    
-    // Assume 8 hours/day, 10 inferences/hour usage
-    const dailyKWh = (powerWatts * 8 * 10) / (3600 * 1000); // Convert to kWh
-    
-    return dailyKWh;
+  calculateScoreFromSize(sizeMB) {
+    if (sizeMB <= EnvironmentalImpactCalculator.THRESHOLDS.LIGHTWEIGHT) return 1;
+    if (sizeMB <= EnvironmentalImpactCalculator.THRESHOLDS.STANDARD) return 2;
+    return 3;
   }
 
   /**
-   * Calculate environmental score (1-3) based on daily kWh
+   * Get tier name from size
+   * @param {number} sizeMB - Model size in megabytes
+   * @returns {string} Tier name
    */
-  calculateEnvironmentalScore(dailyKWh) {
-    if (dailyKWh < 0.1) return 1;      // Low impact: < 0.1 kWh/day
-    if (dailyKWh < 1.0) return 2;      // Medium impact: 0.1-1.0 kWh/day
-    return 3;                          // High impact: > 1.0 kWh/day
-  }
-
-  /**
-   * Infer deployment type from model characteristics
-   */
-  inferDeploymentType(model) {
-    const sizeMB = model.sizeMB || 100;
-    const deploymentOptions = model.deploymentOptions || [];
-    
-    // Check explicit deployment options
-    if (deploymentOptions.includes('browser')) return 'browser';
-    if (deploymentOptions.includes('mobile')) return 'mobile';
-    
-    // Infer from size
-    if (sizeMB < 50) return 'mobile';
-    if (sizeMB < 200) return 'browser';
-    return 'cloud';
-  }
-
-  /**
-   * Infer model architecture type from name/description
-   */
-  inferModelType(model) {
-    const text = `${model.name} ${model.description || ''}`.toLowerCase();
-    
-    if (text.includes('transformer') || text.includes('bert') || text.includes('gpt')) return 'transformer';
-    if (text.includes('diffusion') || text.includes('stable') || text.includes('dalle')) return 'diffusion';
-    if (text.includes('quantized') || text.includes('int8') || text.includes('fp16')) return 'quantized';
-    
-    return 'cnn'; // Default assumption
+  getTierFromSize(sizeMB) {
+    if (sizeMB <= EnvironmentalImpactCalculator.THRESHOLDS.LIGHTWEIGHT) return 'lightweight';
+    if (sizeMB <= EnvironmentalImpactCalculator.THRESHOLDS.STANDARD) return 'standard';
+    return 'advanced';
   }
 
   /**
    * Compare environmental impact between models
+   * @param {Array} models - Array of models to compare
+   * @returns {Array} Models sorted by environmental score (lower is better)
    */
-  compareModels(models, deploymentScenario = {}) {
+  compareModels(models) {
     const comparisons = models.map(model => ({
       model: model,
-      impact: this.calculateImpact(model, deploymentScenario)
+      impact: this.calculateImpact(model)
     }));
     
-    // Sort by environmental score (lower is better)
-    comparisons.sort((a, b) => a.impact.environmentalScore - b.impact.environmentalScore);
+    // Sort by environmental score (lower is better), then by size
+    comparisons.sort((a, b) => {
+      const scoreDiff = a.impact.environmentalScore - b.impact.environmentalScore;
+      if (scoreDiff !== 0) return scoreDiff;
+      return (a.model.sizeMB || 0) - (b.model.sizeMB || 0);
+    });
     
     return comparisons;
   }
 
   /**
-   * Get score label
+   * Get human-readable label for environmental score
+   * @param {number} score - Environmental score (1-3)
+   * @returns {string} Label
    */
   getScoreLabel(score) {
     switch (score) {

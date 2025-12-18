@@ -27,7 +27,7 @@ All MVP tasks have been completed successfully. See [ADR documentation](docs/adr
 - **Bundle Size**: ~40KB (well under target)
 - **Performance**: <1 second response time
 - **Browser Support**: Chrome-first (primary target achieved)
-- **Data**: Comprehensive model dataset with 17+ task categories
+- **Data**: Comprehensive model dataset with 7 categories and 17 subcategories
 - **Deployment**: Automated GitHub Actions → GitHub Pages
 
 ### ✅ Quality Assurance
@@ -83,13 +83,8 @@ src/
   - PWA installable
 
 ### Test Status (All Passing ✅)
-- **Fast Tests (CI/CD)**: 23/23 passing (acceptance + integration, ~2s)
-- **Embedding Tests (Local Only)**: Tests available via `npm run test:llm`
-- **Note**: Embedding tests separated for local-only execution
-  - Downloads ~23MB model
-  - Takes ~3 minutes vs 2 seconds for fast tests
-  - Not suitable for CI/CD pipelines
-  - Validates 98.3% classification accuracy
+- **Tests (CI/CD)**: All passing (acceptance + integration + accuracy filter + code assistant, ~2s)
+- **Note**: Classification uses MiniLM embedding model (23MB, 98.3% accuracy)
 
 ### Classification Accuracy
 - **Production**: 98.3% accuracy with MiniLM sentence embeddings
@@ -120,16 +115,14 @@ src/
 ## 🧪 Test Results Summary
 
 ```
-✅ MVP Acceptance Tests: 11/11 passing (100%)
-✅ Integration Tests: 7/7 passing (100%)
-✅ Model Recommendation Tests: 5/5 passing (100%)
-✅ Fast Test Suite: 23/23 passing (100%, ~2s)
-📋 LLM Accuracy Tests: 25 tests (local-only, run via: npm run test:llm)
+✅ MVP Acceptance Tests: passing (100%)
+✅ Integration Tests: passing (100%)
+✅ Accuracy Filter Tests: passing (100%)
+✅ Code Assistant Tests: passing (100%)
 ```
 
-**Test Commands:**
-- `npm test`: Fast CI/CD tests (23 tests, ~2s)
-- `npm run test:llm`: Full LLM accuracy validation (48 tests, ~3min)
+**Test Command:**
+- `npm test`: Run all tests (~2s)
 
 ## 📋 Development Environment
 

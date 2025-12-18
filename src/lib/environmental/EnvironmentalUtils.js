@@ -1,132 +1,73 @@
 /**
  * Environmental Impact Utilities
- * Helper functions for integrating environmental calculations with model data
+ * Helper functions for integrating environmental scoring with model data
+ * 
+ * NOTE: Environmental scores are a simple size-based heuristic (smaller = more efficient).
+ * They are intended for rough comparison only, not as precise measurements.
  */
 
 import { environmentalCalculator } from './EnvironmentalImpactCalculator.js';
 
 /**
- * Enhance model data with environmental impact calculations
+ * Enhance model data with environmental impact score
+ * @param {Object} model - Model object with sizeMB
+ * @returns {Object} Model with environmental data added
  */
-export function enhanceModelWithEnvironmentalData(model, deploymentScenario = {}) {
-  const impact = environmentalCalculator.calculateImpact(model, deploymentScenario);
+export function enhanceModelWithEnvironmentalData(model) {
+  const impact = environmentalCalculator.calculateImpact(model);
   
   return {
     ...model,
     environmental: {
       score: impact.environmentalScore,
-      impact: environmentalCalculator.formatImpact(impact, { format: 'summary' }),
-      detailed: environmentalCalculator.formatImpact(impact, { format: 'detailed' }),
-      lastCalculated: impact.lastCalculated
+      label: impact.scoreLabel,
+      tier: impact.tier
     }
   };
 }
 
 /**
  * Get environmental comparison for a list of models
+ * @param {Array} models - Models to compare
+ * @returns {Object} Comparison results
  */
-export function getEnvironmentalComparison(models, deploymentScenario = {}) {
-  const comparison = environmentalCalculator.compareModels(models, deploymentScenario);
+export function getEnvironmentalComparison(models) {
+  const comparisons = environmentalCalculator.compareModels(models);
+  
+  const mostEfficient = comparisons[0];
+  const leastEfficient = comparisons[comparisons.length - 1];
   
   return {
-    models: comparison.comparisons.map(c => ({
+    models: comparisons.map((c, index) => ({
       ...c.model,
       environmental: {
         score: c.impact.environmentalScore,
-        impact: environmentalCalculator.formatImpact(c.impact, { format: 'summary' }),
-        rank: comparison.comparisons.indexOf(c) + 1
+        label: c.impact.scoreLabel,
+        rank: index + 1
       }
     })),
     summary: {
-      mostEfficient: {
-        name: comparison.summary.mostEfficient.model.name,
-        score: comparison.summary.mostEfficient.impact.environmentalScore,
-        impact: environmentalCalculator.formatImpact(comparison.summary.mostEfficient.impact, { format: 'summary' })
-      },
-      leastEfficient: {
-        name: comparison.summary.leastEfficient.model.name,
-        score: comparison.summary.leastEfficient.impact.environmentalScore,
-        impact: environmentalCalculator.formatImpact(comparison.summary.leastEfficient.impact, { format: 'summary' })
-      },
-      averageScore: Math.round(comparison.summary.averageScore * 10) / 10,
-      totalModels: comparison.summary.totalModels
+      mostEfficient: mostEfficient ? {
+        name: mostEfficient.model.name,
+        score: mostEfficient.impact.environmentalScore,
+        label: mostEfficient.impact.scoreLabel
+      } : null,
+      leastEfficient: leastEfficient ? {
+        name: leastEfficient.model.name,
+        score: leastEfficient.impact.environmentalScore,
+        label: leastEfficient.impact.scoreLabel
+      } : null,
+      totalModels: models.length
     }
   };
-}
-
-/**
- * Generate environmental recommendations for models
- */
-export function getEnvironmentalRecommendations(models, userScenario = {}) {
-  const recommendations = [];
-  
-  for (const model of models) {
-    const modelRecommendations = environmentalCalculator.generateRecommendations(model, userScenario);
-    
-    if (modelRecommendations.recommendations.length > 0) {
-      recommendations.push({
-        model: {
-          id: model.id,
-          name: model.name,
-          tier: model.tier
-        },
-        currentImpact: environmentalCalculator.formatImpact(modelRecommendations.currentImpact, { format: 'summary' }),
-        recommendations: modelRecommendations.recommendations
-      });
-    }
-  }
-  
-  return recommendations;
-}
-
-/**
- * Calculate tier-based environmental statistics
- */
-export function getTierEnvironmentalStats(tieredModels, deploymentScenario = {}) {
-  const stats = {
-    lightweight: { models: [], avgScore: 0, avgDailyKWh: 0 },
-    standard: { models: [], avgScore: 0, avgDailyKWh: 0 },
-    advanced: { models: [], avgScore: 0, avgDailyKWh: 0 }
-  };
-  
-  // Collect models from tiered structure
-  for (const [category, subcategories] of Object.entries(tieredModels)) {
-    for (const [subcategory, tiers] of Object.entries(subcategories)) {
-      for (const [tier, models] of Object.entries(tiers)) {
-        if (stats[tier]) {
-          stats[tier].models.push(...models.map(m => ({ ...m, category, subcategory })));
-        }
-      }
-    }
-  }
-  
-  // Calculate averages for each tier
-  for (const [tier, data] of Object.entries(stats)) {
-    if (data.models.length > 0) {
-      const impacts = data.models.map(model => 
-        environmentalCalculator.calculateImpact(model, deploymentScenario)
-      );
-      
-      data.avgScore = impacts.reduce((sum, impact) => sum + impact.environmentalScore, 0) / impacts.length;
-      data.avgDailyKWh = impacts.reduce((sum, impact) => sum + impact.powerConsumption.dailyKWh, 0) / impacts.length;
-      data.totalModels = data.models.length;
-      
-      // Add distribution by score
-      data.scoreDistribution = {
-        score1: impacts.filter(i => i.environmentalScore === 1).length,
-        score2: impacts.filter(i => i.environmentalScore === 2).length,
-        score3: impacts.filter(i => i.environmentalScore === 3).length
-      };
-    }
-  }
-  
-  return stats;
 }
 
 /**
  * Get environmental insights for user decision making
+ * @param {Array} models - Models to analyze
+ * @returns {Object} Insights and recommendations
  */
-export function getEnvironmentalInsights(models, userPreferences = {}) {
+export function getEnvironmentalInsights(models) {
   const insights = {
     summary: {
       totalModels: models.length,
@@ -135,13 +76,12 @@ export function getEnvironmentalInsights(models, userPreferences = {}) {
       highImpactCount: 0
     },
     recommendations: [],
-    comparisons: [],
     tips: []
   };
   
   // Calculate impacts and categorize
   const modelsWithImpact = models.map(model => {
-    const impact = environmentalCalculator.calculateImpact(model, userPreferences.deploymentScenario);
+    const impact = environmentalCalculator.calculateImpact(model);
     return { model, impact };
   });
   
@@ -154,7 +94,11 @@ export function getEnvironmentalInsights(models, userPreferences = {}) {
   
   // Generate top 3 eco-friendly recommendations
   const sortedByImpact = modelsWithImpact
-    .sort((a, b) => a.impact.environmentalScore - b.impact.environmentalScore)
+    .sort((a, b) => {
+      const scoreDiff = a.impact.environmentalScore - b.impact.environmentalScore;
+      if (scoreDiff !== 0) return scoreDiff;
+      return (a.model.sizeMB || 0) - (b.model.sizeMB || 0);
+    })
     .slice(0, 3);
   
   insights.recommendations = sortedByImpact.map(({ model, impact }, index) => ({
@@ -162,141 +106,121 @@ export function getEnvironmentalInsights(models, userPreferences = {}) {
     model: {
       id: model.id,
       name: model.name,
-      tier: model.tier || 'unknown'
+      tier: model.tier || 'unknown',
+      sizeMB: model.sizeMB
     },
-    environmental: environmentalCalculator.formatImpact(impact, { format: 'summary' }),
+    score: impact.environmentalScore,
+    label: impact.scoreLabel,
     reason: generateRecommendationReason(model, impact)
   }));
   
-  // Generate comparison insights
-  if (modelsWithImpact.length >= 2) {
-    const best = modelsWithImpact[0];
-    const worst = modelsWithImpact[modelsWithImpact.length - 1];
-    
-    if (best.impact.environmentalScore !== worst.impact.environmentalScore) {
-      const savings = environmentalCalculator.calculateOptimizationSavings(
-        worst.model,
-        userPreferences.deploymentScenario || {},
-        { ...userPreferences.deploymentScenario, optimizations: ['quantization'] }
-      );
-      
-      insights.comparisons.push({
-        type: 'best_vs_worst',
-        bestModel: best.model.name,
-        worstModel: worst.model.name,
-        dailyKWhDifference: (worst.impact.powerConsumption.dailyKWh - best.impact.powerConsumption.dailyKWh).toFixed(2),
-        dailyCO2Difference: (worst.impact.carbonFootprint.daily - best.impact.carbonFootprint.daily).toFixed(2)
-      });
-    }
-  }
-  
-  // Generate environmental tips
-  insights.tips = generateEnvironmentalTips(modelsWithImpact, userPreferences);
+  // Generate tips
+  insights.tips = generateEnvironmentalTips(modelsWithImpact);
   
   return insights;
 }
 
 /**
- * Generate recommendation reason
+ * Generate recommendation reason based on model characteristics
  */
 function generateRecommendationReason(model, impact) {
   const reasons = [];
   
   if (impact.environmentalScore === 1) {
-    reasons.push('Low energy consumption');
+    reasons.push('Lightweight model with low resource requirements');
+  } else if (impact.environmentalScore === 2) {
+    reasons.push('Balanced size and capability');
   }
   
-  if (model.sizeMB < 50) {
-    reasons.push('Compact model size');
+  if (model.sizeMB && model.sizeMB < 100) {
+    reasons.push('Very compact size');
   }
   
-  if (model.deploymentOptions && model.deploymentOptions.includes('browser')) {
-    reasons.push('Browser-compatible');
+  if (model.deploymentOptions) {
+    if (model.deploymentOptions.includes('browser')) {
+      reasons.push('Can run in browser');
+    }
+    if (model.deploymentOptions.includes('mobile')) {
+      reasons.push('Mobile-friendly');
+    }
+    if (model.deploymentOptions.includes('edge')) {
+      reasons.push('Edge deployment ready');
+    }
   }
   
-  if (model.deploymentOptions && model.deploymentOptions.includes('edge')) {
-    reasons.push('Edge deployment ready');
-  }
-  
-  return reasons.length > 0 ? reasons.join(', ') : 'Environmentally efficient option';
+  return reasons.length > 0 ? reasons.join(', ') : 'Efficient option for your task';
 }
 
 /**
- * Generate environmental tips
+ * Generate environmental tips based on model selection
  */
-function generateEnvironmentalTips(modelsWithImpact, userPreferences) {
+function generateEnvironmentalTips(modelsWithImpact) {
   const tips = [];
   
-  // Deployment optimization tips
-  const hasLargeModels = modelsWithImpact.some(({ model }) => model.sizeMB > 500);
-  if (hasLargeModels) {
-    tips.push({
-      category: 'deployment',
-      title: 'Consider model compression',
-      description: 'Large models in your selection could benefit from quantization or pruning to reduce environmental impact.',
-      impact: 'Can reduce energy consumption by 20-50%'
-    });
-  }
+  // Check if user is considering only large models
+  const hasOnlyAdvanced = modelsWithImpact.every(({ model }) => 
+    model.tier === 'advanced' || model.tier === 'xlarge'
+  );
   
-  // Usage pattern tips  
-  if (userPreferences.deploymentScenario?.usagePattern === 'realtime') {
-    tips.push({
-      category: 'usage',
-      title: 'Optimize inference frequency',
-      description: 'Real-time processing has high environmental cost. Consider caching or batch processing strategies.',
-      impact: 'Can reduce energy consumption by 50-80%'
-    });
-  }
-  
-  // Tier selection tips
-  const hasOnlyAdvanced = modelsWithImpact.every(({ model }) => model.tier === 'advanced');
-  if (hasOnlyAdvanced) {
+  if (hasOnlyAdvanced && modelsWithImpact.length > 0) {
     tips.push({
       category: 'selection',
-      title: 'Explore lighter alternatives',
-      description: 'All selected models are in the advanced tier. Consider if lightweight or standard models meet your accuracy requirements.',
-      impact: 'Can reduce environmental impact significantly'
+      title: 'Consider lighter alternatives',
+      description: 'All selected models are in advanced tiers. Lightweight or standard models may meet your accuracy needs with lower resource usage.'
     });
   }
   
-  // General efficiency tip
+  // Check for very large models
+  const hasVeryLarge = modelsWithImpact.some(({ model }) => 
+    model.sizeMB && model.sizeMB > 10000
+  );
+  
+  if (hasVeryLarge) {
+    tips.push({
+      category: 'optimization',
+      title: 'Large model detected',
+      description: 'Consider quantized versions of large models to reduce size while maintaining most accuracy.'
+    });
+  }
+  
+  // General tip
   tips.push({
     category: 'general',
-    title: 'Choose smallest suitable model',
-    description: 'The most environmentally friendly approach is to use the smallest model that meets your accuracy requirements.',
-    impact: 'Environmental impact scales with model size'
+    title: 'Smaller is generally greener',
+    description: 'When accuracy requirements allow, choosing a smaller model reduces compute resources and energy usage.'
   });
   
-  return tips.slice(0, 4); // Limit to 4 tips
+  return tips.slice(0, 3);
 }
 
 /**
  * Format environmental data for display components
+ * @param {Object} environmentalData - Environmental data object
+ * @param {string} displayType - 'card', 'badge', or 'detailed'
+ * @returns {Object} Formatted data for display
  */
 export function formatEnvironmentalForDisplay(environmentalData, displayType = 'card') {
   if (!environmentalData) return null;
   
+  const score = environmentalData.score;
+  
   switch (displayType) {
     case 'card':
       return {
-        score: environmentalData.score,
-        label: getScoreIcon(environmentalData.score) + ' ' + getScoreLabel(environmentalData.score),
-        dailyEnergy: environmentalData.impact?.dailyEnergy || 'N/A',
-        dailyCarbon: environmentalData.impact?.dailyCarbon || 'N/A',
-        efficiency: environmentalData.impact?.efficiency || 'Unknown',
-        color: getScoreColor(environmentalData.score)
+        score,
+        label: getScoreIcon(score) + ' ' + getScoreLabel(score),
+        color: getScoreColor(score)
       };
       
     case 'badge':
       return {
-        text: getScoreLabel(environmentalData.score),
-        icon: getScoreIcon(environmentalData.score),
-        color: getScoreColor(environmentalData.score),
-        tooltip: `Daily: ${environmentalData.impact?.dailyEnergy} • ${environmentalData.impact?.dailyCarbon}`
+        text: getScoreLabel(score),
+        icon: getScoreIcon(score),
+        color: getScoreColor(score)
       };
       
     case 'detailed':
-      return environmentalData.detailed || environmentalData;
+      return environmentalData;
       
     default:
       return environmentalData;
@@ -337,35 +261,4 @@ function getScoreLabel(score) {
     case 3: return 'High Impact';
     default: return 'Unknown Impact';
   }
-}
-
-/**
- * Calculate environmental savings from tier selection
- */
-export function calculateTierSavings(currentTier, targetTier, sampleModels) {
-  if (!sampleModels[currentTier] || !sampleModels[targetTier]) {
-    return null;
-  }
-  
-  const currentModel = sampleModels[currentTier][0]; // Use first model as representative
-  const targetModel = sampleModels[targetTier][0];
-  
-  const currentImpact = environmentalCalculator.calculateImpact(currentModel);
-  const targetImpact = environmentalCalculator.calculateImpact(targetModel);
-  
-  const savings = environmentalCalculator.calculateOptimizationSavings(
-    currentModel, 
-    {}, 
-    { deployment: targetImpact.scenario.deployment }
-  );
-  
-  return {
-    currentTier,
-    targetTier,
-    savings: {
-      percentReduction: Math.round(((currentImpact.carbonFootprint.daily - targetImpact.carbonFootprint.daily) / currentImpact.carbonFootprint.daily) * 100),
-      dailyKWhSaved: (currentImpact.powerConsumption.dailyKWh - targetImpact.powerConsumption.dailyKWh).toFixed(2),
-      dailyCO2Saved: (currentImpact.carbonFootprint.daily - targetImpact.carbonFootprint.daily).toFixed(2)
-    }
-  };
 }

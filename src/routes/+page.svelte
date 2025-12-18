@@ -194,6 +194,22 @@
     processTask(pendingTaskDescription, null, true);
   }
 
+  async function handleClarificationText(event) {
+    const { originalDescription, additionalDetails } = event.detail;
+    showClarification = false;
+    
+    // Combine original description with additional details
+    // Normalize: remove trailing punctuation from original before adding separator
+    const normalizedOriginal = originalDescription.replace(/[.!?,;:]+$/, '').trim();
+    const enhancedDescription = `${normalizedOriginal}. ${additionalDetails}`;
+    
+    // Update the task description in the input field
+    taskDescription = enhancedDescription;
+    
+    // Process with enhanced description, skip further clarification to prevent loops
+    await processTask(enhancedDescription, null, true);
+  }
+
   async function processTask(description, forcedCategory = null, skipClarification = false) {
     isLoading = true;
     error = null;
@@ -398,7 +414,7 @@
 
       <div class="stats-bar">
         <div class="stat-item">
-          <span class="stat-number">200+</span>
+          <span class="stat-number">150+</span>
           <span class="stat-label">Models</span>
         </div>
         <div class="stat-divider"></div>
@@ -408,11 +424,24 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">95.2%</span>
+          <span class="stat-number">98.3%</span>
           <span class="stat-label">Accuracy</span>
         </div>
       </div>
     </header>
+
+    <div class="disclaimer-card">
+      <div class="disclaimer-icon">💡</div>
+      <div class="disclaimer-content">
+        <p>
+          <strong>This is a starting point, not a final answer.</strong> 
+          We point you toward models that might fit your task, but you decide what works best for your use case, 
+          data, and constraints. Smaller models are often highly specialized and can match or outperform 
+          larger ones for specific tasks while using far fewer resources. When you refine your task description, 
+          we re-run the classifier, so recommendations may change as we better understand your needs.
+        </p>
+      </div>
+    </div>
 
     {#if isModelLoading || modelLoadProgress}
       <div class="model-loading-card" role="status">
@@ -457,6 +486,7 @@
         originalDescription={pendingTaskDescription}
         on:select={handleClarificationSelect}
         on:skip={handleClarificationSkip}
+        on:clarify={handleClarificationText}
       />
     {:else}
       <TaskInput bind:taskDescription {isLoading} on:submit={handleTaskSubmit} />
@@ -677,6 +707,43 @@
     width: 1px;
     height: 30px;
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Disclaimer Card */
+  .disclaimer-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .disclaimer-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .disclaimer-content {
+    flex: 1;
+  }
+
+  .disclaimer-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+
+  .disclaimer-content strong {
+    color: #e8f5e9;
+    font-weight: 600;
   }
 
   /* Loading Card */
