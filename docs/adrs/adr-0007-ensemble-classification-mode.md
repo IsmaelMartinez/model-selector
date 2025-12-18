@@ -136,5 +136,5 @@ This ADR was superseded on 2025-12-17 by [ADR-0008: Embedding Similarity Classif
 | **Old (This ADR)** | 3 LLM calls @ different temperatures → majority vote |
 | **New (ADR-0008)** | 1 embedding call → top-5 reference examples vote by category |
 
-The `LLMTaskClassifier.classifyEnsemble()` method is retained but unused.
+The `LLMTaskClassifier.js` file and `tests/ensemble-validation.test.js` have been removed from the codebase.
 

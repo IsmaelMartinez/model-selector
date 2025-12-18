@@ -290,4 +290,4 @@ This ADR was superseded on 2025-12-17 by [ADR-0008: Embedding Similarity Classif
 - Inference is ~200x faster (~2ms vs ~400ms)
 - Memory usage reduced from ~2GB to ~200MB
 
-The `LLMTaskClassifier.js` file is retained but disabled by default (`classifierConfig.js: llm.enabled = false`).
+The `LLMTaskClassifier.js` file and associated test files have been removed from the codebase.

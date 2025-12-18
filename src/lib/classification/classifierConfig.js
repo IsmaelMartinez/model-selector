@@ -14,13 +14,6 @@ export const CLASSIFIER_CONFIG = {
     confidenceThreshold: 0.70, // Below this, show generic models
   },
   
-  // Legacy LLM model (optional, for comparison)
-  llm: {
-    modelName: 'Xenova/Llama-3.2-1B-Instruct',
-    modelSize: '500MB',
-    enabled: false, // Disabled by default
-  },
-  
   // Confidence thresholds
   confidence: {
     high: 0.85,    // Very confident - show specific models

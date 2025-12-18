@@ -15,12 +15,12 @@
 
 - [ADR-0001](adrs/adr-0001-sveltekit-vite-rules-first-mvp.md) - Tech stack (SvelteKit + Vite)
 - [ADR-0002](adrs/adr-0002-task-classification-model-selection.md) - Task classification approach
-- [ADR-0003](adrs/adr-0003-browser-llm-classification-model-selection.md) - Browser LLM selection
+- [ADR-0003](adrs/adr-0003-browser-llm-classification-model-selection.md) - Browser LLM selection (superseded by ADR-0008)
 - [ADR-0004](adrs/adr-0004-slm-model-selection.md) - SLM evaluation (rejected)
 - [ADR-0005](adrs/adr-0005-automated-model-dataset-updates.md) - Automated updates
 - [ADR-0006](adrs/adr-0006-model-accuracy-filtering.md) - Accuracy filtering
-- [ADR-0007](adrs/adr-0007-ensemble-classification-mode.md) - Ensemble classification
-- [ADR-0008](adrs/adr-0008-embedding-similarity-classification.md) - Embedding classification
+- [ADR-0007](adrs/adr-0007-ensemble-classification-mode.md) - Ensemble classification (superseded by ADR-0008)
+- [ADR-0008](adrs/adr-0008-embedding-similarity-classification.md) - Embedding classification ✓
 
 ## Research
 
