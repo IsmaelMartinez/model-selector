@@ -412,7 +412,7 @@
 
       <div class="stats-bar">
         <div class="stat-item">
-          <span class="stat-number">200+</span>
+          <span class="stat-number">150+</span>
           <span class="stat-label">Models</span>
         </div>
         <div class="stat-divider"></div>
@@ -422,7 +422,7 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">95.2%</span>
+          <span class="stat-number">98.3%</span>
           <span class="stat-label">Accuracy</span>
         </div>
       </div>

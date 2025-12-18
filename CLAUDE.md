@@ -20,8 +20,7 @@ npm install && npm run dev     # Start dev server (localhost:5173)
 npm run build && npm run preview  # Build + preview production
 
 # Testing
-npm test                       # Fast tests (23 tests, ~2s) - Use for CI
-npm run test:llm              # LLM tests (48 tests, ~3min) - Local only, downloads 1.2GB model
+npm test                       # Run tests (~2s) - Use for CI
 
 # Data
 npm run update-models          # Update model database from HuggingFace
@@ -64,11 +63,11 @@ npm run update-models:dry-run  # Preview updates
 
 ### Environmental Scoring
 
-| Score | Energy | Size | Priority |
-|-------|--------|------|----------|
-| 1 (Low) | <0.1 kWh/day | <100MB | Highest |
-| 2 (Medium) | 0.1-1.0 kWh/day | <500MB | Medium |
-| 3 (High) | >1.0 kWh/day | <2000MB | Lowest |
+| Score | Size | Label | Priority |
+|-------|------|-------|----------|
+| 1 (Low) | ≤500MB | Low Impact | Highest |
+| 2 (Medium) | ≤4GB | Medium Impact | Medium |
+| 3 (High) | >4GB | High Impact | Lowest |
 
 Implementation: `src/lib/environmental/EnvironmentalImpactCalculator.js`
 
@@ -107,9 +106,8 @@ Reference: See "Adding a New Model" in this file or `docs/model-curation-process
 Ranking: lightweight tier > standard tier > advanced tier (within tier, smaller first)
 
 ### 2. Testing Strategy
-- **CI/CD:** Only run `npm test` (fast, 23 tests, ~2s)
-- **Local:** Run `npm run test:llm` for accuracy validation (48 tests, ~3min, downloads 1.2GB model)
-- **Never** run LLM tests in CI - they're too slow
+- **CI/CD:** Run `npm test` for all tests (~2s)
+- Tests cover acceptance, integration, accuracy filtering, and code assistant workflows
 
 ### 3. Static-First Architecture
 - No backend/API calls during runtime
@@ -201,7 +199,7 @@ describe('Module', () => {
 2. **Maintain 98.3% Accuracy** - Test against LLM suite before committing classification changes
 3. **Accessibility First** - Keyboard navigation and screen readers are required
 4. **Static & Fast** - No APIs, <50KB bundle, client-side processing only
-5. **Test Smart** - Run `npm test` (fast) before commits; `npm run test:llm` (slow) only locally
+5. **Test Smart** - Run `npm test` before commits
 6. **Document Decisions** - Create ADRs in `docs/adrs/` for architectural changes
 7. **Progressive Enhancement** - PWA support, multiple browsers with graceful fallbacks
 

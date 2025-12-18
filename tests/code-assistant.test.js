@@ -2,14 +2,14 @@ import { describe, test, expect, beforeAll } from 'vitest';
 import { BrowserTaskClassifier } from '../src/lib/classification/BrowserTaskClassifier.js';
 import { ModelSelector } from '../src/lib/recommendation/ModelSelector.js';
 import modelsData from '../src/lib/data/models.json';
-import tasksData from '../src/lib/data/tasks.json';
+import tasksData from '../src/lib/data/tasks.json'; // Used for data integrity tests
 
 describe('Code Assistant Classification Tests', () => {
   let taskClassifier;
   let modelSelector;
 
   beforeAll(() => {
-    taskClassifier = new BrowserTaskClassifier(tasksData);
+    taskClassifier = new BrowserTaskClassifier();
     modelSelector = new ModelSelector(modelsData);
   });
 

@@ -2,14 +2,13 @@ import { describe, test, expect, beforeAll } from 'vitest';
 import { BrowserTaskClassifier } from '../src/lib/classification/BrowserTaskClassifier.js';
 import { ModelSelector } from '../src/lib/recommendation/ModelSelector.js';
 import modelsData from '../src/lib/data/models.json';
-import tasksData from '../src/lib/data/tasks.json';
 
 describe('Integration Tests - Real User Scenarios', () => {
   let taskClassifier;
   let modelSelector;
 
   beforeAll(() => {
-    taskClassifier = new BrowserTaskClassifier(tasksData);
+    taskClassifier = new BrowserTaskClassifier();
     modelSelector = new ModelSelector(modelsData);
   });
 
@@ -220,7 +219,7 @@ describe('Integration Tests - Real User Scenarios', () => {
       // Verify models data integrity
       Object.entries(modelsData.models).forEach(([category, categoryData]) => {
         Object.entries(categoryData).forEach(([subcategory, subcategoryData]) => {
-          ['lightweight', 'standard', 'advanced'].forEach(tier => {
+          ['lightweight', 'standard', 'advanced', 'xlarge'].forEach(tier => {
             if (subcategoryData[tier]) {
               subcategoryData[tier].forEach(model => {
                 expect(model).toHaveProperty('id');
