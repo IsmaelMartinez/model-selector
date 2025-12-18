@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document evaluates whether Retrieval-Augmented Generation (RAG) can improve task classification quality in the Model Selector, and explores alternative approaches including requiring more input context, using smaller embedding models, or eliminating the browser LLM entirely.
+This document evaluates whether Retrieval-Augmented Generation (RAG) can improve task classification quality in the AI Model Advisor, and explores alternative approaches including requiring more input context, using smaller embedding models, or eliminating the browser LLM entirely.
 
 ## Problem Statement
 

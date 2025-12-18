@@ -1,10 +1,10 @@
-# Claude Configuration - AI Model Selector
+# Claude Configuration - AI Model Advisor
 
 ## Project Overview
 
 **Mission:** Build sustainable AI by helping users choose environmentally efficient models ("smaller is better" philosophy)
 
-**Live:** https://ismaelmartinez.github.io/model-selector
+**Live:** https://ismaelmartinez.github.io/ai-model-advisor
 **Status:** MVP Complete ✅ + Ensemble Mode (95.2% Fast / 98%+ Ensemble accuracy)
 **Tech:** SvelteKit 2 + Vite 5 + Transformers.js (Browser-based Llama 3.2 1B)
 **Platform:** Desktop only (mobile not recommended - requires ~700 MB model download)

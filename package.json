@@ -1,7 +1,7 @@
 {
-  "name": "model-selector",
+  "name": "ai-model-advisor",
   "version": "0.1.0",
-  "description": "An open source assistant to help you choose, adapt, and deploy the best AI model for your task",
+  "description": "An open source assistant to help you choose the most environmentally efficient AI model for your task",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -34,10 +34,10 @@
     "offline",
     "svelte"
   ],
-  "author": "Model Selector Contributors",
+  "author": "AI Model Advisor Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/model-selector.git"
+    "url": "https://github.com/ismaelmartinez/ai-model-advisor.git"
   }
 }

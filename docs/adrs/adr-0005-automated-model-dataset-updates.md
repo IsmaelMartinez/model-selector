@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The Model Selector requires fresh model data to remain valuable. Without automation, the dataset would become stale within 3-6 months as new models are released and old models become deprecated.
+The AI Model Advisor requires fresh model data to remain valuable. Without automation, the dataset would become stale within 3-6 months as new models are released and old models become deprecated.
 
 ### Requirements
 

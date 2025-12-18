@@ -1,8 +1,8 @@
-# AI Model Selector - Current Project Status
+# AI Model Advisor - Current Project Status
 
 **Date**: November 16, 2025
 **Status**: MVP Complete & Deployed ✅ + Ensemble Mode ✅
-**Live URL**: https://ismaelmartinez.github.io/model-selector
+**Live URL**: https://ismaelmartinez.github.io/ai-model-advisor
 **Last Commit**: 6269a5c - feat: implement 3-agent ensemble classification mode (PRD 4)  
 
 ## 📊 Overall Progress: 100% Complete
@@ -100,7 +100,7 @@ src/
 ## 🚀 Deployment Status
 
 ### Production Environment
-- **URL**: https://ismaelmartinez.github.io/model-selector
+- **URL**: https://ismaelmartinez.github.io/ai-model-advisor
 - **Status**: Live and accessible ✅
 - **SSL**: HTTPS enabled ✅
 - **Build**: Successfully automated via GitHub Actions ✅
@@ -203,7 +203,7 @@ git status         # ✅ Clean working tree
 
 ## 📝 Final Notes
 
-The AI Model Selector MVP has been **successfully completed and deployed**. While there are some test failures in edge cases, the core functionality works as designed and meets all MVP requirements. The application is live, accessible, and provides valuable environmental-conscious AI model recommendations.
+The AI Model Advisor MVP has been **successfully completed and deployed**. While there are some test failures in edge cases, the core functionality works as designed and meets all MVP requirements. The application is live, accessible, and provides valuable environmental-conscious AI model recommendations.
 
 The project demonstrates a complete end-to-end development process from PRD to deployment, with systematic task management and quality assurance practices.
 

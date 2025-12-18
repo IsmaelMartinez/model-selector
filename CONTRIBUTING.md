@@ -1,6 +1,6 @@
-# Contributing to Model Selector
+# Contributing to AI Model Advisor
 
-Thank you for your interest in contributing to the Model Selector project!
+Thank you for your interest in contributing to the AI Model Advisor project!
 
 ## Getting Started
 

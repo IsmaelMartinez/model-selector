@@ -91,7 +91,7 @@ async function main() {
     return;
   }
 
-  console.log('🤖 Model Selector - Metadata Aggregation CLI');
+  console.log('🤖 AI Model Advisor - Metadata Aggregation CLI');
   console.log('='.repeat(50));
 
   // Check for API token

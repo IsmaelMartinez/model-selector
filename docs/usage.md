@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Open the Model Selector in your browser
+1. Open the AI Model Advisor in your browser
 2. Enter a natural language description of your task
 3. Review the structured recommendations
 4. Follow the deployment and adaptation suggestions
@@ -24,4 +24,4 @@ The system provides:
 
 ## Offline Usage
 
-The Model Selector works completely offline once installed as a PWA, ensuring your queries remain private and the tool is always available.
+The AI Model Advisor works completely offline once installed as a PWA, ensuring your queries remain private and the tool is always available.

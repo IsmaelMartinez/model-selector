@@ -1,4 +1,4 @@
-# Model Selector - Project Vision
+# AI Model Advisor - Project Vision
 
 ## Mission
 An open source assistant to help you choose the most environmentally efficient AI model for your task — focusing on sustainability and simplicity first.
@@ -22,7 +22,7 @@ An open source assistant to help you choose the most environmentally efficient A
 - ✅ PWA with offline capability
 - ✅ Full accessibility support
 
-**Live**: https://ismaelmartinez.github.io/model-selector
+**Live**: https://ismaelmartinez.github.io/ai-model-advisor
 
 ## Roadmap
 

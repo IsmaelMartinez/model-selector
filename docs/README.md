@@ -1,6 +1,6 @@
-# Model Selector Documentation
+# AI Model Advisor Documentation
 
-This directory contains comprehensive documentation for the Model Selector project.
+This directory contains comprehensive documentation for the AI Model Advisor project.
 
 ## Contents
 
@@ -29,7 +29,7 @@ This directory contains comprehensive documentation for the Model Selector proje
 
 ## Overview
 
-The Model Selector is designed to help users choose the most environmentally efficient AI models for their specific tasks through an intuitive, portable interface that works offline.
+The AI Model Advisor is designed to help users choose the most environmentally efficient AI models for their specific tasks through an intuitive, portable interface that works offline.
 
 ### Key Principles
 
