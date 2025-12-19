@@ -381,8 +381,8 @@
 </script>
 
 <svelte:head>
-  <title>AI Model Advisor — Eco-Friendly AI Models</title>
-  <meta name="description" content="Find the most environmentally efficient AI models for your task. We prioritize smaller, greener models." />
+  <title>AI Model Advisor — Find the Right AI Model</title>
+  <meta name="description" content="Find the right AI model for your task. We help you choose between specialized smaller models and powerful larger ones." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -397,19 +397,14 @@
 
   <main>
     <header class="hero">
-      <div class="badge">
-        <span class="pulse"></span>
-        <span>🌱 Eco-First AI</span>
-      </div>
-      
       <h1>
         <span class="gradient-text">AI Model Advisor</span>
       </h1>
       
       <p class="hero-subtitle">
-        Find AI models that are <em>powerful</em> and <em>planet-friendly</em>.
+        Find the <em>right AI model</em> for your task.
         <br />
-        <span class="highlight">Smaller models. Bigger impact.</span>
+        <span class="highlight">Sometimes smaller is smarter. Sometimes bigger is better.</span>
       </p>
 
       <div class="stats-bar">
@@ -610,33 +605,6 @@
   .hero {
     text-align: center;
     margin-bottom: 3rem;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    border-radius: 100px;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #34d399;
-    margin-bottom: 1.5rem;
-  }
-
-  .pulse {
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
   }
 
   h1 {
@@ -939,7 +907,7 @@
 
   /* Accessibility */
   @media (prefers-reduced-motion: reduce) {
-    .glow-1, .glow-2, .pulse, .spinner {
+    .glow-1, .glow-2, .spinner {
       animation: none;
     }
   }
