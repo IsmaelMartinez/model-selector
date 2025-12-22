@@ -193,21 +193,12 @@ export class EmbeddingTaskClassifier {
   }
 
   /**
-   * Calculate cosine similarity between two vectors
+   * Calculate cosine similarity between two normalized vectors
+   * Since embeddings are normalized (normalize: true in getEmbedding),
+   * cosine similarity simplifies to the dot product
    */
   cosineSimilarity(a, b) {
-    let dotProduct = 0;
-    let normA = 0;
-    let normB = 0;
-    
-    for (let i = 0; i < a.length; i++) {
-      dotProduct += a[i] * b[i];
-      normA += a[i] * a[i];
-      normB += b[i] * b[i];
-    }
-    
-    const denominator = Math.sqrt(normA) * Math.sqrt(normB);
-    return denominator === 0 ? 0 : dotProduct / denominator;
+    return a.reduce((sum, val, i) => sum + val * b[i], 0);
   }
 
   /**

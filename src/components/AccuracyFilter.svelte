@@ -2,7 +2,10 @@
   import { onMount } from 'svelte';
   import { getAccuracyThreshold, saveAccuracyThreshold } from '../lib/storage/preferences.js';
 
+  /** @type {number} - Current accuracy threshold (0-95, where 0 means no filter) */
   export let threshold = 0;
+  
+  /** @type {((threshold: number) => void)|null} - Callback when threshold changes */
   export let onChange = null;
 
   const MIN_THRESHOLD = 75;

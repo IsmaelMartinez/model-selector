@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeAll } from 'vitest';
 import { BrowserTaskClassifier } from '../src/lib/classification/BrowserTaskClassifier.js';
 import { ModelSelector } from '../src/lib/recommendation/ModelSelector.js';
+import { getDefaultSubcategory, TIERS } from '../src/lib/data/constants.js';
 import modelsData from '../src/lib/data/models.json';
 
 describe('Integration Tests - Real User Scenarios', () => {
@@ -29,21 +30,8 @@ describe('Integration Tests - Real User Scenarios', () => {
       // Step 3: Get model recommendations
       const classification = {
         category: topPrediction.category,
-        subcategory: topPrediction.subcategory || 'image_classification'
+        subcategory: topPrediction.subcategory || getDefaultSubcategory(topPrediction.category)
       };
-      
-      if (!classification.subcategory) {
-        const categoryDefaults = {
-          'natural_language_processing': 'text_classification',
-          'computer_vision': 'image_classification',
-          'speech_processing': 'speech_recognition',
-          'time_series': 'forecasting',
-          'recommendation_systems': 'collaborative_filtering',
-          'reinforcement_learning': 'game_playing',
-          'data_preprocessing': 'data_cleaning'
-        };
-        classification.subcategory = categoryDefaults[classification.category] || 'text_classification';
-      }
       
       const models = modelSelector.selectModels(classification.category, classification.subcategory, 3);
       
@@ -219,7 +207,7 @@ describe('Integration Tests - Real User Scenarios', () => {
       // Verify models data integrity
       Object.entries(modelsData.models).forEach(([category, categoryData]) => {
         Object.entries(categoryData).forEach(([subcategory, subcategoryData]) => {
-          ['lightweight', 'standard', 'advanced', 'xlarge'].forEach(tier => {
+          TIERS.forEach(tier => {
             if (subcategoryData[tier]) {
               subcategoryData[tier].forEach(model => {
                 expect(model).toHaveProperty('id');

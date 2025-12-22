@@ -1,13 +1,16 @@
 /**
  * Browser-Compatible Enhanced Task Classification System
- * Client-side version without Node.js dependencies
+ * Client-side fallback classifier using keyword and semantic matching.
+ * 
+ * Note: This is a fallback classifier for when the primary EmbeddingTaskClassifier
+ * is unavailable. The API-based classification path was intentionally removed
+ * to maintain the static-first architecture (no external API calls at runtime).
  */
 
 import tasksData from '../data/tasks.json' assert { type: 'json' };
 
 export class BrowserTaskClassifier {
-  constructor(options = {}) {
-    this.apiKey = options.apiKey;
+  constructor() {
     this.taskTaxonomy = tasksData.taskTaxonomy;
     this.mappingRules = tasksData.taskMappingRules;
     
@@ -26,7 +29,6 @@ export class BrowserTaskClassifier {
     this.stats = {
       totalClassifications: 0,
       methodUsage: {
-        api: 0,
         semantic: 0,
         keyword: 0,
         fallback: 0
@@ -54,21 +56,7 @@ export class BrowserTaskClassifier {
     const startTime = Date.now();
 
     try {
-      // Method 1: Hugging Face API Zero-shot Classification (if available)
-      if (!options.offline && this.apiKey) {
-        const apiResult = await this.classifyWithAPI(taskDescription);
-        if (apiResult.success && apiResult.confidence > 0.6) {
-          result.predictions = apiResult.predictions;
-          result.subcategoryPredictions = apiResult.subcategoryPredictions;
-          result.method = 'huggingface_api';
-          result.confidence = apiResult.confidence;
-          result.confidenceLevel = this.getConfidenceLevel(apiResult.confidence);
-          this.stats.methodUsage.api++;
-          return this.finalizeResult(result, startTime);
-        }
-      }
-
-      // Method 2: Enhanced Semantic Similarity
+      // Method 1: Enhanced Semantic Similarity
       const semanticResult = this.classifyWithEnhancedSemantics(taskDescription);
       if (semanticResult.confidence > 0.5) {
         result.predictions = semanticResult.predictions;
@@ -80,7 +68,7 @@ export class BrowserTaskClassifier {
         return this.finalizeResult(result, startTime);
       }
 
-      // Method 3: Enhanced Keyword Classification
+      // Method 2: Enhanced Keyword Classification
       const keywordResult = this.classifyWithEnhancedKeywords(taskDescription);
       result.predictions = keywordResult.predictions;
       result.subcategoryPredictions = keywordResult.subcategoryPredictions;
@@ -169,58 +157,6 @@ export class BrowserTaskClassifier {
     const rarityWeight = 1 / Math.sqrt(allKeywords.length);
     
     return 0.5 + (lengthWeight * 0.3) + (rarityWeight * 0.2);
-  }
-
-  /**
-   * Enhanced Hugging Face API Classification
-   */
-  async classifyWithAPI(taskDescription) {
-    console.log('🔄 Attempting Hugging Face API classification...');
-    
-    try {
-      // Get category labels for zero-shot classification
-      const categoryLabels = Object.entries(this.taskTaxonomy).map(([key, data]) => data.label);
-      
-      const response = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          inputs: taskDescription,
-          parameters: { 
-            candidate_labels: categoryLabels,
-            multi_label: false
-          }
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
-      // Convert API results to our format
-      const predictions = this.convertAPIResults(data);
-      const subcategoryPredictions = await this.getSubcategoryPredictions(taskDescription, predictions);
-      
-      return {
-        success: true,
-        predictions,
-        subcategoryPredictions,
-        confidence: Math.max(...predictions.map(p => p.score))
-      };
-      
-    } catch (error) {
-      console.log(`   ⚠️ API classification failed: ${error.message}`);
-      return { success: false, reason: error.message };
-    }
   }
 
   /**
@@ -363,33 +299,6 @@ export class BrowserTaskClassifier {
     
     // Combined similarity with weights
     return (jaccardSimilarity * 0.5) + containsKeyword + containsPartial;
-  }
-
-  /**
-   * Convert API results to our prediction format
-   */
-  convertAPIResults(apiData) {
-    const predictions = [];
-    
-    for (let i = 0; i < apiData.labels.length; i++) {
-      const label = apiData.labels[i];
-      const score = apiData.scores[i];
-      
-      // Find corresponding category key
-      const categoryKey = Object.entries(this.taskTaxonomy).find(([key, data]) => 
-        data.label === label
-      )?.[0];
-      
-      if (categoryKey) {
-        predictions.push({
-          category: categoryKey,
-          label: label,
-          score: score
-        });
-      }
-    }
-    
-    return predictions.slice(0, 3);
   }
 
   /**
@@ -578,7 +487,6 @@ export class BrowserTaskClassifier {
     return {
       ...this.stats,
       accuracyEstimates: {
-        api: '85-95%',
         semantic: '75-85%',
         keyword: '65-75%',
         fallback: '40-60%'

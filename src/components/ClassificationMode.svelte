@@ -2,7 +2,10 @@
   import { onMount } from 'svelte';
   import { getClassificationMode, saveClassificationMode } from '../lib/storage/preferences.js';
 
+  /** @type {'fast'|'ensemble'} - Current classification mode */
   export let mode = 'fast';
+  
+  /** @type {(mode: 'fast'|'ensemble') => void} - Callback when mode changes */
   export let onModeChange = () => {};
 
   onMount(() => {
