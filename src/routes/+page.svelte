@@ -8,6 +8,7 @@
   import { BrowserTaskClassifier } from "../lib/classification/BrowserTaskClassifier.js";
   import { CLASSIFIER_CONFIG } from "../lib/classification/classifierConfig.js";
   import { ModelSelector } from "../lib/recommendation/ModelSelector.js";
+  import { getDefaultSubcategory } from "../lib/data/constants.js";
 
   // Import data
   import modelsData from "../lib/data/models.json";
@@ -45,6 +46,7 @@
 
   onMount(async () => {
     try {
+      // 1. Initialize components first
       modelSelector = new ModelSelector(modelsData);
       fallbackClassifier = new BrowserTaskClassifier(); // Uses tasks.json internally
 
@@ -86,6 +88,15 @@
       }
 
       console.log("✅ Data pipeline initialized successfully");
+
+      // 2. Handle URL parameters after initialization is complete
+      const urlParams = new URLSearchParams(window.location.search);
+      const taskFromUrl = urlParams.get("task");
+      if (taskFromUrl) {
+        taskDescription = decodeURIComponent(taskFromUrl);
+        // Components are now guaranteed to be initialized
+        handleTaskSubmit({ detail: { taskDescription } });
+      }
     } catch (err) {
       console.error("❌ Failed to initialize data pipeline:", err);
       error = "Failed to initialize the AI model advisor. Please refresh the page.";
@@ -332,19 +343,6 @@
     }
   }
 
-  function getDefaultSubcategory(category) {
-    const defaults = {
-      natural_language_processing: "text_classification",
-      computer_vision: "image_classification",
-      speech_processing: "speech_recognition",
-      time_series: "forecasting",
-      recommendation_systems: "collaborative_filtering",
-      reinforcement_learning: "game_playing",
-      data_preprocessing: "data_cleaning",
-    };
-    return defaults[category] || "text_classification";
-  }
-
   function handleAccuracyFilterChange(newThreshold) {
     accuracyThreshold = newThreshold;
 
@@ -366,18 +364,6 @@
     }
   }
 
-  onMount(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const taskFromUrl = urlParams.get("task");
-    if (taskFromUrl) {
-      taskDescription = decodeURIComponent(taskFromUrl);
-      setTimeout(() => {
-        if (taskClassifier && modelSelector) {
-          handleTaskSubmit({ detail: { taskDescription } });
-        }
-      }, 100);
-    }
-  });
 </script>
 
 <svelte:head>
@@ -439,9 +425,9 @@
     </div>
 
     {#if isModelLoading || modelLoadProgress}
-      <div class="model-loading-card" role="status">
+      <div class="model-loading-card" role="status" aria-live="polite" aria-atomic="true">
         <div class="loading-icon">
-          <svg class="spinner" viewBox="0 0 50 50">
+          <svg class="spinner" viewBox="0 0 50 50" aria-hidden="true">
             <circle cx="25" cy="25" r="20" fill="none" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="80 120" />
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -455,7 +441,7 @@
           <h3>Loading MiniLM Classifier</h3>
           <p>{modelLoadProgress || "Preparing AI model (~23MB)..."}</p>
           {#if downloadPercentage > 0}
-            <div class="progress-track">
+            <div class="progress-track" role="progressbar" aria-valuenow={downloadPercentage} aria-valuemin="0" aria-valuemax="100">
               <div class="progress-fill" style="width: {downloadPercentage}%"></div>
             </div>
           {/if}

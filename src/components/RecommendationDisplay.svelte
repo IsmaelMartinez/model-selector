@@ -1,18 +1,79 @@
 <script>
+  /**
+   * @typedef {Object} Model
+   * @property {string} id - Unique model identifier
+   * @property {string} name - Display name
+   * @property {string} huggingFaceId - HuggingFace model ID
+   * @property {string} description - Model description
+   * @property {number} sizeMB - Model size in megabytes
+   * @property {number} [accuracy] - Model accuracy (0-1)
+   * @property {number} environmentalScore - Environmental impact score (1-3)
+   * @property {string[]} deploymentOptions - Deployment targets
+   * @property {string[]} frameworks - Supported frameworks
+   * @property {string} lastUpdated - Last update date
+   * @property {string} tier - Performance tier
+   */
+
+  /**
+   * @typedef {Object} EnsembleInfo
+   * @property {string} method - Classification method used
+   * @property {number} votes - Number of votes for winner
+   * @property {number} total - Total number of votes
+   * @property {number} confidence - Confidence score (0-1)
+   * @property {Array<{text: string, category: string, similarity: string}>} similarExamples
+   */
+
+  /** @type {Model[]} */
   export let recommendations = [];
+  
+  /** @type {string} */
   export let taskCategory = '';
+  
+  /** @type {string} */
   export let taskSubcategory = '';
+  
+  /** @type {boolean} */
   export let isLoading = false;
+  
+  /** @type {number} */
   export let totalHidden = 0;
+  
+  /** @type {number} */
   export let accuracyThreshold = 0;
+  
+  /** @type {EnsembleInfo|null} */
   export let ensembleInfo = null;
   
   function getEnvironmentalBadge(score) {
     switch (score) {
-      case 1: return { label: 'Low Impact', class: 'env-low', icon: '🌱', color: '#10b981' };
-      case 2: return { label: 'Medium', class: 'env-medium', icon: '⚡', color: '#f59e0b' };
-      case 3: return { label: 'High Impact', class: 'env-high', icon: '🔥', color: '#ef4444' };
-      default: return { label: 'Unknown', class: 'env-unknown', icon: '❓', color: '#6b7280' };
+      case 1: return { 
+        label: 'Low Impact', 
+        class: 'env-low', 
+        icon: '🌱', 
+        color: '#10b981',
+        tooltip: 'Under 500MB - Can run on laptops, phones, edge devices'
+      };
+      case 2: return { 
+        label: 'Medium', 
+        class: 'env-medium', 
+        icon: '⚡', 
+        color: '#f59e0b',
+        tooltip: 'Under 4GB - Suitable for cloud or desktop with GPU'
+      };
+      case 3: return { 
+        label: 'High Impact', 
+        class: 'env-high', 
+        icon: '🔥', 
+        color: '#ef4444',
+        tooltip: 'Over 4GB - Requires dedicated GPU infrastructure'
+      };
+      default: return { 
+        label: 'Unknown', 
+        class: 'env-unknown', 
+        icon: '❓', 
+        color: '#6b7280',
+        tooltip: 'Environmental impact unknown'
+      };
     }
   }
   
@@ -52,8 +113,8 @@
 
 <section class="recommendations" aria-label="Model Recommendations">
   {#if isLoading}
-    <div class="loading-state">
-      <div class="loading-animation">
+    <div class="loading-state" role="status" aria-live="polite">
+      <div class="loading-animation" aria-hidden="true">
         <div class="leaf leaf-1">🍃</div>
         <div class="leaf leaf-2">🌿</div>
         <div class="leaf leaf-3">🍃</div>
@@ -123,7 +184,7 @@
               </span>
               <span 
                 class="badge env-badge {envBadge.class}" 
-                title="{envBadge.label}"
+                title={envBadge.tooltip}
                 style="--env-color: {envBadge.color}"
               >
                 {envBadge.icon} {envBadge.label}
@@ -432,6 +493,38 @@
   .env-badge {
     background: color-mix(in srgb, var(--env-color) 15%, transparent);
     color: var(--env-color);
+    cursor: help;
+    position: relative;
+  }
+
+  /* Enhanced tooltip styling for environmental badges */
+  .env-badge[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .env-badge[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1e293b;
+    z-index: 10;
   }
 
   .model-description {

@@ -1,13 +1,30 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   
+  /**
+   * @typedef {Object} ClarificationOption
+   * @property {string} label - Display label with emoji
+   * @property {string} desc - Short description
+   * @property {string} category - Associated category key
+   */
+
+  /** @type {ClarificationOption[]} - Available clarification options */
   export let options = [];
+  
+  /** @type {string} - The original task description that needs clarification */
   export let originalDescription = '';
   
   const dispatch = createEventDispatcher();
   
   let showTextInput = false;
   let additionalDetails = '';
+  let cardRef;
+  
+  // Focus the card when component mounts for accessibility
+  onMount(async () => {
+    await tick();
+    cardRef?.focus();
+  });
   
   function handleSelect(option) {
     dispatch('select', {
@@ -41,13 +58,19 @@
 </script>
 
 <div class="clarification-container">
-  <div class="clarification-card">
+  <div 
+    class="clarification-card" 
+    bind:this={cardRef} 
+    tabindex="-1" 
+    role="dialog" 
+    aria-labelledby="clarification-title"
+  >
     <div class="clarification-header">
       <div class="icon-wrapper">
         <span class="icon">🤔</span>
       </div>
       <div>
-        <h2>Let's narrow it down</h2>
+        <h2 id="clarification-title">Let's narrow it down</h2>
         <p class="original-query">
           You asked: <span>"{originalDescription}"</span>
         </p>
@@ -135,6 +158,11 @@
     border-radius: 24px;
     padding: 2rem;
     backdrop-filter: blur(10px);
+  }
+
+  .clarification-card:focus {
+    outline: none;
+    border-color: rgba(16, 185, 129, 0.4);
   }
 
   .clarification-header {

@@ -1,8 +1,13 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   
+  /** @type {string} - Current task description text */
   export let taskDescription = '';
+  
+  /** @type {boolean} - Whether a task is currently being processed */
   export let isLoading = false;
+  
+  /** @type {string|null} - Error message to display, or null if no error */
   export let error = null;
   
   const dispatch = createEventDispatcher();
