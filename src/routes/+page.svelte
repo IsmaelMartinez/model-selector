@@ -389,8 +389,6 @@
       
       <p class="hero-subtitle">
         Find the <em>right AI model</em> for your task.
-        <br />
-        <span class="highlight">Sometimes smaller is smarter. Sometimes bigger is better.</span>
       </p>
 
       <div class="stats-bar">
