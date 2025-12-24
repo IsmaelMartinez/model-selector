@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-12-18",
+  "lastUpdated": "2025-12-24",
   "tiers": {
     "lightweight": {
       "label": "Lightweight Models",
@@ -2041,16 +2041,14 @@
             "lastUpdated": "2024-11-09T18:21:01.000Z"
           },
           {
-            "id": "openai_whisper-small",
-            "name": "Whisper Small",
-            "huggingFaceId": "openai/whisper-small",
-            "description": "Whisper Small model for automatic speech recognition",
-            "sizeMB": 25,
-            "accuracy": 0.72,
+            "id": "theainerd_wav2vec2-large-xlsr-hindi",
+            "name": "Wav2Vec2 Large Xlsr Hindi",
+            "huggingFaceId": "theainerd/Wav2Vec2-large-xlsr-hindi",
+            "description": "Wav2Vec2 Large Xlsr Hindi model for automatic speech recognition",
+            "sizeMB": 301,
+            "accuracy": 0.85,
             "environmentalScore": 1,
             "deploymentOptions": [
-              "browser",
-              "mobile",
               "edge",
               "cloud",
               "server"
@@ -2059,7 +2057,7 @@
               "PyTorch",
               "TensorFlow"
             ],
-            "lastUpdated": "2025-10-12"
+            "lastUpdated": "2025-04-01T11:46:19.000Z"
           }
         ],
         "standard": [
@@ -2335,11 +2333,11 @@
             "lastUpdated": "2023-09-06T13:32:25.000Z"
           },
           {
-            "id": "coqui_xtts-v2",
-            "name": "XTTS V2",
-            "huggingFaceId": "coqui/XTTS-v2",
-            "description": "XTTS V2 model for text to speech",
-            "sizeMB": 100,
+            "id": "facebook_mms-tts-hin",
+            "name": "Mms Tts Hin",
+            "huggingFaceId": "facebook/mms-tts-hin",
+            "description": "Mms Tts Hin model for text to speech",
+            "sizeMB": 35,
             "accuracy": 0.75,
             "environmentalScore": 1,
             "deploymentOptions": [
@@ -2350,9 +2348,10 @@
               "server"
             ],
             "frameworks": [
-              "PyTorch"
+              "PyTorch",
+              "TensorFlow"
             ],
-            "lastUpdated": "2025-12-18"
+            "lastUpdated": "2023-09-06T13:33:08.000Z"
           }
         ],
         "standard": [
