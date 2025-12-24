@@ -383,21 +383,40 @@ export class ModelAggregator {
   // === Utility Methods ===
 
   /**
-   * Estimate model size in MB based on safetensors metadata or parameter count
+   * Estimate model size in MB based on file sizes or parameter count
+   * Priority: siblings file sizes > safetensors params > name pattern > heuristics
    */
   estimateModelSize(rawModel, detailedInfo) {
-    // 1. Try safetensors total size (most accurate)
-    if (detailedInfo?.safetensors?.total) {
-      return Math.round(detailedInfo.safetensors.total / (1024 * 1024));
+    // 1. Sum siblings file sizes (MOST ACCURATE)
+    // The siblings array contains actual file info with sizes in bytes
+    if (detailedInfo?.siblings) {
+      const modelFiles = detailedInfo.siblings.filter(f => 
+        f.rfilename?.endsWith('.safetensors') || 
+        f.rfilename?.endsWith('.bin') ||
+        f.rfilename?.endsWith('.onnx')
+      );
+      if (modelFiles.length > 0) {
+        const totalBytes = modelFiles.reduce((sum, f) => sum + (f.size || 0), 0);
+        if (totalBytes > 0) {
+          return Math.round(totalBytes / (1024 * 1024));
+        }
+      }
     }
 
-    // 2. Try safetensors parameters (estimate ~2 bytes per param for fp16)
+    // 2. Use safetensors param count (NOTE: safetensors.total is PARAMS, not bytes!)
+    // Estimate ~2 bytes per param for fp16 quantization
+    if (detailedInfo?.safetensors?.total) {
+      const params = detailedInfo.safetensors.total;
+      return Math.round((params * 2) / (1024 * 1024)); // fp16: 2 bytes per param
+    }
+
+    // 3. Try safetensors.parameters.total as alternative param source
     if (detailedInfo?.safetensors?.parameters?.total) {
       const params = detailedInfo.safetensors.parameters.total;
       return Math.round((params * 2) / (1024 * 1024)); // fp16: 2 bytes per param
     }
 
-    // 3. Try to extract parameter count from model name (e.g., "7b", "70b", "1.3b")
+    // 4. Try to extract parameter count from model name (e.g., "7b", "70b", "1.3b")
     const modelName = rawModel.id.toLowerCase();
     const paramMatch = modelName.match(/(\d+\.?\d*)b(?:-|_|$)/);
     if (paramMatch) {
@@ -406,7 +425,7 @@ export class ModelAggregator {
       return Math.round(billions * 2000);
     }
 
-    // 4. Fallback heuristics for non-LLM models
+    // 5. Fallback heuristics for non-LLM models
     if (modelName.includes('nano') || modelName.includes('tiny')) return 50;
     if (modelName.includes('small') || modelName.includes('mobile')) return 150;
     if (modelName.includes('base') && !modelName.includes('large')) return 400;
